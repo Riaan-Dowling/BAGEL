@@ -100,9 +100,9 @@ def lineages_estimater():
         (
             pseudo_data,
             initialize_cells_offset,
-            step_size,
+            pseudo_time_interval,
             window_step,
-            window_size,
+            window_interval,
             itterations,
             burn_period,
         ) = lineage_parameters.parameters(pseudo_data)
@@ -111,7 +111,7 @@ def lineages_estimater():
             half_window,
             cell_total,
         ) = lineage_parameters.total_windows_estimate(
-            pseudo_data, initialize_cells_offset, window_size, step_size
+            pseudo_data, initialize_cells_offset, window_interval, pseudo_time_interval
         )  # Total windows and if there is half a window
 
         """
@@ -213,8 +213,8 @@ def lineages_estimater():
         pov_data = pseudo_data
 
         # Original sizes
-        INITIAL_step_size = step_size  # |_______/
-        INITIAL_window_size = window_size  # |______|
+        INITIAL_pseudo_time_interval = pseudo_time_interval  # |_______/
+        INITIAL_window_interval = window_interval  # |______|
 
         # Frenet frame
         Frenet_frame_NORMAL_VECTOR = pd.DataFrame()
@@ -239,12 +239,12 @@ def lineages_estimater():
             # Terminal states
             wp_data_TSNE_ROW = joblib.load("wp_data_TSNE_ROW.pkl")
 
-            step_size = INITIAL_step_size  # |_______/
-            window_size = INITIAL_window_size  # |______|
+            pseudo_time_interval = INITIAL_pseudo_time_interval  # |_______/
+            window_interval = INITIAL_window_interval  # |______|
 
             stop = False
-            terminal_state_step_SIZE = INITIAL_step_size
-            terminal_state_step = INITIAL_step_size
+            terminal_state_pseudo_time_interval = INITIAL_pseudo_time_interval
+            terminal_state_step = INITIAL_pseudo_time_interval
 
             # Terminal state detected
             TS_detected_Next_window = False
@@ -252,7 +252,7 @@ def lineages_estimater():
             while stop == False:
 
                 # Select window data
-                TERMINAL_STATE_TEST = pov_data.head(step_size)
+                TERMINAL_STATE_TEST = pov_data.head(pseudo_time_interval)
                 TERMINAL_STATE_TEST_POV = pov_data[
                     ~pov_data["cell_ID_number"].isin(
                         TERMINAL_STATE_TEST["cell_ID_number"].values
@@ -282,8 +282,8 @@ def lineages_estimater():
                         final_window = True
 
                         len_till_TS = len(pov_data.index)
-                        step_size = len_till_TS  # len_till_TS INITIAL_step_size + terminal_state_step #|_______/
-                        window_size = len_till_TS  # INITIAL_step_size + terminal_state_step #|______|
+                        pseudo_time_interval = len_till_TS  # len_till_TS INITIAL_pseudo_time_interval + terminal_state_step #|_______/
+                        window_interval = len_till_TS  # INITIAL_pseudo_time_interval + terminal_state_step #|______|
 
                     else:
 
@@ -308,23 +308,23 @@ def lineages_estimater():
                         temp = pov_data.head(pt_max_detected_POSITION[0])
                         len_till_TS = len(temp.index)
                         terminal_state_step = (
-                            terminal_state_step + terminal_state_step_SIZE
+                            terminal_state_step + terminal_state_pseudo_time_interval
                         )
 
-                        step_size = (
+                        pseudo_time_interval = (
                             difference[0] + 1
-                        )  # len_till_TS INITIAL_step_size + terminal_state_step #|_______/
-                        window_size = (
+                        )  # len_till_TS INITIAL_pseudo_time_interval + terminal_state_step #|_______/
+                        window_interval = (
                             difference[0] + 1
-                        )  # INITIAL_step_size + terminal_state_step #|______|
+                        )  # INITIAL_pseudo_time_interval + terminal_state_step #|______|
 
                         if len(pov_data.index) == (difference[0] + 1):
                             stop = True
                             final_window = True
 
                             len_till_TS = len(pov_data.index)
-                            step_size = len_till_TS  # len_till_TS INITIAL_step_size + terminal_state_step #|_______/
-                            window_size = len_till_TS  # INITIAL_step_size + terminal_state_step #|______|
+                            pseudo_time_interval = len_till_TS  # len_till_TS INITIAL_pseudo_time_interval + terminal_state_step #|_______/
+                            window_interval = len_till_TS  # INITIAL_pseudo_time_interval + terminal_state_step #|______|
 
             """
             -----------------------------------------------------------------
@@ -333,7 +333,7 @@ def lineages_estimater():
             """
 
             # #Step window forward
-            window_step = step_size + window_step
+            window_step = pseudo_time_interval + window_step
 
             """
             -----------------------------------------------------------------
@@ -372,8 +372,8 @@ def lineages_estimater():
                 ) = Frenet_frame.pov_plane_slice(
                     pseudo_data,
                     pov_data,
-                    window_size,
-                    step_size,
+                    window_interval,
+                    pseudo_time_interval,
                     total_windows,
                     final_window,
                     window_itteration,
@@ -456,7 +456,7 @@ def lineages_estimater():
                     window_3d,
                     split,
                     final_window,
-                    step_size,
+                    pseudo_time_interval,
                     data_output_gibbs_ORIGNAL,
                     data_output_gibbs_PROJECTED,
                     first_time_association,

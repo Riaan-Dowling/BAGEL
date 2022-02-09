@@ -16,17 +16,17 @@ from sklearn import preprocessing  # Normalise data [-1, 1]
 min_max_scaler = preprocessing.MinMaxScaler()  # [0,1]
 
 
-def Frenet(pseudo_data, pov_data, window_size, step_size):
+def Frenet(pseudo_data, pov_data, window_interval, pseudo_time_interval):
 
     """
     -----------------------------------------------------------------
-    Step size data
+    pseudo_time_interval data
     -----------------------------------------------------------------
     """
 
     pseudo_data.reset_index(drop=True, inplace=True)
     pov_data.reset_index(drop=True, inplace=True)
-    PCA_window_pseudo_data = pov_data.head(step_size)
+    PCA_window_pseudo_data = pov_data.head(pseudo_time_interval)
     PCA_window_pseudo_data.reset_index(drop=True, inplace=True)
 
     """
@@ -75,7 +75,7 @@ def Frenet(pseudo_data, pov_data, window_size, step_size):
     nv = pca.components_[0]
     nv[0] = nv[0] / pt_bias
     a, b, c = nv
-    normal_vector = (1 / (np.sqrt(a**2 + b**2 + c**2))) * nv
+    normal_vector = (1 / (np.sqrt(a ** 2 + b ** 2 + c ** 2))) * nv
     v = nv * 3 * np.sqrt(pca.explained_variance_[0])
     pca.mean_[0] = pca.mean_[0] / pt_bias
 
@@ -100,16 +100,16 @@ def Frenet(pseudo_data, pov_data, window_size, step_size):
 
     """
     -----------------------------------------------------------------
-    Window size slize
+    Window interval slize
     -----------------------------------------------------------------
     """
     result_df.reset_index(drop=True, inplace=True)
     if (300 * v[0]) > pca.mean_[0]:
         NEW_WINDOW_pseudo_time_data = result_df.sort_values("PC1", ascending=True)
-        NEW_WINDOW_pseudo_time_data = NEW_WINDOW_pseudo_time_data.head(window_size)
+        NEW_WINDOW_pseudo_time_data = NEW_WINDOW_pseudo_time_data.head(window_interval)
     else:
         NEW_WINDOW_pseudo_time_data = result_df.sort_values("PC1", ascending=False)
-        NEW_WINDOW_pseudo_time_data = NEW_WINDOW_pseudo_time_data.head(window_size)
+        NEW_WINDOW_pseudo_time_data = NEW_WINDOW_pseudo_time_data.head(window_interval)
 
     NEW_WINDOW_pseudo_time_data.reset_index(drop=True, inplace=True)
 
@@ -157,8 +157,8 @@ def Frenet(pseudo_data, pov_data, window_size, step_size):
 def pov_plane_slice(
     pseudo_data,
     pov_data,
-    window_size,
-    step_size,
+    window_interval,
+    pseudo_time_interval,
     total_windows,
     final_window,
     window_itteration,
@@ -168,8 +168,8 @@ def pov_plane_slice(
     if final_window == True:  # Incroperate data that does not make a complete widow
         final_window = True
 
-        window_size = len(pov_data["Pseudo_Time_normal"])
-        step_size = len(pov_data["Pseudo_Time_normal"])
+        window_interval = len(pov_data["Pseudo_Time_normal"])
+        pseudo_time_interval = len(pov_data["Pseudo_Time_normal"])
         (
             MEAN_window_pseudo_data,
             normal_vector,
@@ -180,7 +180,7 @@ def pov_plane_slice(
             window_pseudo_data,
             not_window_pseudo_data,
             pov_return,
-        ) = Frenet(pseudo_data, pov_data, window_size, step_size)
+        ) = Frenet(pseudo_data, pov_data, window_interval, pseudo_time_interval)
 
     else:
         (
@@ -193,7 +193,7 @@ def pov_plane_slice(
             window_pseudo_data,
             not_window_pseudo_data,
             pov_return,
-        ) = Frenet(pseudo_data, pov_data, window_size, step_size)
+        ) = Frenet(pseudo_data, pov_data, window_interval, pseudo_time_interval)
 
     back_face = window_pseudo_data["Pseudo_Time_normal"].min()
     front_face = window_pseudo_data["Pseudo_Time_normal"].max()
