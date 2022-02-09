@@ -9,9 +9,9 @@ BAGEL can be run by opening 1. Algorithm directory and running the Algorithm.py 
 -
 -
 ## 1.) Algorithm/lineage_parameters
-### Window parameters                                     ________
--step_size = 200  # How much cells per step (Step size)  |_______/
--window_size = 150  # How many cells in window  (Widow size) |_____|
+### Window parameters                                   
+-step_size = 200  # How much cells per step (Step size) 
+-window_size = 150  # How many cells in window  (Widow size)
 
 ### Gibbs sampler parameters
 -itterations = 2000  # Total itterations
