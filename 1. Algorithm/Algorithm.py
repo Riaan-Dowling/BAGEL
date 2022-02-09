@@ -14,9 +14,9 @@ def main():
     Model options
     -----------------------------------------------------------------
     """
-    new_manifold_FLAG = True  # Start with a new manifold?
-    two_data_set_FLAG = False  # Is two diferent datasets used?
-    results_only = False  # Only display results
+    new_manifold_FLAG = True  # Start with a new manifold? This flag should only be set to True the first time that BAGEL obtains the phenotypic manifold of the current dataset/s. After this initial run, BAGEL stored the current phenotypic manifold and this flag can be set to False.
+    two_data_set_FLAG = False  # Is two diferent datasets used? Is there one (Flase) or Two (True) datasets used as input to BAGEL
+    results_only = False  # Only display results? Can be set to true after BAGEL's initial run, as all of the modelling data has been saved locally.
 
     """
     -----------------------------------------------------------------
