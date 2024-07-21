@@ -196,9 +196,9 @@ def association(
     if (split == False) and (Model_1 == True) and (once == False) and (twice == False):
         # Lineage 1
         before_split.columns = [
-            "Pseudo_Time_normal",
-            "tsne_1",
-            "tsne_2",
+            "psuedo_time_normal",
+            "pca_1",
+            "pca_2",
         ]  # Set to lineage formating
         frames = [Lineage_1, before_split]
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
@@ -207,9 +207,9 @@ def association(
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
         before_split.columns = [
-            "G1_Pseudo_Time_normal",
-            "G1_tsne_1",
-            "G1_tsne_2",
+            "g1_psuedo_time_normal",
+            "g1_pca_1",
+            "g1_pca_2",
         ]  # Reset to orignal formating4
 
     elif (split == False) and (Model_1 == True) and (once == True) and (twice == False):
@@ -219,9 +219,9 @@ def association(
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
         before_split.columns = [
-            "Pseudo_Time_normal",
-            "tsne_1",
-            "tsne_2",
+            "psuedo_time_normal",
+            "pca_1",
+            "pca_2",
         ]  # Set to lineage formating
         frames = [Lineage_1, before_split]
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
@@ -244,9 +244,9 @@ def association(
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
         before_split.columns = [
-            "Pseudo_Time_normal",
-            "tsne_1",
-            "tsne_2",
+            "psuedo_time_normal",
+            "pca_1",
+            "pca_2",
         ]  # Set to lineage formating
         frames = [Lineage_1, before_split]
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
@@ -262,9 +262,9 @@ def association(
         frames = [Lineage_2, before_split]
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         before_split.columns = [
-            "G1_Pseudo_Time_normal",
-            "G1_tsne_1",
-            "G1_tsne_2",
+            "g1_psuedo_time_normal",
+            "g1_pca_1",
+            "g1_pca_2",
         ]  # Reset to orignal formating
 
     elif split == True:
@@ -279,80 +279,80 @@ def association(
             """
             # Data projected onto plane
             d = {
-                "tsne_1": once_data_PROJECTED["G1_tsne_1"],
-                "tsne_2": once_data_PROJECTED["G1_tsne_2"],
+                "pca_1": once_data_PROJECTED["g1_pca_1"],
+                "pca_2": once_data_PROJECTED["g1_pca_2"],
             }
-            current_PROJECTED_window_G1 = pd.DataFrame(d)
-            current_PROJECTED_window_G1 = (
-                current_PROJECTED_window_G1.dropna()
+            current_PROJECTED_window_g1 = pd.DataFrame(d)
+            current_PROJECTED_window_g1 = (
+                current_PROJECTED_window_g1.dropna()
             )  # Drop NAN rows
 
             d = {
-                "tsne_1": once_data_PROJECTED["G2_tsne_1"],
-                "tsne_2": once_data_PROJECTED["G2_tsne_2"],
+                "pca_1": once_data_PROJECTED["g2_pca_1"],
+                "pca_2": once_data_PROJECTED["g2_pca_2"],
             }
-            current_PROJECTED_window_G2 = pd.DataFrame(d)
-            current_PROJECTED_window_G2 = (
-                current_PROJECTED_window_G2.dropna()
+            current_PROJECTED_window_g2 = pd.DataFrame(d)
+            current_PROJECTED_window_g2 = (
+                current_PROJECTED_window_g2.dropna()
             )  # Drop NAN rows
 
             # Data in original 3d window
             d = {
-                "Pseudo_Time_normal": once_data_ORIGNAL["G1_Pseudo_Time_normal"],
-                "tsne_1": once_data_ORIGNAL["G1_tsne_1"],
-                "tsne_2": once_data_ORIGNAL["G1_tsne_2"],
+                "psuedo_time_normal": once_data_ORIGNAL["g1_psuedo_time_normal"],
+                "pca_1": once_data_ORIGNAL["g1_pca_1"],
+                "pca_2": once_data_ORIGNAL["g1_pca_2"],
             }
-            current_ORIGINAL_window_G1_3d = pd.DataFrame(d)
-            current_ORIGINAL_window_G1_3d = (
-                current_ORIGINAL_window_G1_3d.dropna()
+            current_ORIGINAL_window_g1_3d = pd.DataFrame(d)
+            current_ORIGINAL_window_g1_3d = (
+                current_ORIGINAL_window_g1_3d.dropna()
             )  # Drop NAN rows
 
             d = {
-                "Pseudo_Time_normal": once_data_ORIGNAL["G2_Pseudo_Time_normal"],
-                "tsne_1": once_data_ORIGNAL["G2_tsne_1"],
-                "tsne_2": once_data_ORIGNAL["G2_tsne_2"],
+                "psuedo_time_normal": once_data_ORIGNAL["g2_psuedo_time_normal"],
+                "pca_1": once_data_ORIGNAL["g2_pca_1"],
+                "pca_2": once_data_ORIGNAL["g2_pca_2"],
             }
-            current_ORIGINAL_window_G2_3d = pd.DataFrame(d)
-            current_ORIGINAL_window_G2_3d = (
-                current_ORIGINAL_window_G2_3d.dropna()
+            current_ORIGINAL_window_g2_3d = pd.DataFrame(d)
+            current_ORIGINAL_window_g2_3d = (
+                current_ORIGINAL_window_g2_3d.dropna()
             )  # Drop NAN rows
 
             # Data in original 2d window
             d = {
-                "tsne_1": once_data_ORIGNAL["G1_tsne_1"],
-                "tsne_2": once_data_ORIGNAL["G1_tsne_2"],
+                "pca_1": once_data_ORIGNAL["g1_pca_1"],
+                "pca_2": once_data_ORIGNAL["g1_pca_2"],
             }
-            current_ORIGINAL_window_G1_2d = pd.DataFrame(d)
-            current_ORIGINAL_window_G1_2d = (
-                current_ORIGINAL_window_G1_2d.dropna()
+            current_ORIGINAL_window_g1_2d = pd.DataFrame(d)
+            current_ORIGINAL_window_g1_2d = (
+                current_ORIGINAL_window_g1_2d.dropna()
             )  # Drop NAN rows
 
             d = {
-                "tsne_1": once_data_ORIGNAL["G2_tsne_1"],
-                "tsne_2": once_data_ORIGNAL["G2_tsne_2"],
+                "pca_1": once_data_ORIGNAL["g2_pca_1"],
+                "pca_2": once_data_ORIGNAL["g2_pca_2"],
             }
-            current_ORIGINAL_window_G2_2d = pd.DataFrame(d)
-            current_ORIGINAL_window_G2_2d = (
-                current_ORIGINAL_window_G2_2d.dropna()
+            current_ORIGINAL_window_g2_2d = pd.DataFrame(d)
+            current_ORIGINAL_window_g2_2d = (
+                current_ORIGINAL_window_g2_2d.dropna()
             )  # Drop NAN rows
 
             # Assign NEW previouse windows
             previouse_window_L1 = (
-                current_ORIGINAL_window_G1_3d  # current_PROJECTED_window_G1
+                current_ORIGINAL_window_g1_3d  # current_PROJECTED_window_g1
             )
             previouse_window_L2 = (
-                current_ORIGINAL_window_G2_3d  # current_PROJECTED_window_G2
+                current_ORIGINAL_window_g2_3d  # current_PROJECTED_window_g2
             )
 
-            previouse_window_L1_PROJECTED = current_ORIGINAL_window_G1_3d
-            previouse_window_L2_PROJECTED = current_ORIGINAL_window_G2_3d
+            previouse_window_L1_PROJECTED = current_ORIGINAL_window_g1_3d
+            previouse_window_L2_PROJECTED = current_ORIGINAL_window_g2_3d
 
             # Add data to lineage
             if once == True:
-                frames = [Lineage_1, current_ORIGINAL_window_G1_3d]
+                frames = [Lineage_1, current_ORIGINAL_window_g1_3d]
                 Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-                frames = [Lineage_2, current_ORIGINAL_window_G2_3d]
+                frames = [Lineage_2, current_ORIGINAL_window_g2_3d]
                 Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
             """
@@ -475,8 +475,8 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
             # L2_mean = Lineage_2.tail(50).mean(axis=0)
             L2_mean = Lineage_2.tail(1)
 
-        L1_mean.columns = ["Pseudo_Time_normal", "tsne_1", "tsne_2"]
-        L2_mean.columns = ["Pseudo_Time_normal", "tsne_1", "tsne_2"]
+        L1_mean.columns = ["psuedo_time_normal", "pca_1", "pca_2"]
+        L2_mean.columns = ["psuedo_time_normal", "pca_1", "pca_2"]
 
         # Select one cell
         select_one = temp_ID_WINDOW.head(1)
@@ -527,54 +527,54 @@ def euclidean_dist_association(
 
     # Data projected onto plane
     d = {
-        "tsne_1": data_output_gibbs_PROJECTED["G1_tsne_1"],
-        "tsne_2": data_output_gibbs_PROJECTED["G1_tsne_2"],
+        "pca_1": data_output_gibbs_PROJECTED["g1_pca_1"],
+        "pca_2": data_output_gibbs_PROJECTED["g1_pca_2"],
     }
-    current_PROJECTED_window_G1 = pd.DataFrame(d)
-    current_PROJECTED_window_G1 = current_PROJECTED_window_G1.dropna()  # Drop NAN rows
+    current_PROJECTED_window_g1 = pd.DataFrame(d)
+    current_PROJECTED_window_g1 = current_PROJECTED_window_g1.dropna()  # Drop NAN rows
 
     d = {
-        "tsne_1": data_output_gibbs_PROJECTED["G2_tsne_1"],
-        "tsne_2": data_output_gibbs_PROJECTED["G2_tsne_2"],
+        "pca_1": data_output_gibbs_PROJECTED["g2_pca_1"],
+        "pca_2": data_output_gibbs_PROJECTED["g2_pca_2"],
     }
-    current_PROJECTED_window_G2 = pd.DataFrame(d)
-    current_PROJECTED_window_G2 = current_PROJECTED_window_G2.dropna()  # Drop NAN rows
+    current_PROJECTED_window_g2 = pd.DataFrame(d)
+    current_PROJECTED_window_g2 = current_PROJECTED_window_g2.dropna()  # Drop NAN rows
 
     # Data in original 3d window
     d = {
-        "Pseudo_Time_normal": data_output_gibbs_ORIGNAL["G1_Pseudo_Time_normal"],
-        "tsne_1": data_output_gibbs_ORIGNAL["G1_tsne_1"],
-        "tsne_2": data_output_gibbs_ORIGNAL["G1_tsne_2"],
+        "psuedo_time_normal": data_output_gibbs_ORIGNAL["g1_psuedo_time_normal"],
+        "pca_1": data_output_gibbs_ORIGNAL["g1_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAL["g1_pca_2"],
     }
-    current_ORIGINAL_window_G1_3d = pd.DataFrame(d)
-    current_ORIGINAL_window_G1_3d = (
-        current_ORIGINAL_window_G1_3d.dropna()
+    current_ORIGINAL_window_g1_3d = pd.DataFrame(d)
+    current_ORIGINAL_window_g1_3d = (
+        current_ORIGINAL_window_g1_3d.dropna()
     )  # Drop NAN rows
 
     d = {
-        "Pseudo_Time_normal": data_output_gibbs_ORIGNAL["G2_Pseudo_Time_normal"],
-        "tsne_1": data_output_gibbs_ORIGNAL["G2_tsne_1"],
-        "tsne_2": data_output_gibbs_ORIGNAL["G2_tsne_2"],
+        "psuedo_time_normal": data_output_gibbs_ORIGNAL["g2_psuedo_time_normal"],
+        "pca_1": data_output_gibbs_ORIGNAL["g2_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAL["g2_pca_2"],
     }
-    current_ORIGINAL_window_G2_3d = pd.DataFrame(d)
-    current_ORIGINAL_window_G2_3d = (
-        current_ORIGINAL_window_G2_3d.dropna()
+    current_ORIGINAL_window_g2_3d = pd.DataFrame(d)
+    current_ORIGINAL_window_g2_3d = (
+        current_ORIGINAL_window_g2_3d.dropna()
     )  # Drop NAN rows
 
     d = {
-        "tsne_1": data_output_gibbs_ORIGNAL["G1_tsne_1"],
-        "tsne_2": data_output_gibbs_ORIGNAL["G1_tsne_2"],
+        "pca_1": data_output_gibbs_ORIGNAL["g1_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAL["g1_pca_2"],
     }
-    current_ORIGINAL_window_G1 = pd.DataFrame(d)
-    current_ORIGINAL_window_G1_2d = current_ORIGINAL_window_G1.dropna()  # Drop NAN rows
+    current_ORIGINAL_window_g1 = pd.DataFrame(d)
+    current_ORIGINAL_window_g1_2d = current_ORIGINAL_window_g1.dropna()  # Drop NAN rows
 
     d = {
-        "tsne_1": data_output_gibbs_ORIGNAL["G2_tsne_1"],
-        "tsne_2": data_output_gibbs_ORIGNAL["G2_tsne_2"],
+        "pca_1": data_output_gibbs_ORIGNAL["g2_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAL["g2_pca_2"],
     }
-    current_ORIGINAL_window_G2_2d = pd.DataFrame(d)
-    current_ORIGINAL_window_G2_2d = (
-        current_ORIGINAL_window_G2_2d.dropna()
+    current_ORIGINAL_window_g2_2d = pd.DataFrame(d)
+    current_ORIGINAL_window_g2_2d = (
+        current_ORIGINAL_window_g2_2d.dropna()
     )  # Drop NAN rows
 
     if len(previouse_window_L1.index) > len(previouse_window_L2.index):
@@ -589,47 +589,47 @@ def euclidean_dist_association(
     # The prevouse data is known as the image and the current data as the template
     # Data frame of mean meseure distance to mean
     mean = previouse_window_L1.mean(axis=0)
-    mean.columns = ["tsne_1", "tsne_2"]
+    mean.columns = ["pca_1", "pca_2"]
     # Calculate euclidean distance
-    euclidean_distance_L1_G1 = (
-        (current_ORIGINAL_window_G1_3d - mean).pow(2).sum(1).pow(0.5)
+    euclidean_distance_L1_g1 = (
+        (current_ORIGINAL_window_g1_3d - mean).pow(2).sum(1).pow(0.5)
     )
-    euclidean_distance_L1_G1 = euclidean_distance_L1_G1.mean(axis=0)
+    euclidean_distance_L1_g1 = euclidean_distance_L1_g1.mean(axis=0)
 
     mean = previouse_window_L2.mean(axis=0)
-    mean.columns = ["tsne_1", "tsne_2"]
-    euclidean_distance_L2_G1 = (
-        (current_ORIGINAL_window_G1_3d - mean).pow(2).sum(1).pow(0.5)
+    mean.columns = ["pca_1", "pca_2"]
+    euclidean_distance_L2_g1 = (
+        (current_ORIGINAL_window_g1_3d - mean).pow(2).sum(1).pow(0.5)
     )
-    euclidean_distance_L2_G1 = euclidean_distance_L2_G1.mean(axis=0)
+    euclidean_distance_L2_g1 = euclidean_distance_L2_g1.mean(axis=0)
 
     # Bigger distance == bad!
-    if euclidean_distance_L1_G1 > euclidean_distance_L2_G1:
-        NEW_previouse_window_L1 = current_ORIGINAL_window_G2_3d  # Assign the current window as future previose window
-        NEW_previouse_window_L2 = current_ORIGINAL_window_G1_3d  # Assign the current window as future previose window
+    if euclidean_distance_L1_g1 > euclidean_distance_L2_g1:
+        NEW_previouse_window_L1 = current_ORIGINAL_window_g2_3d  # Assign the current window as future previose window
+        NEW_previouse_window_L2 = current_ORIGINAL_window_g1_3d  # Assign the current window as future previose window
 
-        NEW_previouse_window_L1_PROJECTED = current_ORIGINAL_window_G2_3d
-        NEW_previouse_window_L2_PROJECTED = current_ORIGINAL_window_G1_3d
+        NEW_previouse_window_L1_PROJECTED = current_ORIGINAL_window_g2_3d
+        NEW_previouse_window_L2_PROJECTED = current_ORIGINAL_window_g1_3d
 
         # Correctly append asociated data to new lineage
 
-        frames = [Lineage_1, current_ORIGINAL_window_G2_3d]
+        frames = [Lineage_1, current_ORIGINAL_window_g2_3d]
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-        frames = [Lineage_2, current_ORIGINAL_window_G1_3d]
+        frames = [Lineage_2, current_ORIGINAL_window_g1_3d]
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
     else:
-        NEW_previouse_window_L1 = current_ORIGINAL_window_G1_3d  # Assign the current window as future previose window
-        NEW_previouse_window_L2 = current_ORIGINAL_window_G2_3d  # Assign the current window as future previose window
+        NEW_previouse_window_L1 = current_ORIGINAL_window_g1_3d  # Assign the current window as future previose window
+        NEW_previouse_window_L2 = current_ORIGINAL_window_g2_3d  # Assign the current window as future previose window
 
-        NEW_previouse_window_L1_PROJECTED = current_ORIGINAL_window_G1_3d
-        NEW_previouse_window_L2_PROJECTED = current_ORIGINAL_window_G2_3d
+        NEW_previouse_window_L1_PROJECTED = current_ORIGINAL_window_g1_3d
+        NEW_previouse_window_L2_PROJECTED = current_ORIGINAL_window_g2_3d
 
-        frames = [Lineage_1, current_ORIGINAL_window_G1_3d]
+        frames = [Lineage_1, current_ORIGINAL_window_g1_3d]
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-        frames = [Lineage_2, current_ORIGINAL_window_G2_3d]
+        frames = [Lineage_2, current_ORIGINAL_window_g2_3d]
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
     # Associate lineage_1 and lineage_2 with before_split and after_split due to window and step size mis match
