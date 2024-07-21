@@ -54,40 +54,11 @@ def main():
 
     # """
     # -----------------------------------------------------------------
-    # OUTPUT
-    # -----------------------------------------------------------------
-    # """
-
-    # human_bone_marrow_and_human_UCB
-    # TODO move to config
-    primary_label = "Human bone marrow"  # Primary data label
-    secondary_label = "Human UCB"  # Secondary data label
-    picture_name = "human_bone_marrow_and_human_UCB"  # Label of saved figure
-
-    # Display settings
-    genelist = ["CD34", "GATA1", "MPO"]  # Genes to be displayed (must be equal to 3)
-
-    two_dimension_manifold_plot = True  # Two dimensional phenotypic manifold plot
-    three_dimension_manifold_plot = True  # Three dimensional phenotypic manifold plot
-    gene_expression_plot = (
-        True  # Gene expressions of two dimensional phenotypic manifold plot
-    )
-    bifurcation_plot = True  # Detected bifurcation points plot
-    one_lineage_plot = True  # Plot one detected lineage at a time
-    all_lineage_plot = True  # Plot all detected lineage
-    frenet_frame_plot = True  # Plot Frenet frame representation
-    GP_with_data_plot = True  # Gaussian process with data plot
-    GP_only_plot = True  # Gaussian process only plot
-    GP_per_lineage_plot = (
-        True  # Plot one detected lineage with Gaussian process at a time
-    )
-
-    # """
-    # -----------------------------------------------------------------
     # START BAGEL
     # -----------------------------------------------------------------
     # """
-    timestamp_prefix = 1
+
+    output_version_no = bagel_config["output"]["output_version_no"]
     bagel_object = bagel_class_script.BAGEL(
         bagel_config,
         load_old_manifold,
@@ -95,57 +66,25 @@ def main():
         main_data_file,
         secondary_data_file,
         early_cell,
-        timestamp_prefix,
+        output_version_no,
     )
     bagel_object.create_processing_dir()
     bagel_object.load_datasets()
     bagel_object.load_phenotypic_manifold()
 
-    # TODO actual math...
+    # TODO complete formating
     bagel_object.bagel_loop()
 
-    # # Diffusion components of palantri algorithm
-    # diffusion_components = 5
-
-    # if results_only == False:
-    #     # Dimensionality reduction and pseuod-time
-    #     pseudo_time.palantir_pseudo_time(
-    #         early_cell,
-    #         diffusion_components,
-    #         load_old_manifold,
-    #         main_data_file,
-    #         secondary_data_file,
-    #     )
-
-    #     # Trajectory infernce
-    #     # _, _ = lineages.lineages_estimater()
-    #     lineages.lineages_estimater()
-
-    # # Plot results
-    # print("Results start.")
-    # D_resutls.results(
-    #     primary_label,
-    #     secondary_label,
-    #     picture_name,
-    #     genelist,
-    #     two_dimension_manifold_plot,
-    #     three_dimension_manifold_plot,
-    #     gene_expression_plot,
-    #     bifurcation_plot,
-    #     one_lineage_plot,
-    #     all_lineage_plot,
-    #     frenet_frame_plot,
-    #     GP_with_data_plot,
-    #     GP_only_plot,
-    #     GP_per_lineage_plot,
-    # )
-    # print("BAGEL -- END.")
+    # TODO plotting
+    bagel_object.plot()
+    print("BAGEL -- END.")
 
 
 if __name__ == "__main__":
     main()
 
 
+# TODO remove below
 #  # """
 #     # -----------------------------------------------------------------
 #     # Example inputs
@@ -171,3 +110,33 @@ if __name__ == "__main__":
 #     # main_data_file = 'data/sample_scseq_data.csv' #Mouse
 #     # secondary_data_file = 'data/human_UCB.csv' #Human 2
 #     # early_cell = 'W30258'
+
+# """
+# -----------------------------------------------------------------
+# OUTPUT
+# -----------------------------------------------------------------
+# """
+
+# # human_bone_marrow_and_human_UCB
+# # TODO move to config
+# primary_label = "Human bone marrow"  # Primary data label
+# secondary_label = "Human UCB"  # Secondary data label
+# output_prefix_label = "human_bone_marrow_and_human_UCB"  # Label of saved figure
+
+# # Display settings
+# genelist = ["CD34", "GATA1", "MPO"]  # Genes to be displayed (must be equal to 3)
+
+# two_dimension_manifold_plot = True  # Two dimensional phenotypic manifold plot
+# three_dimension_manifold_plot = True  # Three dimensional phenotypic manifold plot
+# gene_expression_plot = (
+#     True  # Gene expressions of two dimensional phenotypic manifold plot
+# )
+# bifurcation_plot = True  # Detected bifurcation points plot
+# one_lineage_plot = True  # Plot one detected lineage at a time
+# all_lineage_plot = True  # Plot all detected lineage
+# frenet_frame_plot = True  # Plot Frenet frame representation
+# GP_with_data_plot = True  # Gaussian process with data plot
+# GP_only_plot = True  # Gaussian process only plot
+# GP_per_lineage_plot = (
+#     True  # Plot one detected lineage with Gaussian process at a time
+# )

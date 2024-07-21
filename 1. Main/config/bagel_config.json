@@ -1,6 +1,7 @@
 {
     "output": {
-        "results_only": false
+        "results_only": false,
+        "output_version_no": 1,
     },
     "phenotypic_manifold_config": {
         "load_old_manifold": true,
@@ -17,10 +18,31 @@
         }
     },
     "bagel_loop_config": {
+        "load_old_bagel_loop": false,
         "window_interval_extra_samples": 200,
         "window_interval_actual_samples": 150,
         "gibbs_samples": 2000,
         "gibbs_burn_in_period": 500,
         "initialize_cells_offset": 0
+    },
+    "plot_config": {
+        "primary_label": "Human bone marrow",
+        "secondary_label": "",
+        "output_prefix_label": "human_bone_marrow_and_human_UCB",
+        "gene_list": [
+            "CD34",
+            "GATA1",
+            "MPO"
+        ],
+        "two_dimension_manifold_plot": true,
+        "three_dimension_manifold_plot": true,
+        "gene_expression_plot": true,
+        "bifurcation_plot": true,
+        "one_lineage_plot": true,
+        "all_lineage_plot": true,
+        "frenet_frame_plot": true,
+        "gp_with_data_plot": true,
+        "gp_only_plot": true,
+        "gp_per_lineage_plot": true
     }
 }
