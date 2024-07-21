@@ -1030,18 +1030,24 @@ class BAGEL(object):
 
                 # Dump frenet frame data
                 joblib.dump(
-                    Frenet_frame_NORMAL_VECTOR,
-                    "Frenet_frame_NORMAL_VECTOR" + str(Final_lineage_counter) + ".pkl",
+                    frenet_frame_normal_vector,
+                    f"{self.result_folder}/frenet_frame_normal_vector"
+                    + str(Final_lineage_counter)
+                    + ".pkl",
                     compress=3,
                 )
                 joblib.dump(
-                    Frenet_frame_MEAN,
-                    "Frenet_frame_MEAN" + str(Final_lineage_counter) + ".pkl",
+                    frenet_frame_mean,
+                    f"{self.result_folder}/frenet_frame_mean"
+                    + str(Final_lineage_counter)
+                    + ".pkl",
                     compress=3,
                 )
                 joblib.dump(
-                    Frenet_frame_COUNTER,
-                    "Frenet_frame_COUNTER" + str(Final_lineage_counter) + ".pkl",
+                    frenet_frame_counter,
+                    f"{self.result_folder}/frenet_frame_counter"
+                    + str(Final_lineage_counter)
+                    + ".pkl",
                     compress=3,
                 )
 
@@ -1096,11 +1102,27 @@ class BAGEL(object):
                     )  # Remove new pseudo data lineage from data
 
         # Dump pkl file
-        joblib.dump(Final_lineage_df, "Final_lineage_df.pkl", compress=3)
-        joblib.dump(Final_lineage_counter, "Final_lineage_counter.pkl", compress=3)
-        joblib.dump(bifurcation_data, "bifurcation_data.pkl", compress=3)
-        joblib.dump(total_bifurcations, "total_bifurcations.pkl", compress=3)
-        joblib.dump(previouse_window_number, "previouse_window_number.pkl", compress=3)
+        joblib.dump(
+            Final_lineage_df, f"{self.result_folder}/Final_lineage_df.pkl", compress=3
+        )
+        joblib.dump(
+            Final_lineage_counter,
+            f"{self.result_folder}/Final_lineage_counter.pkl",
+            compress=3,
+        )
+        joblib.dump(
+            bifurcation_data, f"{self.result_folder}/bifurcation_data.pkl", compress=3
+        )
+        joblib.dump(
+            total_bifurcations,
+            f"{self.result_folder}/total_bifurcations.pkl",
+            compress=3,
+        )
+        joblib.dump(
+            previouse_window_number,
+            f"{self.result_folder}/previouse_window_number.pkl",
+            compress=3,
+        )
 
     def _plot(self):
         """
