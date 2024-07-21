@@ -1102,7 +1102,7 @@ class BAGEL(object):
             )
             joblib.dump(
                 final_lineage_df,
-                f"{self.result_folder}/final_lineage_df.pkl",
+                f"{self.result_folder}/final_lineage_counter.pkl",
                 compress=3,
             )
             joblib.dump(
