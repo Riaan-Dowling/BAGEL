@@ -167,7 +167,7 @@ def frenet_frame_slice(
     frenet_frame_slice
     """
 
-    print("Plane estiamte start.")
+    print("Frenet frame estiamte start.")
     if final_window is True:  # Incroperate data that does not make a complete widow
         window_interval_actual_samples = len(
             window_removed_bagel_loop_data["pseudo_time_normal"]
@@ -190,7 +190,7 @@ def frenet_frame_slice(
         window_interval_extra_samples,
     )
 
-    print("Plane estiamte end.")
+    print("Frenet frame estiamte end.")
     return (
         mean_window_bagel_loop_data,
         normal_vector,
