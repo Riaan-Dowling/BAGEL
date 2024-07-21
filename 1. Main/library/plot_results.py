@@ -17,12 +17,11 @@ import matplotlib.patches as mpatches
 from sklearn import preprocessing  # Normalise data [-1, 1]
 
 import os
-import plots
 
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import proj3d
 import shutil
-import gaussian_process
+import library.gaussian_process as gp_sup
 
 
 plt.rcParams["font.family"] = "Times New Roman"
@@ -972,12 +971,12 @@ def results(
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
                 Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
@@ -1067,12 +1066,12 @@ def results(
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
                 Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
@@ -1197,12 +1196,12 @@ def results(
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
                 Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
@@ -1931,12 +1930,12 @@ def results(
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
                 Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
                 ax.plot(
@@ -2019,12 +2018,12 @@ def results(
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
                 Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
@@ -2089,12 +2088,12 @@ def results(
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
                 Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gaussian_process.Gaussian_process_algorithm(
+                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
                     X_train, Y_train
                 )
 
