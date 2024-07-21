@@ -788,17 +788,17 @@ def gibbs_sampler_2_gaussians(
         )
         # Return data
         d = {
-            "G1_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
-            "G1_tsne_1": ORIGINAL_window_1["pca_1"],
-            "G1_tsne_2": ORIGINAL_window_1["pca_2"],
+            "g1_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
+            "g1_pca_1": ORIGINAL_window_1["pca_1"],
+            "g1_pca_2": ORIGINAL_window_1["pca_2"],
         }
         data_output_gibbs_ORIGNAL = pd.DataFrame(d)
 
         # Return data
         d = {
-            "G1_pseudo_time_normal": window_3d["pseudo_time_normal"],
-            "G1_tsne_1": window_3d["pca_1"],
-            "G1_tsne_2": window_3d["pca_2"],
+            "g1_pseudo_time_normal": window_3d["pseudo_time_normal"],
+            "g1_pca_1": window_3d["pca_1"],
+            "g1_pca_2": window_3d["pca_2"],
         }
         data_output_gibbs_PROJECTED = pd.DataFrame(d)
 
@@ -943,17 +943,17 @@ def gibbs_sampler_2_gaussians(
             )
             # Return data
             d = {
-                "G1_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
-                "G1_tsne_1": ORIGINAL_window_1["pca_1"],
-                "G1_tsne_2": ORIGINAL_window_1["pca_2"],
+                "g1_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
+                "g1_pca_1": ORIGINAL_window_1["pca_1"],
+                "g1_pca_2": ORIGINAL_window_1["pca_2"],
             }
             data_output_gibbs_ORIGNAL = pd.DataFrame(d)
 
             # Return data
             d = {
-                "G1_pseudo_time_normal": window_3d["pseudo_time_normal"],
-                "G1_tsne_1": window_3d["pca_1"],
-                "G1_tsne_2": window_3d["pca_2"],
+                "g1_pseudo_time_normal": window_3d["pseudo_time_normal"],
+                "g1_pca_1": window_3d["pca_1"],
+                "g1_pca_2": window_3d["pca_2"],
             }
             data_output_gibbs_PROJECTED = pd.DataFrame(d)
 
@@ -1044,46 +1044,46 @@ def gibbs_sampler_2_gaussians(
 
                 # Orignal window data
                 d = {
-                    "G1_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
-                    "G1_tsne_1": ORIGINAL_window_1["pca_1"],
-                    "G1_tsne_2": ORIGINAL_window_1["pca_2"],
-                    "G2_pseudo_time_normal": ORIGINAL_window_2["pseudo_time_normal"],
-                    "G2_tsne_1": ORIGINAL_window_2["pca_1"],
-                    "G2_tsne_2": ORIGINAL_window_2["pca_2"],
+                    "g1_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
+                    "g1_pca_1": ORIGINAL_window_1["pca_1"],
+                    "g1_pca_2": ORIGINAL_window_1["pca_2"],
+                    "g2_pseudo_time_normal": ORIGINAL_window_2["pseudo_time_normal"],
+                    "g2_pca_1": ORIGINAL_window_2["pca_1"],
+                    "g2_pca_2": ORIGINAL_window_2["pca_2"],
                 }
                 data_output_gibbs_ORIGNAL = pd.DataFrame(d)
 
                 # Plane PROJECTED data
                 d = {
-                    "G1_pseudo_time_normal": PROJECTED_window_1["pseudo_time_normal"],
-                    "G1_tsne_1": PROJECTED_window_1["pca_1"],
-                    "G1_tsne_2": PROJECTED_window_1["pca_2"],
-                    "G2_pseudo_time_normal": PROJECTED_window_2["pseudo_time_normal"],
-                    "G2_tsne_1": PROJECTED_window_2["pca_1"],
-                    "G2_tsne_2": PROJECTED_window_2["pca_2"],
+                    "g1_pseudo_time_normal": PROJECTED_window_1["pseudo_time_normal"],
+                    "g1_pca_1": PROJECTED_window_1["pca_1"],
+                    "g1_pca_2": PROJECTED_window_1["pca_2"],
+                    "g2_pseudo_time_normal": PROJECTED_window_2["pseudo_time_normal"],
+                    "g2_pca_1": PROJECTED_window_2["pca_1"],
+                    "g2_pca_2": PROJECTED_window_2["pca_2"],
                 }
                 data_output_gibbs_PROJECTED = pd.DataFrame(d)
 
             else:
                 # Orignal window data
                 d = {
-                    "G1_pseudo_time_normal": ORIGINAL_window_2["pseudo_time_normal"],
-                    "G1_tsne_1": ORIGINAL_window_2["pca_1"],
-                    "G1_tsne_2": ORIGINAL_window_2["pca_2"],
-                    "G2_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
-                    "G2_tsne_1": ORIGINAL_window_1["pca_1"],
-                    "G2_tsne_2": ORIGINAL_window_1["pca_2"],
+                    "g1_pseudo_time_normal": ORIGINAL_window_2["pseudo_time_normal"],
+                    "g1_pca_1": ORIGINAL_window_2["pca_1"],
+                    "g1_pca_2": ORIGINAL_window_2["pca_2"],
+                    "g2_pseudo_time_normal": ORIGINAL_window_1["pseudo_time_normal"],
+                    "g2_pca_1": ORIGINAL_window_1["pca_1"],
+                    "g2_pca_2": ORIGINAL_window_1["pca_2"],
                 }
                 data_output_gibbs_ORIGNAL = pd.DataFrame(d)
 
                 # Plane PROJECTED data
                 d = {
-                    "G1_pseudo_time_normal": PROJECTED_window_2["pseudo_time_normal"],
-                    "G1_tsne_1": PROJECTED_window_2["pca_1"],
-                    "G1_tsne_2": PROJECTED_window_2["pca_2"],
-                    "G2_pseudo_time_normal": PROJECTED_window_1["pseudo_time_normal"],
-                    "G2_tsne_1": PROJECTED_window_1["pca_1"],
-                    "G2_tsne_2": PROJECTED_window_1["pca_2"],
+                    "g1_pseudo_time_normal": PROJECTED_window_2["pseudo_time_normal"],
+                    "g1_pca_1": PROJECTED_window_2["pca_1"],
+                    "g1_pca_2": PROJECTED_window_2["pca_2"],
+                    "g2_pseudo_time_normal": PROJECTED_window_1["pseudo_time_normal"],
+                    "g2_pca_1": PROJECTED_window_1["pca_1"],
+                    "g2_pca_2": PROJECTED_window_1["pca_2"],
                 }
                 data_output_gibbs_PROJECTED = pd.DataFrame(d)
 
