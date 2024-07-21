@@ -390,8 +390,8 @@ class BAGEL(object):
 
         # Global undefined lineages
         to_be_determinded = pd.DataFrame()  # To be estimated lineages
-        Final_lineage_df = pd.DataFrame()  # Final lineage data_frame
-        Final_lineage_counter = 0  # Count total lineages
+        final_lineage_df = pd.DataFrame()  # Final lineage data_frame
+        final_lineage_df = 0  # Count total lineages
         all_lineages_detected = False
 
         # """
@@ -566,7 +566,6 @@ class BAGEL(object):
                 # Determine adaptive window
                 # -----------------------------------------------------------------
                 # """
-
                 # TODO check all if states
                 (
                     is_final_window,
@@ -594,13 +593,12 @@ class BAGEL(object):
                     # -----------------------------------------------------------------
                     # Estimate plane
                     # -----------------------------------------------------------------
-                    # """ TODO Future refinement
                     (
-                        mean_window_bagel_loop_data,
-                        normal_vector,
+                        _,
+                        _,
                         covariance_length,
                         window_bagel_loop_data,
-                        not_window_bagel_loop_data,
+                        _,
                         self.window_removed_bagel_loop_data,
                     ) = frenet_frame_sup.frenet_frame_slice(
                         self.bagel_loop_data,
@@ -609,27 +607,14 @@ class BAGEL(object):
                         window_interval_extra_samples,
                         is_final_window,
                     )
-                    print()
 
                     # Create  window data dataframe
-                    window_2d = pd.DataFrame(
-                        {
-                            "pca_1": window_bagel_loop_data["pca_1"],
-                            "pca_2": window_bagel_loop_data["pca_2"],
-                        }
+                    window_bagel_loop_data_no_cell_id = window_bagel_loop_data[
+                        ["pseudo_time_normal", "pca_1", "pca_2"]
+                    ]
+                    window_bagel_loop_data_no_cell_id.reset_index(
+                        drop=True, inplace=True
                     )
-                    window_3d = pd.DataFrame(
-                        {
-                            "pseudo_time_normal": window_bagel_loop_data[
-                                "pseudo_time_normal"
-                            ],
-                            "pca_1": window_bagel_loop_data["pca_1"],
-                            "pca_2": window_bagel_loop_data["pca_2"],
-                        }
-                    )
-                    # Reset data index
-                    window_3d.reset_index(drop=True, inplace=True)
-                    window_2d.reset_index(drop=True, inplace=True)
 
                     # """
                     # -----------------------------------------------------------------
@@ -643,12 +628,12 @@ class BAGEL(object):
                         two_model_flag,
                         data_output_gibbs_original,
                         data_output_gibbs_projected,
-                        M1_map_mean,
-                        M1_map_cov,
-                        M2_map_mean_G1,
-                        M2_map_cov_G1,
-                        M2_map_mean_G2,
-                        M2_map_cov_G2,
+                        model_1_map_mean,
+                        model_1_map_cov,
+                        model_2_map_mean_G1,
+                        model_2_map_cov_G1,
+                        model_2_map_mean_G2,
+                        model_2_map_cov_G2,
                     ) = bays_sup.gibbs_sampler_2_gaussians(
                         previous_proximity,
                         window_bagel_loop_data,
@@ -666,8 +651,6 @@ class BAGEL(object):
                     # -----------------------------------------------------------------
                     # """
 
-                    data_association_after_split_flag = False
-
                     # Estimate global split
                     (
                         split_in_lineage_once,
@@ -677,7 +660,7 @@ class BAGEL(object):
                         split_in_lineage_twice_data,
                         once_data_original,
                         once_data_projected,
-                        twice_data_ORIGNAL,
+                        twice_data_original,
                         twice_data_projected,
                         first_time_association,
                         main_lineage_1_df,
@@ -689,7 +672,7 @@ class BAGEL(object):
                         two_model_flag,
                         split_in_lineage_once_data,
                         split_in_lineage_twice_data,
-                        window_3d,
+                        window_bagel_loop_data_no_cell_id,
                         lineage_split_flag,
                         is_final_window,
                         window_interval_extra_samples,
@@ -731,7 +714,7 @@ class BAGEL(object):
                                 split_in_lineage_once,
                                 split_in_lineage_twice,
                                 lineage_split_flag,
-                                window_3d,
+                                window_bagel_loop_data_no_cell_id,
                                 one_model_flag,
                                 two_model_flag,
                                 main_lineage_1_df,
@@ -792,7 +775,7 @@ class BAGEL(object):
                                 split_in_lineage_once,
                                 split_in_lineage_twice,
                                 lineage_split_flag,
-                                window_3d,
+                                window_bagel_loop_data_no_cell_id,
                                 one_model_flag,
                                 two_model_flag,
                                 main_lineage_1_df,
@@ -801,7 +784,7 @@ class BAGEL(object):
                                 data_output_gibbs_projected,
                                 once_data_original,
                                 once_data_projected,
-                                twice_data_ORIGNAL,
+                                twice_data_original,
                                 twice_data_projected,
                                 first_time_association,
                                 previouse_window_l1,
@@ -854,7 +837,7 @@ class BAGEL(object):
                         split_in_lineage_once,
                         split_in_lineage_twice,
                         lineage_split_flag,
-                        window_3d,
+                        window_bagel_loop_data_no_cell_id,
                         one_model_flag,
                         two_model_flag,
                         main_lineage_1_df,
@@ -863,7 +846,7 @@ class BAGEL(object):
                         data_output_gibbs_projected,
                         once_data_original,
                         once_data_projected,
-                        twice_data_ORIGNAL,
+                        twice_data_original,
                         twice_data_projected,
                         first_time_association,
                         previouse_window_l1,
@@ -934,8 +917,6 @@ class BAGEL(object):
                         )
                     ]
 
-                    data_association_after_split_flag = True
-
                 # """
                 # -----------------------------------------------------------------
                 # Display
@@ -956,10 +937,6 @@ class BAGEL(object):
             # Remove any duplicate assignments due to window and stepsize mismatch
             main_lineage_1_df = main_lineage_1_df.drop_duplicates()
             main_lineage_2_df = main_lineage_2_df.drop_duplicates()
-            # Drop if fake detection
-
-            before_split = before_split.drop_duplicates()
-            after_split = after_split.drop_duplicates()
 
             # Bifurcation
             (
@@ -967,7 +944,7 @@ class BAGEL(object):
                 bifurcate_once,
                 total_bifurcations,
             ) = majority_sup.bifurcation_points(
-                split,
+                lineage_split_flag,
                 bifurcation_data,
                 bifurcate_once,
                 total_bifurcations,
@@ -1004,20 +981,20 @@ class BAGEL(object):
                     self.bagel_loop_data.dropna()
                 )  # Drop possible NAN data
                 self.bagel_loop_data.columns = [
-                    "Pseudo_Time_normal",
-                    "tsne_1",
-                    "tsne_2",
+                    "pseudo_time_normal",
+                    "pca_1",
+                    "pca_2",
                 ]
 
                 # Sort data
                 self.bagel_loop_data = self.bagel_loop_data.sort_values(
-                    "Pseudo_Time_normal"
+                    "pseudo_time_normal"
                 )
                 # Provide each cell with a number
-                pt_samples = len(self.bagel_loop_data["tsne_1"])
+                pt_samples = len(self.bagel_loop_data["pca_1"])
                 cell_ID_number = range(pt_samples)
                 # Number of cell
-                self.bagel_loop_data["cell_ID_number"] = cell_ID_number
+                self.bagel_loop_data["cell_id_number"] = cell_ID_number
 
                 to_be_determinded.columns = range(
                     to_be_determinded.shape[1]
@@ -1032,40 +1009,40 @@ class BAGEL(object):
                 joblib.dump(
                     frenet_frame_normal_vector,
                     f"{self.result_folder}/frenet_frame_normal_vector"
-                    + str(Final_lineage_counter)
+                    + str(final_lineage_df)
                     + ".pkl",
                     compress=3,
                 )
                 joblib.dump(
                     frenet_frame_mean,
                     f"{self.result_folder}/frenet_frame_mean"
-                    + str(Final_lineage_counter)
+                    + str(final_lineage_df)
                     + ".pkl",
                     compress=3,
                 )
                 joblib.dump(
                     frenet_frame_counter,
                     f"{self.result_folder}/frenet_frame_counter"
-                    + str(Final_lineage_counter)
+                    + str(final_lineage_df)
                     + ".pkl",
                     compress=3,
                 )
 
                 # Lineages
-                if Final_lineage_df.empty:
-                    Final_lineage_df.reset_index(drop=True, inplace=True)
+                if final_lineage_df.empty:
+                    final_lineage_df.reset_index(drop=True, inplace=True)
                     self.bagel_loop_data.reset_index(drop=True, inplace=True)
-                    Final_lineage_df = self.bagel_loop_data.iloc[:, 0:3]
+                    final_lineage_df = self.bagel_loop_data.iloc[:, 0:3]
 
                 else:
-                    Final_lineage_df.reset_index(drop=True, inplace=True)
+                    final_lineage_df.reset_index(drop=True, inplace=True)
                     self.bagel_loop_data.reset_index(drop=True, inplace=True)
-                    frames = [Final_lineage_df, self.bagel_loop_data.iloc[:, 0:3]]
-                    Final_lineage_df = pd.concat(
+                    frames = [final_lineage_df, self.bagel_loop_data.iloc[:, 0:3]]
+                    final_lineage_df = pd.concat(
                         frames, axis=1, sort=False
                     )  # Append new lineage data
 
-                Final_lineage_counter = Final_lineage_counter + 1
+                final_lineage_df = final_lineage_df + 1
 
                 if to_be_determinded.empty:
                     print("All lineages detected")
@@ -1079,20 +1056,20 @@ class BAGEL(object):
                         self.bagel_loop_data.dropna()
                     )  # Drop possible NAN data
                     self.bagel_loop_data.columns = [
-                        "Pseudo_Time_normal",
-                        "tsne_1",
-                        "tsne_2",
+                        "pseudo_time_normal",
+                        "pca_1",
+                        "pca_2",
                     ]
 
                     # Sort data
                     self.bagel_loop_data = self.bagel_loop_data.sort_values(
-                        "Pseudo_Time_normal"
+                        "pseudo_time_normal"
                     )
                     # Provide each cell with a number
-                    pt_samples = len(self.bagel_loop_data["tsne_1"])
+                    pt_samples = len(self.bagel_loop_data["pca_1"])
                     cell_ID_number = range(pt_samples)
                     # Number of cell
-                    self.bagel_loop_data["cell_ID_number"] = cell_ID_number
+                    self.bagel_loop_data["cell_id_number"] = cell_ID_number
 
                     to_be_determinded.columns = range(
                         to_be_determinded.shape[1]
@@ -1103,11 +1080,11 @@ class BAGEL(object):
 
         # Dump pkl file
         joblib.dump(
-            Final_lineage_df, f"{self.result_folder}/Final_lineage_df.pkl", compress=3
+            final_lineage_df, f"{self.result_folder}/final_lineage_df.pkl", compress=3
         )
         joblib.dump(
-            Final_lineage_counter,
-            f"{self.result_folder}/Final_lineage_counter.pkl",
+            final_lineage_df,
+            f"{self.result_folder}/final_lineage_df.pkl",
             compress=3,
         )
         joblib.dump(
