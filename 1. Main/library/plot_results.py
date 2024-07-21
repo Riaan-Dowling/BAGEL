@@ -117,7 +117,7 @@ def results(
     colors = ["b", "g", "gold", "sienna", "silver"]
 
     # LOAD DATA
-    log_norm_main_df = joblib.load("log_norm_main_df.pkl")
+    log_norm_main_df = joblib.load(f"{result_folder}/log_norm_main_df.pkl")
 
     # Link terminal state to normalized manifold
     terminal_states = joblib.load(f"{result_folder}/terminal_states.pkl")
