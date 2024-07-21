@@ -8,7 +8,7 @@ from sklearn import preprocessing
 import joblib
 import pandas as pd
 
-from library.phenotypic_manifold_script import PhenotypicManifold
+import library.phenotypic_manifold_script as pheno_sup
 import library.frenet_frame as frenet_frame_sup
 import library.bayesian_model_selection as bays_sup
 import library.majority_vote as majority_sup
@@ -44,7 +44,9 @@ class BAGEL(object):
         self.secondary_df = pd.DataFrame()
 
         # parent_dir
-        self.parent_dir = os.path.dirname(os.path.realpath(__file__))
+        self.parent_dir = os.path.dirname(os.path.realpath(__file__)).split("/library")[
+            0
+        ]
         self.result_folder = os.path.join(
             self.parent_dir, f"run_{self.timestamp_prefix}_result_folder"
         )
@@ -143,7 +145,7 @@ class BAGEL(object):
         """
         load_phenotypic_manifold
         """
-        phenotypic_manifold_object = PhenotypicManifold(
+        phenotypic_manifold_object = pheno_sup.PhenotypicManifold(
             self.total_datasets,
             self.main_df,
             self.secondary_df,
@@ -198,7 +200,7 @@ class BAGEL(object):
 
         # Link terminal state to normalized manifold
         bagel_loop_data_terminal_state = bagel_loop_data.loc[self.terminal_states]
-        # bagel_loop_data_terminal_state = wp_data_TSNE_ROW
+        # bagel_loop_data_terminal_state = self.bagel_loop_data_terminal_state
         joblib.dump(
             bagel_loop_data_terminal_state,
             f"{self.result_folder}/bagel_loop_data_terminal_state.pkl",
@@ -509,18 +511,18 @@ class BAGEL(object):
             twice_data_original = pd.DataFrame(columns=column_place_holder_data)
             twice_data_projected = pd.DataFrame(columns=column_place_holder_data)
 
-            previouse_window_L1 = pd.DataFrame(columns=column_place_holder_data)
-            previouse_window_L2 = pd.DataFrame(columns=column_place_holder_data)
+            previouse_window_l1 = pd.DataFrame(columns=column_place_holder_data)
+            previouse_window_l2 = pd.DataFrame(columns=column_place_holder_data)
 
             main_lineage_1_df = pd.DataFrame(columns=column_place_holder_data)
             main_lineage_2_df = pd.DataFrame(columns=column_place_holder_data)
 
             first_time_association = False  # Start association after delay
 
-            Model_1_Lineage_1_counter = (
+            model_1_lineage_1_counter = (
                 0  # Count how many times model 1 is selected after split detection
             )
-            Model_1_Lineage_2_counter = (
+            model_1_lineage_2_counter = (
                 0  # Count how many times model 1 is selected after split detection
             )
 
@@ -538,27 +540,8 @@ class BAGEL(object):
             # """
             bifurcate_once = False  # Reset flag of bifurcation after each itteration.
 
-            # """
-            # -----------------------------------------------------------------
-            # VIDEO
-            # -----------------------------------------------------------------
-            # """ TODO REMOVE
-            split_VIDEO = False  # Flag for three splits and hence split is true
-            once_VIDEO = False  # Flag for one split
-            twice_VIDEO = False  # Flag for two split
-
-            first_time_association_VIDEO = False  # Only do delayed split values once
-
-            # Save data for first split window
-            once_data_VIDEO_WINDOW = pd.DataFrame()
-            once_data_VIDEO_NOT_WINDOW = pd.DataFrame()
-
-            # Save data for secind split window
-            twice_data_VIDEO_WINDOW = pd.DataFrame()
-            twice_data_VIDEO_NOT_WINDOW = pd.DataFrame()
-
-            previouse_window_L1_projected = pd.DataFrame()
-            previouse_window_L2_projected = pd.DataFrame()
+            previouse_window_l1_projected = pd.DataFrame()
+            previouse_window_l2_projected = pd.DataFrame()
 
             # Data used during bagel calculation
             self.window_removed_bagel_loop_data = self.bagel_loop_data.copy()
@@ -674,6 +657,7 @@ class BAGEL(object):
                         gibbs_burn_in_period,
                         current_window_itteration,
                         self.window_removed_bagel_loop_data,
+                        self.bagel_loop_data_terminal_state,
                     )
 
                     # """
@@ -682,7 +666,7 @@ class BAGEL(object):
                     # -----------------------------------------------------------------
                     # """
 
-                    data_Association_after_split_Flag = False
+                    data_association_after_split_flag = False
 
                     # Estimate global split
                     (
@@ -718,12 +702,12 @@ class BAGEL(object):
                         twice_data_projected,
                         main_lineage_1_df,
                         main_lineage_2_df,
-                        previouse_window_L1,
-                        previouse_window_L2,
-                        previouse_window_L1_projected,
-                        previouse_window_L2_projected,
-                        Model_1_Lineage_1_counter,
-                        Model_1_Lineage_2_counter,
+                        previouse_window_l1,
+                        previouse_window_l2,
+                        previouse_window_l1_projected,
+                        previouse_window_l2_projected,
+                        model_1_lineage_1_counter,
+                        model_1_lineage_2_counter,
                     )
 
                     print()
@@ -734,8 +718,8 @@ class BAGEL(object):
                             (
                                 _,
                                 _,
-                                Lineage_1_Test,
-                                Lineage_2_Test,
+                                lineage_1_test,
+                                lineage_2_test,
                                 _,
                                 _,
                                 _,
@@ -759,40 +743,44 @@ class BAGEL(object):
                                 twice_data_original,
                                 twice_data_projected,
                                 first_time_association,
-                                previouse_window_L1,
-                                previouse_window_L2,
-                                previouse_window_L1_projected,
-                                previouse_window_L2_projected,
-                                Model_1_Lineage_1_counter,
-                                Model_1_Lineage_2_counter,
+                                previouse_window_l1,
+                                previouse_window_l2,
+                                previouse_window_l1_projected,
+                                previouse_window_l2_projected,
+                                model_1_lineage_1_counter,
+                                model_1_lineage_2_counter,
                             )
                             (
-                                Lineage_1_Test,
-                                Lineage_2_Test,
-                                previouse_window_L1_projected,
-                                previouse_window_L2_projected,
+                                lineage_1_test,
+                                lineage_2_test,
+                                previouse_window_l1_projected,
+                                previouse_window_l2_projected,
                             ) = majority_sup.after_split_euclidean_dist_association(
                                 main_lineage_1_df,
                                 main_lineage_2_df,
                                 self.window_removed_bagel_loop_data,
                             )
 
-                            Lineage_1_TERMINAL_STATE = Lineage_1_Test[
-                                Lineage_1_Test["pseudo_time_normal"].isin(
-                                    self.pseudo["pseudo_time_normal"].values
+                            lineage_1_terminal_state = lineage_1_test[
+                                lineage_1_test["pseudo_time_normal"].isin(
+                                    self.bagel_loop_data_terminal_state[
+                                        "pseudo_time_normal"
+                                    ].values
                                 )
                             ]
-                            Lineage_2_TERMINAL_STATE = Lineage_2_Test[
-                                Lineage_2_Test["pseudo_time_normal"].isin(
-                                    wp_data_TSNE_ROW["pseudo_time_normal"].values
+                            lineage_2_terminal_state = lineage_2_test[
+                                lineage_2_test["pseudo_time_normal"].isin(
+                                    self.bagel_loop_data_terminal_state[
+                                        "pseudo_time_normal"
+                                    ].values
                                 )
                             ]
                         else:
                             (
                                 _,
                                 _,
-                                Lineage_1_Test,
-                                Lineage_2_Test,
+                                lineage_1_test,
+                                lineage_2_test,
                                 _,
                                 _,
                                 _,
@@ -816,32 +804,36 @@ class BAGEL(object):
                                 twice_data_ORIGNAL,
                                 twice_data_projected,
                                 first_time_association,
-                                previouse_window_L1,
-                                previouse_window_L2,
-                                previouse_window_L1_projected,
-                                previouse_window_L2_projected,
-                                Model_1_Lineage_1_counter,
-                                Model_1_Lineage_2_counter,
+                                previouse_window_l1,
+                                previouse_window_l2,
+                                previouse_window_l1_projected,
+                                previouse_window_l2_projected,
+                                model_1_lineage_1_counter,
+                                model_1_lineage_2_counter,
                             )
-                            Lineage_1_TERMINAL_STATE = Lineage_1_Test[
-                                Lineage_1_Test["pseudo_time_normal"].isin(
-                                    wp_data_TSNE_ROW["pseudo_time_normal"].values
+                            lineage_1_terminal_state = lineage_1_test[
+                                lineage_1_test["pseudo_time_normal"].isin(
+                                    self.bagel_loop_data_terminal_state[
+                                        "pseudo_time_normal"
+                                    ].values
                                 )
                             ]
-                            Lineage_2_TERMINAL_STATE = Lineage_2_Test[
-                                Lineage_2_Test["pseudo_time_normal"].isin(
-                                    wp_data_TSNE_ROW["pseudo_time_normal"].values
+                            lineage_2_terminal_state = lineage_2_test[
+                                lineage_2_test["pseudo_time_normal"].isin(
+                                    self.bagel_loop_data_terminal_state[
+                                        "pseudo_time_normal"
+                                    ].values
                                 )
                             ]
 
-                        if (Lineage_1_TERMINAL_STATE.empty == True) or (
-                            Lineage_2_TERMINAL_STATE.empty == True
+                        if (lineage_1_terminal_state.empty is True) or (
+                            lineage_2_terminal_state.empty is True
                         ):
                             # Fake lineages
-                            split = False
-                            Model_1 = True
-                            Model_2 = False
-                            print("False split")
+                            lineage_split_flag = False
+                            one_model_flag = True
+                            two_model_flag = False
+                            print("False split - reset paramters")
                         else:
                             print("Split verifyed correct")
 
@@ -851,20 +843,20 @@ class BAGEL(object):
                         split_in_lineage_twice,
                         main_lineage_1_df,
                         main_lineage_2_df,
-                        previouse_window_L1,
-                        previouse_window_L2,
-                        previouse_window_L1_projected,
-                        previouse_window_L2_projected,
+                        previouse_window_l1,
+                        previouse_window_l2,
+                        previouse_window_l1_projected,
+                        previouse_window_l2_projected,
                         first_time_association,
-                        Model_1_Lineage_1_counter,
-                        Model_1_Lineage_2_counter,
+                        model_1_lineage_1_counter,
+                        model_1_lineage_2_counter,
                     ) = majority_sup.association(
                         split_in_lineage_once,
                         split_in_lineage_twice,
                         lineage_split_flag,
                         window_3d,
-                        Model_1,
-                        Model_2,
+                        one_model_flag,
+                        two_model_flag,
                         main_lineage_1_df,
                         main_lineage_2_df,
                         data_output_gibbs_original,
@@ -874,960 +866,247 @@ class BAGEL(object):
                         twice_data_ORIGNAL,
                         twice_data_projected,
                         first_time_association,
-                        previouse_window_L1,
-                        previouse_window_L2,
-                        previouse_window_L1_projected,
-                        previouse_window_L2_projected,
-                        Model_1_Lineage_1_counter,
-                        Model_1_Lineage_2_counter,
+                        previouse_window_l1,
+                        previouse_window_l2,
+                        previouse_window_l1_projected,
+                        previouse_window_l2_projected,
+                        model_1_lineage_1_counter,
+                        model_1_lineage_2_counter,
                     )
 
                     frenet_frame_counter = frenet_frame_counter + 1
 
-        #             # Create Frenet Frame
+                    # Create Frenet Frame
 
-        #             if frenet_frame_normal_vector.empty:
-        #                 # covariance_length.reset_index(drop=True, inplace=True)
-        #                 frenet_frame_normal_vector = pd.DataFrame(covariance_length)
-        #                 frenet_frame_mean = pd.DataFrame(
-        #                     (window_bagel_loop_data.iloc[:, 0:3].mean(axis=0)).values
-        #                 )
+                    if frenet_frame_normal_vector.empty:
+                        # covariance_length.reset_index(drop=True, inplace=True)
+                        frenet_frame_normal_vector = pd.DataFrame(covariance_length)
+                        frenet_frame_mean = pd.DataFrame(
+                            (window_bagel_loop_data.iloc[:, 0:3].mean(axis=0)).values
+                        )
 
-        #             else:
-        #                 # Normal vectors
-        #                 frenet_frame_normal_vector.reset_index(drop=True, inplace=True)
-        #                 # covariance_length.reset_index(drop=True, inplace=True)
-        #                 frames = [
-        #                     frenet_frame_normal_vector,
-        #                     pd.DataFrame(covariance_length),
-        #                 ]
-        #                 frenet_frame_normal_vector = pd.concat(
-        #                     frames, axis=1, sort=False
-        #                 )
+                    else:
+                        # Normal vectors
+                        frenet_frame_normal_vector.reset_index(drop=True, inplace=True)
+                        # covariance_length.reset_index(drop=True, inplace=True)
+                        frenet_frame_normal_vector = pd.concat(
+                            [
+                                frenet_frame_normal_vector,
+                                pd.DataFrame(covariance_length),
+                            ],
+                            axis=1,
+                            sort=False,
+                        )
 
-        #                 # Mean data
-        #                 frenet_frame_mean.reset_index(drop=True, inplace=True)
-        #                 frames = [
-        #                     frenet_frame_mean,
-        #                     pd.DataFrame(
-        #                         (window_bagel_loop_data.iloc[:, 0:3].mean(axis=0)).values
-        #                     ),
-        #                 ]
-        #                 frenet_frame_mean = pd.concat(frames, axis=1, sort=False)
+                        # Mean data
+                        frenet_frame_mean.reset_index(drop=True, inplace=True)
+                        frenet_frame_mean = pd.concat(
+                            [
+                                frenet_frame_mean,
+                                pd.DataFrame(
+                                    (
+                                        window_bagel_loop_data.iloc[:, 0:3].mean(axis=0)
+                                    ).values
+                                ),
+                            ],
+                            axis=1,
+                            sort=False,
+                        )
 
-        #         elif split == True:
-        #             (
-        #                 Lineage_1,
-        #                 Lineage_2,
-        #                 previouse_window_L1_projected,
-        #                 previouse_window_L2_projected,
-        #             ) = split_algorithm.after_split_euclidean_dist_association(
-        #                 Lineage_1, Lineage_2, window_removed_bagel_loop_data
-        #             )
-        #             is_final_window = True
+                elif lineage_split_flag is True:
+                    (
+                        main_lineage_1_df,
+                        main_lineage_2_df,
+                        previouse_window_l1_projected,
+                        previouse_window_l2_projected,
+                    ) = majority_sup.after_split_euclidean_dist_association(
+                        main_lineage_1_df,
+                        main_lineage_2_df,
+                        self.window_removed_bagel_loop_data,
+                    )
+                    is_final_window = True
 
-        #             # Define 'window' data for final window
-        #             window_bagel_loop_data = window_removed_bagel_loop_data
-        #             not_window_bagel_loop_data = pseudo_data[
-        #                 ~pseudo_data["cell_ID_number"].isin(
-        #                     window_bagel_loop_data["cell_ID_number"].values
-        #                 )
-        #             ]
+                    # Define 'window' data for final window
+                    self.window_bagel_loop_data = self.window_removed_bagel_loop_data
+                    not_window_bagel_loop_data = self.bagel_loop_data[
+                        ~self.bagel_loop_data["cell_id_number"].isin(
+                            window_bagel_loop_data["cell_id_number"].values
+                        )
+                    ]
 
-        #             data_Association_after_split_Flag = True
+                    data_association_after_split_flag = True
 
-        #         """
-        #         -----------------------------------------------------------------
-        #         Display
-        #         -----------------------------------------------------------------
-        #         """
+                # """
+                # -----------------------------------------------------------------
+                # Display
+                # -----------------------------------------------------------------
+                # """
 
-        #         # Plot VIDEO window data on manifold
-        #         VIDEO_window_plot_FOLLOW_FLAG = True  # Plane follow
-        #         window_number = previouse_window_number + z
+                # Plot VIDEO window data on manifold
+                window_number = previouse_window_number + current_window_itteration
 
-        #         # --------------------------------------
-        #         # ------------Split detection start-----
-        #         # --------------------------------------
-        #         if split == False:
-        #             previouse_window_L1_projected = window_bagel_loop_data
+                # --------------------------------------
+                # ------------Split detection start-----
+                # --------------------------------------
+                if lineage_split_flag is False:
+                    previouse_window_l1_projected = window_bagel_loop_data
 
-        #         if (
-        #             (Model_2 == True)
-        #             and (once_VIDEO == False)
-        #             and (twice_VIDEO == False)
-        #             and (split_VIDEO == False)
-        #         ):
-        #             once_VIDEO = True  # First split
-        #             once_data_VIDEO_WINDOW = window_bagel_loop_data
-        #             once_data_VIDEO_NOT_WINDOW = not_window_bagel_loop_data
+            previouse_window_number = window_number  # Adjust labeling for VIDEO output
 
-        #             # Data in original 3d window
-        #             d = {
-        #                 "pseudo_time_normal": once_data_projected[
-        #                     "G1_pseudo_time_normal"
-        #                 ],
-        #                 "tsne_1": once_data_projected["G1_tsne_1"],
-        #                 "tsne_2": once_data_projected["G1_tsne_2"],
-        #             }
-        #             current_ORIGINAL_window_G1_3d = pd.DataFrame(d)
-        #             current_ORIGINAL_window_G1_3d = (
-        #                 current_ORIGINAL_window_G1_3d.dropna()
-        #             )  # Drop NAN rows
+            # Remove any duplicate assignments due to window and stepsize mismatch
+            main_lineage_1_df = main_lineage_1_df.drop_duplicates()
+            main_lineage_2_df = main_lineage_2_df.drop_duplicates()
+            # Drop if fake detection
 
-        #             d = {
-        #                 "pseudo_time_normal": once_data_projected[
-        #                     "G2_pseudo_time_normal"
-        #                 ],
-        #                 "tsne_1": once_data_projected["G2_tsne_1"],
-        #                 "tsne_2": once_data_projected["G2_tsne_2"],
-        #             }
-        #             current_ORIGINAL_window_G2_3d = pd.DataFrame(d)
-        #             current_ORIGINAL_window_G2_3d = (
-        #                 current_ORIGINAL_window_G2_3d.dropna()
-        #             )  # Drop NAN rows
+            before_split = before_split.drop_duplicates()
+            after_split = after_split.drop_duplicates()
 
-        #             # Assign NEW previouse windows
-        #             once_VIDEO_previouse_window_L1 = current_ORIGINAL_window_G1_3d
-        #             once_VIDEO_previouse_window_L2 = current_ORIGINAL_window_G2_3d
+            # Bifurcation
+            (
+                bifurcation_data,
+                bifurcate_once,
+                total_bifurcations,
+            ) = majority_sup.bifurcation_points(
+                split,
+                bifurcation_data,
+                bifurcate_once,
+                total_bifurcations,
+                once_data_original,
+            )
 
-        #             # Once Guassian paramets
-        #             once_M1_map_mean = M1_map_mean
-        #             once_M1_map_cov = M1_map_cov
-        #             once_M2_map_mean_G1 = M2_map_mean_G1
-        #             once_M2_map_cov_G1 = M2_map_cov_G1
-        #             once_M2_map_mean_G2 = M2_map_mean_G2
-        #             once_M2_map_cov_G2 = M2_map_cov_G2
+            if lineage_split_flag is True:
+                # Plot indidicating split across entire manifold
 
-        #             # Once model parameters
-        #             once_Model_1 = Model_1
-        #             once_Model_2 = Model_2
+                # plots.estimate_guassians_on_manifold_plot(before_split,after_split, estimate_guassians_on_manifold_plot_FLAG)
+                # plots.two_lineage_plot(Lineage_1, Lineage_2, two_lineage_plot_FLAG)
 
-        #             # Window parameters
-        #             once_window_number = window_number
-        #             once_back_face = back_face
-        #             once_front_face = front_face
+                if to_be_determinded.empty:
+                    main_lineage_1_df.reset_index(drop=True, inplace=True)
+                    main_lineage_2_df.reset_index(drop=True, inplace=True)
+                    to_be_determinded.reset_index(drop=True, inplace=True)
+                    to_be_determinded = pd.concat(
+                        [main_lineage_1_df, main_lineage_2_df], axis=1, sort=False
+                    )  # Append new lineage data
+                else:
+                    main_lineage_1_df.reset_index(drop=True, inplace=True)
+                    main_lineage_2_df.reset_index(drop=True, inplace=True)
+                    to_be_determinded.reset_index(drop=True, inplace=True)
+                    to_be_determinded = pd.concat(
+                        [to_be_determinded, main_lineage_1_df, main_lineage_2_df],
+                        axis=1,
+                        sort=False,
+                    )  # Append new lineage data
 
-        #         elif (
-        #             (Model_2 == True)
-        #             and (once_VIDEO == True)
-        #             and (twice_VIDEO == False)
-        #             and (split_VIDEO == False)
-        #         ):
-        #             twice_VIDEO = True  # Second split is true
-        #             twice_data_VIDEO_WINDOW = window_bagel_loop_data
-        #             twice_data_VIDEO_NOT_WINDOW = not_window_bagel_loop_data
+                self.bagel_loop_data = to_be_determinded.iloc[
+                    :, 0:3
+                ]  # to_be_determinded[to_be_determinded.columns[0:3]] #Select first three columns as new input
+                self.bagel_loop_data = (
+                    self.bagel_loop_data.dropna()
+                )  # Drop possible NAN data
+                self.bagel_loop_data.columns = [
+                    "Pseudo_Time_normal",
+                    "tsne_1",
+                    "tsne_2",
+                ]
 
-        #             # Twice Guassian paramets
-        #             twice_M1_map_mean = M1_map_mean
-        #             twice_M1_map_cov = M1_map_cov
-        #             twice_M2_map_mean_G1 = M2_map_mean_G1
-        #             twice_M2_map_cov_G1 = M2_map_cov_G1
-        #             twice_M2_map_mean_G2 = M2_map_mean_G2
-        #             twice_M2_map_cov_G2 = M2_map_cov_G2
+                # Sort data
+                self.bagel_loop_data = self.bagel_loop_data.sort_values(
+                    "Pseudo_Time_normal"
+                )
+                # Provide each cell with a number
+                pt_samples = len(self.bagel_loop_data["tsne_1"])
+                cell_ID_number = range(pt_samples)
+                # Number of cell
+                self.bagel_loop_data["cell_ID_number"] = cell_ID_number
 
-        #             # Window parameters
-        #             twice_window_number = window_number
-        #             twice_back_face = back_face
-        #             twice_front_face = front_face
+                to_be_determinded.columns = range(
+                    to_be_determinded.shape[1]
+                )  # Rename column names
+                to_be_determinded = to_be_determinded.drop(
+                    [0, 1, 2], axis=1
+                )  # Remove new pseudo data lineage from data
 
-        #             # Once model parameters
-        #             twice_Model_1 = Model_1
-        #             twice_Model_2 = Model_2
+            else:
 
-        #             (
-        #                 _,
-        #                 _,
-        #                 _,
-        #                 _,
-        #                 twice_VIDEO_previouse_window_L1,
-        #                 twice_VIDEO_previouse_window_L2,
-        #                 _,
-        #                 _,
-        #             ) = split_algorithm.euclidean_dist_association(
-        #                 once_VIDEO_previouse_window_L1,
-        #                 once_VIDEO_previouse_window_L2,
-        #                 once_VIDEO_previouse_window_L1,
-        #                 once_VIDEO_previouse_window_L2,
-        #                 twice_data_ORIGNAL,
-        #                 twice_data_projected,
-        #                 Lineage_1,
-        #                 Lineage_2,
-        #                 Model_1,
-        #                 Model_2,
-        #                 Model_1_Lineage_1_counter,
-        #                 Model_1_Lineage_2_counter,
-        #             )
+                # Dump frenet frame data
+                joblib.dump(
+                    Frenet_frame_NORMAL_VECTOR,
+                    "Frenet_frame_NORMAL_VECTOR" + str(Final_lineage_counter) + ".pkl",
+                    compress=3,
+                )
+                joblib.dump(
+                    Frenet_frame_MEAN,
+                    "Frenet_frame_MEAN" + str(Final_lineage_counter) + ".pkl",
+                    compress=3,
+                )
+                joblib.dump(
+                    Frenet_frame_COUNTER,
+                    "Frenet_frame_COUNTER" + str(Final_lineage_counter) + ".pkl",
+                    compress=3,
+                )
 
-        #         elif (
-        #             (Model_2 == True)
-        #             and (split_VIDEO == False)
-        #             and (once_VIDEO == True)
-        #             and (twice_VIDEO == True)
-        #             and (first_time_association_VIDEO == False)
-        #         ):
-        #             split_VIDEO = True  # Third split is true, hence save as split
-        #             first_time_association_VIDEO = True  # Split first time association
+                # Lineages
+                if Final_lineage_df.empty:
+                    Final_lineage_df.reset_index(drop=True, inplace=True)
+                    self.bagel_loop_data.reset_index(drop=True, inplace=True)
+                    Final_lineage_df = self.bagel_loop_data.iloc[:, 0:3]
 
-        #             once_VIDEO = False
-        #             twice_VIDEO = False
+                else:
+                    Final_lineage_df.reset_index(drop=True, inplace=True)
+                    self.bagel_loop_data.reset_index(drop=True, inplace=True)
+                    frames = [Final_lineage_df, self.bagel_loop_data.iloc[:, 0:3]]
+                    Final_lineage_df = pd.concat(
+                        frames, axis=1, sort=False
+                    )  # Append new lineage data
 
-        #             # Once projected
-        #             plots.VIDEO_window_plot_FOLLOW(
-        #                 once_window_number,
-        #                 normal_vector,
-        #                 covariance_length,
-        #                 once_back_face,
-        #                 once_front_face,
-        #                 once_data_VIDEO_WINDOW,
-        #                 once_data_VIDEO_NOT_WINDOW,
-        #                 mean_window_bagel_loop_data,
-        #                 plane_x,
-        #                 plane_y,
-        #                 plane_z,
-        #                 once_M1_map_mean,
-        #                 once_M1_map_cov,
-        #                 once_M2_map_mean_G1,
-        #                 once_M2_map_cov_G1,
-        #                 once_M2_map_mean_G2,
-        #                 once_M2_map_cov_G2,
-        #                 Model_1,
-        #                 Model_2,
-        #                 split_VIDEO,
-        #                 once_VIDEO_previouse_window_L1,
-        #                 once_VIDEO_previouse_window_L2,
-        #                 window_bagel_loop_data,
-        #                 plane_normal_window_FLAG,
-        #                 plane_window_FLAG,
-        #                 VIDEO_window_plot_FOLLOW_FLAG,
-        #                 data_Association_after_split_Flag,
-        #             )
+                Final_lineage_counter = Final_lineage_counter + 1
 
-        #             # Twice projected
-        #             plots.VIDEO_window_plot_FOLLOW(
-        #                 twice_window_number,
-        #                 normal_vector,
-        #                 covariance_length,
-        #                 twice_back_face,
-        #                 twice_front_face,
-        #                 twice_data_VIDEO_WINDOW,
-        #                 twice_data_VIDEO_NOT_WINDOW,
-        #                 mean_window_bagel_loop_data,
-        #                 plane_x,
-        #                 plane_y,
-        #                 plane_z,
-        #                 twice_M1_map_mean,
-        #                 twice_M1_map_cov,
-        #                 twice_M2_map_mean_G1,
-        #                 twice_M2_map_cov_G1,
-        #                 twice_M2_map_mean_G2,
-        #                 twice_M2_map_cov_G2,
-        #                 Model_1,
-        #                 Model_2,
-        #                 split_VIDEO,
-        #                 twice_VIDEO_previouse_window_L1,
-        #                 twice_VIDEO_previouse_window_L2,
-        #                 window_bagel_loop_data,
-        #                 plane_normal_window_FLAG,
-        #                 plane_window_FLAG,
-        #                 VIDEO_window_plot_FOLLOW_FLAG,
-        #                 data_Association_after_split_Flag,
-        #             )
+                if to_be_determinded.empty:
+                    print("All lineages detected")
+                    all_lineages_detected = True
+                    break
+                else:
+                    self.bagel_loop_data = to_be_determinded.iloc[
+                        :, 0:3
+                    ]  # to_be_determinded[to_be_determinded.columns[0:3]] #Select first three columns as new input
+                    self.bagel_loop_data = (
+                        self.bagel_loop_data.dropna()
+                    )  # Drop possible NAN data
+                    self.bagel_loop_data.columns = [
+                        "Pseudo_Time_normal",
+                        "tsne_1",
+                        "tsne_2",
+                    ]
 
-        #         # --------------------------------------
-        #         # ------------Split detection end-------
-        #         # --------------------------------------
+                    # Sort data
+                    self.bagel_loop_data = self.bagel_loop_data.sort_values(
+                        "Pseudo_Time_normal"
+                    )
+                    # Provide each cell with a number
+                    pt_samples = len(self.bagel_loop_data["tsne_1"])
+                    cell_ID_number = range(pt_samples)
+                    # Number of cell
+                    self.bagel_loop_data["cell_ID_number"] = cell_ID_number
 
-        #         # --------------------------------------
-        #         # ------------Plot Start----------------
-        #         # --------------------------------------
+                    to_be_determinded.columns = range(
+                        to_be_determinded.shape[1]
+                    )  # Rename column names
+                    to_be_determinded = to_be_determinded.drop(
+                        [0, 1, 2], axis=1
+                    )  # Remove new pseudo data lineage from data
 
-        #         if split_VIDEO == False:
-        #             if (
-        #                 (once_VIDEO == True)
-        #                 and (twice_VIDEO == False)
-        #                 and (Model_1 == True)
-        #             ):
-        #                 once_VIDEO = False
-        #                 twice_VIDEO = False
-        #                 # Once
-
-        #                 # Once model parameters
-        #                 once_Model_1 = Model_1
-        #                 once_Model_2 = Model_2
-
-        #                 frames = [
-        #                     once_VIDEO_previouse_window_L1,
-        #                     once_VIDEO_previouse_window_L2,
-        #                 ]
-        #                 once_VIDEO_previouse_window_L1 = pd.concat(
-        #                     frames, axis=0, ignore_index=False, sort=True
-        #                 )
-
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     once_window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     once_back_face,
-        #                     once_front_face,
-        #                     once_data_VIDEO_WINDOW,
-        #                     once_data_VIDEO_NOT_WINDOW,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     once_M1_map_mean,
-        #                     once_M1_map_cov,
-        #                     once_M2_map_mean_G1,
-        #                     once_M2_map_cov_G1,
-        #                     once_M2_map_mean_G2,
-        #                     once_M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     once_VIDEO_previouse_window_L1,
-        #                     once_VIDEO_previouse_window_L2,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #                 # Current
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     back_face,
-        #                     front_face,
-        #                     window_bagel_loop_data,
-        #                     not_window_bagel_loop_data,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     M1_map_mean,
-        #                     M1_map_cov,
-        #                     M2_map_mean_G1,
-        #                     M2_map_cov_G1,
-        #                     M2_map_mean_G2,
-        #                     M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #             elif (twice_VIDEO == True) and (Model_1 == True):
-        #                 once_VIDEO = False
-        #                 twice_VIDEO = False
-        #                 # Once
-        #                 # Once model parameters
-        #                 once_Model_1 = Model_1
-        #                 once_Model_2 = Model_2
-
-        #                 frames = [
-        #                     once_VIDEO_previouse_window_L1,
-        #                     once_VIDEO_previouse_window_L2,
-        #                 ]
-        #                 once_VIDEO_previouse_window_L1 = pd.concat(
-        #                     frames, axis=0, ignore_index=False, sort=True
-        #                 )
-
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     once_window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     once_back_face,
-        #                     once_front_face,
-        #                     once_data_VIDEO_WINDOW,
-        #                     once_data_VIDEO_NOT_WINDOW,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     once_M1_map_mean,
-        #                     once_M1_map_cov,
-        #                     once_M2_map_mean_G1,
-        #                     once_M2_map_cov_G1,
-        #                     once_M2_map_mean_G2,
-        #                     once_M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     once_VIDEO_previouse_window_L1,
-        #                     once_VIDEO_previouse_window_L2,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #                 # Twice
-        #                 # Once model parameters
-        #                 twice_Model_1 = Model_1
-        #                 twice_Model_2 = Model_2
-
-        #                 frames = [
-        #                     twice_VIDEO_previouse_window_L1,
-        #                     twice_VIDEO_previouse_window_L2,
-        #                 ]
-        #                 twice_VIDEO_previouse_window_L1 = pd.concat(
-        #                     frames, axis=0, ignore_index=False, sort=True
-        #                 )
-
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     twice_window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     twice_back_face,
-        #                     twice_front_face,
-        #                     twice_data_VIDEO_WINDOW,
-        #                     twice_data_VIDEO_NOT_WINDOW,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     twice_M1_map_mean,
-        #                     twice_M1_map_cov,
-        #                     twice_M2_map_mean_G1,
-        #                     twice_M2_map_cov_G1,
-        #                     twice_M2_map_mean_G2,
-        #                     twice_M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     twice_VIDEO_previouse_window_L1,
-        #                     twice_VIDEO_previouse_window_L2,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #                 # Current
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     back_face,
-        #                     front_face,
-        #                     window_bagel_loop_data,
-        #                     not_window_bagel_loop_data,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     M1_map_mean,
-        #                     M1_map_cov,
-        #                     M2_map_mean_G1,
-        #                     M2_map_cov_G1,
-        #                     M2_map_mean_G2,
-        #                     M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #             elif (once_VIDEO == False) and (twice_VIDEO == False):
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     back_face,
-        #                     front_face,
-        #                     window_bagel_loop_data,
-        #                     not_window_bagel_loop_data,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     M1_map_mean,
-        #                     M1_map_cov,
-        #                     M2_map_mean_G1,
-        #                     M2_map_cov_G1,
-        #                     M2_map_mean_G2,
-        #                     M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #         elif (split_VIDEO == True) and (first_time_association_VIDEO == True):
-        #             plots.VIDEO_window_plot_FOLLOW(
-        #                 window_number,
-        #                 normal_vector,
-        #                 covariance_length,
-        #                 back_face,
-        #                 front_face,
-        #                 window_bagel_loop_data,
-        #                 not_window_bagel_loop_data,
-        #                 mean_window_bagel_loop_data,
-        #                 plane_x,
-        #                 plane_y,
-        #                 plane_z,
-        #                 M1_map_mean,
-        #                 M1_map_cov,
-        #                 M2_map_mean_G1,
-        #                 M2_map_cov_G1,
-        #                 M2_map_mean_G2,
-        #                 M2_map_cov_G2,
-        #                 Model_1,
-        #                 Model_2,
-        #                 split_VIDEO,
-        #                 previouse_window_L1_projected,
-        #                 previouse_window_L2_projected,
-        #                 window_bagel_loop_data,
-        #                 plane_normal_window_FLAG,
-        #                 plane_window_FLAG,
-        #                 VIDEO_window_plot_FOLLOW_FLAG,
-        #                 data_Association_after_split_Flag,
-        #             )
-
-        #         # --------------------------------------
-        #         # ------------Plot end------------------
-        #         # --------------------------------------
-
-        #         # --------------------------------------
-        #         # ------------Plot Anomaly (not three in a row but data end)------------------
-        #         # --------------------------------------
-
-        #         if (
-        #             is_final_window == True
-        #         ):  # Plot split if 111 is not acheived before end of data
-        #             if (once_VIDEO == True) and (twice_VIDEO == False):
-        #                 # Determine if there is till two terminal states
-        #                 if window_removed_bagel_loop_data.empty == False:  # There is still pov data left
-        #                     POV_terminal_State = window_removed_bagel_loop_data[
-        #                         window_removed_bagel_loop_data["pseudo_time_normal"].isin(
-        #                             wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                         )
-        #                     ]
-        #                     if (
-        #                         POV_terminal_State.empty == False
-        #                     ):  # There is a terminal state in the POV data
-        #                         # Determine if once data has a terminal state
-        #                         once_data_terminal_State = once_data[
-        #                             once_data["pseudo_time_normal"].isin(
-        #                                 wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                             )
-        #                         ]
-        #                         if once_data_terminal_State.empty == False:
-        #                             # Once model parameters
-        #                             split = True
-        #                             split_VIDEO = True
-        #                         else:
-        #                             # Once model parameters
-        #                             split = False
-        #                             split_VIDEO = False
-        #                             Model_1 = True
-        #                             Model_2 = False
-
-        #                     else:
-        #                         split = False
-        #                         split_VIDEO = False
-        #                         Model_1 = True
-        #                         Model_2 = False
-
-        #                 elif window_removed_bagel_loop_data.empty == True:  # There is NO pov data left
-        #                     once_data_terminal_State = once_data[
-        #                         once_data["pseudo_time_normal"].isin(
-        #                             wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                         )
-        #                     ]
-        #                     if len(once_data_terminal_State.index) >= 2:
-        #                         # Once model parameters
-        #                         split = True
-        #                         split_VIDEO = True
-        #                     else:
-        #                         # Once model parameters
-        #                         split = False
-        #                         split_VIDEO = False
-        #                         Model_1 = True
-        #                         Model_2 = False
-
-        #                 once_VIDEO = False
-        #                 twice_VIDEO = False
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     once_window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     once_back_face,
-        #                     once_front_face,
-        #                     once_data_VIDEO_WINDOW,
-        #                     once_data_VIDEO_NOT_WINDOW,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     once_M1_map_mean,
-        #                     once_M1_map_cov,
-        #                     once_M2_map_mean_G1,
-        #                     once_M2_map_cov_G1,
-        #                     once_M2_map_mean_G2,
-        #                     once_M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     once_VIDEO_previouse_window_L1,
-        #                     once_VIDEO_previouse_window_L2,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #                 # plots.VIDEO_window_plot_FOLLOW(twice_window_number,normal_vector, covariance_length, twice_back_face,twice_front_face,twice_data_VIDEO_WINDOW, twice_data_VIDEO_NOT_WINDOW, mean_window_bagel_loop_data, plane_x, plane_y, plane_z,twice_M1_map_mean, twice_M1_map_cov, twice_M2_map_mean_G1, twice_M2_map_cov_G1, twice_M2_map_mean_G2, twice_M2_map_cov_G2, Model_1, Model_2, split_VIDEO,twice_VIDEO_previouse_window_L1, twice_VIDEO_previouse_window_L2,window_bagel_loop_data, plane_normal_window_FLAG,plane_window_FLAG, VIDEO_window_plot_FOLLOW_FLAG, data_Association_after_split_Flag)
-        #                 # Assign broken lineages
-        #                 first_time_association = True
-        #                 (
-        #                     once,
-        #                     twice,
-        #                     Lineage_1,
-        #                     Lineage_2,
-        #                     previouse_window_L1,
-        #                     previouse_window_L2,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     first_time_association,
-        #                     Model_1_Lineage_1_counter,
-        #                     Model_1_Lineage_2_counter,
-        #                 ) = split_algorithm.association(
-        #                     once,
-        #                     twice,
-        #                     split,
-        #                     before_split,
-        #                     Model_1,
-        #                     Model_2,
-        #                     Lineage_1,
-        #                     Lineage_2,
-        #                     data_output_gibbs_original,
-        #                     data_output_gibbs_projected,
-        #                     once_data_original,
-        #                     once_data_projected,
-        #                     twice_data_ORIGNAL,
-        #                     twice_data_projected,
-        #                     first_time_association,
-        #                     previouse_window_L1,
-        #                     previouse_window_L2,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     Model_1_Lineage_1_counter,
-        #                     Model_1_Lineage_2_counter,
-        #                 )
-
-        #                 if window_removed_bagel_loop_data.empty == False:
-        #                     (
-        #                         Lineage_1,
-        #                         Lineage_2,
-        #                         previouse_window_L1_projected,
-        #                         previouse_window_L2_projected,
-        #                     ) = split_algorithm.after_split_euclidean_dist_association(
-        #                         Lineage_1, Lineage_2, window_removed_bagel_loop_data
-        #                     )
-        #                     is_final_window = True
-        #                     # Define 'window' data for final window
-        #                     window_bagel_loop_data = window_removed_bagel_loop_data
-        #                     not_window_bagel_loop_data = pseudo_data[
-        #                         ~pseudo_data["cell_ID_number"].isin(
-        #                             window_bagel_loop_data["cell_ID_number"].values
-        #                         )
-        #                     ]
-
-        #                     plots.VIDEO_window_plot_FOLLOW(
-        #                         window_number,
-        #                         normal_vector,
-        #                         covariance_length,
-        #                         back_face,
-        #                         front_face,
-        #                         window_bagel_loop_data,
-        #                         not_window_bagel_loop_data,
-        #                         mean_window_bagel_loop_data,
-        #                         plane_x,
-        #                         plane_y,
-        #                         plane_z,
-        #                         M1_map_mean,
-        #                         M1_map_cov,
-        #                         M2_map_mean_G1,
-        #                         M2_map_cov_G1,
-        #                         M2_map_mean_G2,
-        #                         M2_map_cov_G2,
-        #                         Model_1,
-        #                         Model_2,
-        #                         split_VIDEO,
-        #                         previouse_window_L1_projected,
-        #                         previouse_window_L2_projected,
-        #                         window_bagel_loop_data,
-        #                         plane_normal_window_FLAG,
-        #                         plane_window_FLAG,
-        #                         VIDEO_window_plot_FOLLOW_FLAG,
-        #                         data_Association_after_split_Flag,
-        #                     )
-
-        #             elif twice_VIDEO == True:
-
-        #                 # Determine if there is till two terminal states
-        #                 if window_removed_bagel_loop_data.empty == False:  # There is still pov data left
-        #                     POV_terminal_State = window_removed_bagel_loop_data[
-        #                         window_removed_bagel_loop_data["pseudo_time_normal"].isin(
-        #                             wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                         )
-        #                     ]
-        #                     if (
-        #                         POV_terminal_State.empty == False
-        #                     ):  # There is a terminal state in the POV data
-        #                         # Determine if once data has a terminal state
-        #                         once_data_terminal_State = once_data[
-        #                             once_data["pseudo_time_normal"].isin(
-        #                                 wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                             )
-        #                         ]
-        #                         twice_data_terminal_State = twice_data[
-        #                             twice_data["pseudo_time_normal"].isin(
-        #                                 wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                             )
-        #                         ]
-
-        #                         if (once_data_terminal_State.empty == False) or (
-        #                             twice_data_terminal_State.empty == False
-        #                         ):
-        #                             # Once model parameters
-        #                             split = True
-        #                             split_VIDEO = True
-        #                         else:
-        #                             # Once model parameters
-        #                             split = False
-        #                             split_VIDEO = False
-        #                             Model_1 = True
-        #                             Model_2 = False
-
-        #                     else:
-        #                         split = False
-        #                         split_VIDEO = False
-        #                         Model_1 = True
-        #                         Model_2 = False
-
-        #                 elif window_removed_bagel_loop_data.empty == True:  # There is NO pov data left
-        #                     once_data_terminal_State = once_data[
-        #                         once_data["pseudo_time_normal"].isin(
-        #                             wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                         )
-        #                     ]
-        #                     twice_data_terminal_State = twice_data[
-        #                         twice_data["pseudo_time_normal"].isin(
-        #                             wp_data_TSNE_ROW["pseudo_time_normal"].values
-        #                         )
-        #                     ]
-
-        #                     if len(once_data_terminal_State.index) >= 2:
-        #                         # Once model parameters
-        #                         split = True
-        #                         split_VIDEO = True
-        #                     elif len(twice_data_terminal_State.index) >= 2:
-        #                         # Once model parameters
-        #                         split = True
-        #                         split_VIDEO = True
-        #                     elif (once_data_terminal_State.empty == False) and (
-        #                         twice_data_terminal_State.empty == False
-        #                     ):
-        #                         # Once model parameters
-        #                         split = True
-        #                         split_VIDEO = True
-        #                     else:
-        #                         # Once model parameters
-        #                         split = False
-        #                         split_VIDEO = False
-        #                         Model_1 = True
-        #                         Model_2 = False
-
-        #                 once_VIDEO = False
-        #                 twice_VIDEO = False
-        #                 # Once
-        #                 # Once model parameters
-        #                 # once_Model_1 = False
-        #                 # once_Model_2 = True
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     once_window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     once_back_face,
-        #                     once_front_face,
-        #                     once_data_VIDEO_WINDOW,
-        #                     once_data_VIDEO_NOT_WINDOW,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     once_M1_map_mean,
-        #                     once_M1_map_cov,
-        #                     once_M2_map_mean_G1,
-        #                     once_M2_map_cov_G1,
-        #                     once_M2_map_mean_G2,
-        #                     once_M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     once_VIDEO_previouse_window_L1,
-        #                     once_VIDEO_previouse_window_L2,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #                 # Twice
-        #                 # Twice model parameters
-        #                 # twice_Model_1 = False
-        #                 # twice_Model_2 = True
-        #                 plots.VIDEO_window_plot_FOLLOW(
-        #                     twice_window_number,
-        #                     normal_vector,
-        #                     covariance_length,
-        #                     twice_back_face,
-        #                     twice_front_face,
-        #                     twice_data_VIDEO_WINDOW,
-        #                     twice_data_VIDEO_NOT_WINDOW,
-        #                     mean_window_bagel_loop_data,
-        #                     plane_x,
-        #                     plane_y,
-        #                     plane_z,
-        #                     twice_M1_map_mean,
-        #                     twice_M1_map_cov,
-        #                     twice_M2_map_mean_G1,
-        #                     twice_M2_map_cov_G1,
-        #                     twice_M2_map_mean_G2,
-        #                     twice_M2_map_cov_G2,
-        #                     Model_1,
-        #                     Model_2,
-        #                     split_VIDEO,
-        #                     twice_VIDEO_previouse_window_L1,
-        #                     twice_VIDEO_previouse_window_L2,
-        #                     window_bagel_loop_data,
-        #                     plane_normal_window_FLAG,
-        #                     plane_window_FLAG,
-        #                     VIDEO_window_plot_FOLLOW_FLAG,
-        #                     data_Association_after_split_Flag,
-        #                 )
-
-        #                 # Assign broken lineages
-        #                 first_time_association = True
-        #                 (
-        #                     once,
-        #                     twice,
-        #                     Lineage_1,
-        #                     Lineage_2,
-        #                     previouse_window_L1,
-        #                     previouse_window_L2,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     first_time_association,
-        #                     Model_1_Lineage_1_counter,
-        #                     Model_1_Lineage_2_counter,
-        #                 ) = split_algorithm.association(
-        #                     once,
-        #                     twice,
-        #                     split,
-        #                     before_split,
-        #                     Model_1,
-        #                     Model_2,
-        #                     Lineage_1,
-        #                     Lineage_2,
-        #                     data_output_gibbs_original,
-        #                     data_output_gibbs_projected,
-        #                     once_data_original,
-        #                     once_data_projected,
-        #                     twice_data_ORIGNAL,
-        #                     twice_data_projected,
-        #                     first_time_association,
-        #                     previouse_window_L1,
-        #                     previouse_window_L2,
-        #                     previouse_window_L1_projected,
-        #                     previouse_window_L2_projected,
-        #                     Model_1_Lineage_1_counter,
-        #                     Model_1_Lineage_2_counter,
-        #                 )
-
-        #                 if window_removed_bagel_loop_data.empty == False:
-        #                     (
-        #                         Lineage_1,
-        #                         Lineage_2,
-        #                         previouse_window_L1_projected,
-        #                         previouse_window_L2_projected,
-        #                     ) = split_algorithm.after_split_euclidean_dist_association(
-        #                         Lineage_1, Lineage_2, window_removed_bagel_loop_data
-        #                     )
-        #                     is_final_window = True
-        #                     # Define 'window' data for final window
-        #                     window_bagel_loop_data = window_removed_bagel_loop_data
-        #                     not_window_bagel_loop_data = pseudo_data[
-        #                         ~pseudo_data["cell_ID_number"].isin(
-        #                             window_bagel_loop_data["cell_ID_number"].values
-        #                         )
-        #                     ]
-
-        #                     plots.VIDEO_window_plot_FOLLOW(
-        #                         window_number,
-        #                         normal_vector,
-        #                         covariance_length,
-        #                         back_face,
-        #                         front_face,
-        #                         window_bagel_loop_data,
-        #                         not_window_bagel_loop_data,
-        #                         mean_window_bagel_loop_data,
-        #                         plane_x,
-        #                         plane_y,
-        #                         plane_z,
-        #                         M1_map_mean,
-        #                         M1_map_cov,
-        #                         M2_map_mean_G1,
-        #                         M2_map_cov_G1,
-        #                         M2_map_mean_G2,
-        #                         M2_map_cov_G2,
-        #                         Model_1,
-        #                         Model_2,
-        #                         split_VIDEO,
-        #                         previouse_window_L1_projected,
-        #                         previouse_window_L2_projected,
-        #                         window_bagel_loop_data,
-        #                         plane_normal_window_FLAG,
-        #                         plane_window_FLAG,
-        #                         VIDEO_window_plot_FOLLOW_FLAG,
-        #                         data_Association_after_split_Flag,
-        #                     )
-
-        #         # --------------------------------------
-        #         # ------------Plot Anomaly END (not three in a row but data end)------------------
-        #         # --------------------------------------
+        # Dump pkl file
+        joblib.dump(Final_lineage_df, "Final_lineage_df.pkl", compress=3)
+        joblib.dump(Final_lineage_counter, "Final_lineage_counter.pkl", compress=3)
+        joblib.dump(bifurcation_data, "bifurcation_data.pkl", compress=3)
+        joblib.dump(total_bifurcations, "total_bifurcations.pkl", compress=3)
+        joblib.dump(previouse_window_number, "previouse_window_number.pkl", compress=3)
 
     def _plot(self):
         """
         _plot
         """
+        # TODO update plot script
 
 
 def main():
