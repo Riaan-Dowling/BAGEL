@@ -1,0 +1,26 @@
+{
+    "output": {
+        "results_only": false
+    },
+    "phenotypic_manifold_config": {
+        "load_old_manifold": true,
+        "main_data_file": "data/sample_scseq_data.csv",
+        "secondary_data_file": "",
+        "early_cell": "W30258",
+        "palantir": {
+            "diffusion_components": 5,
+            "_cell_min_molecules": 1000,
+            "_genes_min_cells": 10,
+            "n_components_pca": 300,
+            "n_waypoints": 500,
+            "pseudotime_knn": 30
+        }
+    },
+    "bagel_loop_config": {
+        "window_interval_extra_samples": 200,
+        "window_interval_actual_samples": 150,
+        "gibbs_samples": 2000,
+        "gibbs_burn_in_period": 500,
+        "initialize_cells_offset": 0
+    }
+}
