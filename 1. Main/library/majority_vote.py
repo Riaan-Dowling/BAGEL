@@ -37,8 +37,8 @@ def estimate_guassians_on_manifold(
 
     # Rectify false positves
 
-    if split == False:
-        if (once == True) and (twice == False) and (Model_1 == True):
+    if split is False:
+        if (once is True) and (twice is False) and (Model_1 is True):
 
             # Ascociate data after mis detection
             # Asociate data to lineage
@@ -82,7 +82,7 @@ def estimate_guassians_on_manifold(
             once = False
             twice = False
 
-        elif (once == True) and (twice == True) and (Model_1 == True):
+        elif (once is True) and (twice is True) and (Model_1 is True):
 
             # Ascociate data after mis detection
             # Asociate data to lineage
@@ -129,14 +129,14 @@ def estimate_guassians_on_manifold(
     Ensure 3 consequtive splits
     -----------------------------------------------------------------
     """
-    if (Model_2 == True) and (once == False) and (split == False):
+    if (Model_2 is True) and (once is False) and (split is False):
         once = True  # First split
         once_data = window_3d
         # Once guassian split data
         once_data_ORIGNAL = data_output_gibbs_ORIGNAL
         once_data_PROJECTED = data_output_gibbs_PROJECTED
 
-    elif (Model_2 == True) and (once == True) and (twice == False) and (split == False):
+    elif (Model_2 is True) and (once is True) and (twice is False) and (split is False):
         twice = True  # Second split is true
         twice_data = window_3d
         # Twice gaussian split data
@@ -144,10 +144,10 @@ def estimate_guassians_on_manifold(
         twice_data_PROJECTED = data_output_gibbs_PROJECTED
 
     elif (
-        (Model_2 == True)
-        and (once == True)
-        and (twice == True)
-        and (first_time_association == False)
+        (Model_2 is True)
+        and (once is True)
+        and (twice is True)
+        and (first_time_association is False)
     ):
         split = True  # Third split is true, hence save as split
         first_time_association = True  # Split first time association
@@ -193,10 +193,10 @@ def association(
     Model_1_Lineage_2_counter,
 ):
     # There is no split in data
-    if (split == False) and (Model_1 == True) and (once == False) and (twice == False):
+    if (split is False) and (Model_1 is True) and (once is False) and (twice is False):
         # Lineage 1
         before_split.columns = [
-            "psuedo_time_normal",
+            "pseudo_time_normal",
             "pca_1",
             "pca_2",
         ]  # Set to lineage formating
@@ -207,19 +207,19 @@ def association(
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
         before_split.columns = [
-            "g1_psuedo_time_normal",
+            "g1_pseudo_time_normal",
             "g1_pca_1",
             "g1_pca_2",
         ]  # Reset to orignal formating4
 
-    elif (split == False) and (Model_1 == True) and (once == True) and (twice == False):
+    elif (split is False) and (Model_1 is True) and (once is True) and (twice is False):
         # Lineage 1
         # Once data
         frames = [Lineage_1, once_data_ORIGNAL]
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
         before_split.columns = [
-            "psuedo_time_normal",
+            "pseudo_time_normal",
             "pca_1",
             "pca_2",
         ]  # Set to lineage formating
@@ -234,7 +234,7 @@ def association(
         frames = [Lineage_2, before_split]
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-    elif (split == False) and (Model_1 == True) and (once == True) and (twice == True):
+    elif (split is False) and (Model_1 is True) and (once is True) and (twice is True):
         # Lineage 1
         # Once data
         frames = [Lineage_1, once_data_ORIGNAL]
@@ -244,7 +244,7 @@ def association(
         Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
         before_split.columns = [
-            "psuedo_time_normal",
+            "pseudo_time_normal",
             "pca_1",
             "pca_2",
         ]  # Set to lineage formating
@@ -262,13 +262,13 @@ def association(
         frames = [Lineage_2, before_split]
         Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         before_split.columns = [
-            "g1_psuedo_time_normal",
+            "g1_pseudo_time_normal",
             "g1_pca_1",
             "g1_pca_2",
         ]  # Reset to orignal formating
 
-    elif split == True:
-        if first_time_association == True:
+    elif split is True:
+        if first_time_association is True:
             # Because there is a dely in finalising a split deinition the delyad data has to be assign before continuing
             # The first step is to assign data to lineafge 1 or two 'randomly' because this is the first split data
 
@@ -298,7 +298,7 @@ def association(
 
             # Data in original 3d window
             d = {
-                "psuedo_time_normal": once_data_ORIGNAL["g1_psuedo_time_normal"],
+                "pseudo_time_normal": once_data_ORIGNAL["g1_pseudo_time_normal"],
                 "pca_1": once_data_ORIGNAL["g1_pca_1"],
                 "pca_2": once_data_ORIGNAL["g1_pca_2"],
             }
@@ -308,7 +308,7 @@ def association(
             )  # Drop NAN rows
 
             d = {
-                "psuedo_time_normal": once_data_ORIGNAL["g2_psuedo_time_normal"],
+                "pseudo_time_normal": once_data_ORIGNAL["g2_pseudo_time_normal"],
                 "pca_1": once_data_ORIGNAL["g2_pca_1"],
                 "pca_2": once_data_ORIGNAL["g2_pca_2"],
             }
@@ -348,7 +348,7 @@ def association(
             previouse_window_L2_PROJECTED = current_ORIGINAL_window_g2_3d
 
             # Add data to lineage
-            if once == True:
+            if once is True:
                 frames = [Lineage_1, current_ORIGINAL_window_g1_3d]
                 Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
@@ -360,7 +360,7 @@ def association(
             Twice
             -----------------------------------------------------------------
             """
-            if twice == True:
+            if twice is True:
                 (
                     Lineage_1,
                     Lineage_2,
@@ -389,7 +389,7 @@ def association(
             Current
             -----------------------------------------------------------------
             """
-            if (once == True) and (twice == True):
+            if (once is True) and (twice is True):
                 (
                     Lineage_1,
                     Lineage_2,
@@ -475,8 +475,8 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
             # L2_mean = Lineage_2.tail(50).mean(axis=0)
             L2_mean = Lineage_2.tail(1)
 
-        L1_mean.columns = ["psuedo_time_normal", "pca_1", "pca_2"]
-        L2_mean.columns = ["psuedo_time_normal", "pca_1", "pca_2"]
+        L1_mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+        L2_mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
 
         # Select one cell
         select_one = temp_ID_WINDOW.head(1)
@@ -542,7 +542,7 @@ def euclidean_dist_association(
 
     # Data in original 3d window
     d = {
-        "psuedo_time_normal": data_output_gibbs_ORIGNAL["g1_psuedo_time_normal"],
+        "pseudo_time_normal": data_output_gibbs_ORIGNAL["g1_pseudo_time_normal"],
         "pca_1": data_output_gibbs_ORIGNAL["g1_pca_1"],
         "pca_2": data_output_gibbs_ORIGNAL["g1_pca_2"],
     }
@@ -552,7 +552,7 @@ def euclidean_dist_association(
     )  # Drop NAN rows
 
     d = {
-        "psuedo_time_normal": data_output_gibbs_ORIGNAL["g2_psuedo_time_normal"],
+        "pseudo_time_normal": data_output_gibbs_ORIGNAL["g2_pseudo_time_normal"],
         "pca_1": data_output_gibbs_ORIGNAL["g2_pca_1"],
         "pca_2": data_output_gibbs_ORIGNAL["g2_pca_2"],
     }
@@ -603,7 +603,7 @@ def euclidean_dist_association(
     )
     euclidean_distance_L2_g1 = euclidean_distance_L2_g1.mean(axis=0)
 
-    # Bigger distance == bad!
+    # Bigger distance is bad!
     if euclidean_distance_L1_g1 > euclidean_distance_L2_g1:
         NEW_previouse_window_L1 = current_ORIGINAL_window_g2_3d  # Assign the current window as future previose window
         NEW_previouse_window_L2 = current_ORIGINAL_window_g1_3d  # Assign the current window as future previose window
@@ -649,7 +649,7 @@ def euclidean_dist_association(
 def bifurcation_points(
     split, bifurcation_data, bifurcate_once, total_bifurcations, once_data
 ):
-    if (split == True) and (bifurcate_once == False):
+    if (split is True) and (bifurcate_once is False):
         bifurcate_once = True  # Ensure one bifurcation data point per run
         if bifurcation_data.empty:
             bifurcation_data = once_data
