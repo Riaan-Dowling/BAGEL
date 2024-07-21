@@ -32,8 +32,12 @@ def gibbs_sampler_2_gaussians(
     itterations,
     burn_period,
     window_number,
-    pov_data,
+    window_removed_bagel_loop_data,
+    bagel_loop_data_terminal_state,
 ):
+    """
+    gibbs_sampler_2_gaussians
+    """
     N = len(window_3d)  # Determine total number of cells
 
     ran_out_of_data_split = False  # If ran out of data is true
@@ -840,7 +844,6 @@ def gibbs_sampler_2_gaussians(
         # Calculate at maximum pt
         #       |----->
         # |----->
-        wp_data_TSNE_ROW = joblib.load("wp_data_TSNE_ROW.pkl")
 
         if max_PT_G1 > max_PT_G2:
             test_PT_2 = abs(
@@ -850,7 +853,7 @@ def gibbs_sampler_2_gaussians(
             # |--->
 
             true_false = M2_df_G2_post["pseudo_time_normal"].isin(
-                wp_data_TSNE_ROW["pseudo_time_normal"].values
+                bagel_loop_data_terminal_state["pseudo_time_normal"].values
             )
             true_false.reset_index(drop=True, inplace=True)
             M2_df_G2_post.reset_index(drop=True, inplace=True)
@@ -870,7 +873,7 @@ def gibbs_sampler_2_gaussians(
             # |--->
 
             true_false = M2_df_G1_post["pseudo_time_normal"].isin(
-                wp_data_TSNE_ROW["pseudo_time_normal"].values
+                bagel_loop_data_terminal_state["pseudo_time_normal"].values
             )
             true_false.reset_index(drop=True, inplace=True)
             M2_df_G1_post.reset_index(drop=True, inplace=True)
@@ -888,7 +891,7 @@ def gibbs_sampler_2_gaussians(
         #     ax = fig.add_subplot(111, projection='3d')
         #     ax.scatter( M2_df_G1_post.pseudo_time_normal, M2_df_G1_post.pca_1,  M2_df_G1_post.pca_2, c='b', marker='1', s = 20)
         #     ax.scatter( M2_df_G2_post.pseudo_time_normal, M2_df_G2_post.pca_1,  M2_df_G2_post.pca_2, c='k', marker='1', s = 20)
-        #     ax.scatter( wp_data_TSNE_ROW.pseudo_time_normal, wp_data_TSNE_ROW.pca_1,  wp_data_TSNE_ROW.pca_2, c='r', marker='o', s = 40)
+        #     ax.scatter( bagel_loop_data_terminal_state.pseudo_time_normal, bagel_loop_data_terminal_state.pca_1,  bagel_loop_data_terminal_state.pca_2, c='r', marker='o', s = 40)
         #     ax.set_zlabel('t-SNE z')
         #     ax.set_ylabel('t-SNE y')
         #     ax.set_xlabel('Pseudo time')
@@ -960,7 +963,7 @@ def gibbs_sampler_2_gaussians(
             Test if either Gausians contains a terminal state
             """
             true_false = M2_df_G2_post["pseudo_time_normal"].isin(
-                wp_data_TSNE_ROW["pseudo_time_normal"].values
+                bagel_loop_data_terminal_state["pseudo_time_normal"].values
             )
             true_false.reset_index(drop=True, inplace=True)
             M2_df_G2_post.reset_index(drop=True, inplace=True)
@@ -968,25 +971,29 @@ def gibbs_sampler_2_gaussians(
             test_TERMINAL_STATE_G2.reset_index(drop=True, inplace=True)
 
             true_false = M2_df_G1_post["pseudo_time_normal"].isin(
-                wp_data_TSNE_ROW["pseudo_time_normal"].values
+                bagel_loop_data_terminal_state["pseudo_time_normal"].values
             )
             true_false.reset_index(drop=True, inplace=True)
             M2_df_G1_post.reset_index(drop=True, inplace=True)
             test_TERMINAL_STATE_G1 = M2_df_G1_post[true_false]
             test_TERMINAL_STATE_G1.reset_index(drop=True, inplace=True)
 
-            true_false = pov_data["pseudo_time_normal"].isin(
-                wp_data_TSNE_ROW["pseudo_time_normal"].values
+            true_false = window_removed_bagel_loop_data["pseudo_time_normal"].isin(
+                bagel_loop_data_terminal_state["pseudo_time_normal"].values
             )
             true_false.reset_index(drop=True, inplace=True)
-            pov_data.reset_index(drop=True, inplace=True)
-            test_TERMINAL_STATE_pov_data = pov_data[true_false]
-            test_TERMINAL_STATE_pov_data.reset_index(drop=True, inplace=True)
+            window_removed_bagel_loop_data.reset_index(drop=True, inplace=True)
+            test_TERMINAL_STATE_window_removed_bagel_loop_data = (
+                window_removed_bagel_loop_data[true_false]
+            )
+            test_TERMINAL_STATE_window_removed_bagel_loop_data.reset_index(
+                drop=True, inplace=True
+            )
 
             if (test_TERMINAL_STATE_G2.empty == False) or (
                 test_TERMINAL_STATE_G1.empty == False
             ):
-                if test_TERMINAL_STATE_pov_data.empty == False:
+                if test_TERMINAL_STATE_window_removed_bagel_loop_data.empty == False:
                     ran_out_of_data_split = True
             else:
                 ran_out_of_data_split = False
