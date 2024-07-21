@@ -375,7 +375,7 @@ class BAGEL(object):
         # -----------------------------------------------------------------
         # """
 
-        if self.bagel_config["bagel_loop"]["load_old_bagel_loop"] is False:
+        if self.bagel_config["bagel_loop_config"]["load_old_bagel_loop"] is False:
             # TODO check flags
             # Window plot on manifold flags
             window_plot_FLAG = False  # Should window plot be made
@@ -393,7 +393,7 @@ class BAGEL(object):
             # Global undefined lineages
             to_be_determinded = pd.DataFrame()  # To be estimated lineages
             final_lineage_df = pd.DataFrame()  # Final lineage data_frame
-            final_lineage_df = 0  # Count total lineages
+            final_lineage_counter = 0  # Count total lineages
             all_lineages_detected = False
 
             # """
@@ -1025,21 +1025,21 @@ class BAGEL(object):
                     joblib.dump(
                         frenet_frame_normal_vector,
                         f"{self.result_folder}/frenet_frame_normal_vector"
-                        + str(final_lineage_df)
+                        + str(final_lineage_counter)
                         + ".pkl",
                         compress=3,
                     )
                     joblib.dump(
                         frenet_frame_mean,
                         f"{self.result_folder}/frenet_frame_mean"
-                        + str(final_lineage_df)
+                        + str(final_lineage_counter)
                         + ".pkl",
                         compress=3,
                     )
                     joblib.dump(
                         frenet_frame_counter,
                         f"{self.result_folder}/frenet_frame_counter"
-                        + str(final_lineage_df)
+                        + str(final_lineage_counter)
                         + ".pkl",
                         compress=3,
                     )
@@ -1058,7 +1058,7 @@ class BAGEL(object):
                             frames, axis=1, sort=False
                         )  # Append new lineage data
 
-                    final_lineage_df = final_lineage_df + 1
+                    final_lineage_counter = final_lineage_counter + 1
 
                     if to_be_determinded.empty:
                         print("All lineages detected")
