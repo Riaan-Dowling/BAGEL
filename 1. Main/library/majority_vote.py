@@ -272,11 +272,11 @@ def association(
             # Because there is a dely in finalising a split deinition the delyad data has to be assign before continuing
             # The first step is to assign data to lineafge 1 or two 'randomly' because this is the first split data
 
-            """
-            -----------------------------------------------------------------
-            Once
-            -----------------------------------------------------------------
-            """
+            # """
+            # -----------------------------------------------------------------
+            # Once
+            # -----------------------------------------------------------------
+            # """
             # Data projected onto plane
             d = {
                 "pca_1": once_data_PROJECTED["g1_pca_1"],
@@ -355,11 +355,11 @@ def association(
                 frames = [Lineage_2, current_ORIGINAL_window_g2_3d]
                 Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-            """
-            -----------------------------------------------------------------
-            Twice
-            -----------------------------------------------------------------
-            """
+            # """
+            # -----------------------------------------------------------------
+            # Twice
+            # -----------------------------------------------------------------
+            # """
             if twice is True:
                 (
                     Lineage_1,
@@ -384,11 +384,11 @@ def association(
                     Model_1_Lineage_1_counter,
                     Model_1_Lineage_2_counter,
                 )
-            """
-            -----------------------------------------------------------------
-            Current
-            -----------------------------------------------------------------
-            """
+            # """
+            # -----------------------------------------------------------------
+            # Current
+            # -----------------------------------------------------------------
+            # """
             if (once is True) and (twice is True):
                 (
                     Lineage_1,
