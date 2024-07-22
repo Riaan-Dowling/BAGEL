@@ -831,11 +831,13 @@ class PhenotypicManifold(object):
             n_components_pca = self.bagel_config["phenotypic_manifold_config"][
                 "palantir"
             ]["_cell_min_molecules"]
+            two_data_set_flag = False
             if self.total_datasets == 2:
                 self.total_secondary_cells_used = 2
                 phenotypic_manifold_pca_projections = self.pca_combine_two_datasets(
                     n_components_pca, _cell_min_molecules, _genes_min_cells
                 )
+                two_data_set_flag = True
 
             else:
                 # Filter data set
@@ -858,12 +860,11 @@ class PhenotypicManifold(object):
                 print("PCA (1/4)")
                 phenotypic_manifold_pca_projections = self.run_pca(log_norm_main_df)
 
-            # two_data_set_flag = False
-            # joblib.dump(
-            #     two_data_set_flag,
-            #     f"{self.result_folder}/two_data_set_flag.pkl",
-            #     compress=3,
-            # )
+            joblib.dump(
+                two_data_set_flag,
+                f"{self.result_folder}/two_data_set_flag.pkl",
+                compress=3,
+            )
 
             # Loop until continuous manifold is obtained
             continuous_manifold_flag = False
