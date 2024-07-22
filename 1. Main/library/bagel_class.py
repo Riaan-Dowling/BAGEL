@@ -198,6 +198,11 @@ class BAGEL(object):
             {"pseudo_time_normal": pseudo_time, "pca_1": pca_1, "pca_2": pca_2},
             index=self.phenotypic_manifold_pca_projections.index,
         )
+        joblib.dump(
+            bagel_loop_data,
+            f"{self.result_folder}/bagel_loop_data.pkl",
+            compress=3,
+        )
 
         # Link terminal state to normalized manifold
         bagel_loop_data_terminal_state = bagel_loop_data.loc[self.terminal_states]
@@ -1143,7 +1148,6 @@ class BAGEL(object):
             self.bagel_config["plot_config"]["gp_only_plot"],
             self.bagel_config["plot_config"]["gp_per_lineage_plot"],
             self.result_folder,
-            self.bagel_loop_data,
             self.bagel_loop_data_terminal_state,
         )
 

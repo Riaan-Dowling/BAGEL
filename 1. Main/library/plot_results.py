@@ -98,7 +98,6 @@ def results(
     gp_only_plot,
     gp_per_lineage_plot,
     result_folder,
-    bagel_loop_data,
     bagel_loop_data_terminal_state,
 ):
     """
@@ -118,6 +117,7 @@ def results(
 
     # LOAD DATA
     log_norm_main_df = joblib.load(f"{result_folder}/log_norm_main_df.pkl")
+    bagel_loop_data = joblib.load(f"{result_folder}/bagel_loop_data.pkl")
 
     # Link terminal state to normalized manifold
     terminal_states = joblib.load(f"{result_folder}/terminal_states.pkl")
