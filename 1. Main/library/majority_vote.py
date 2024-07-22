@@ -441,9 +441,9 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
     # Calculate euclidean distance till each mean
     # Set cell ID number to each cell to enable singel cell selection
     pt_samples = len(window_3d.index)
-    cell_ID_number = range(pt_samples)
+    cell_id_number = range(pt_samples)
     label = window_3d.index
-    d = {"cell_ID_number": cell_ID_number}
+    d = {"cell_id_number": cell_id_number}
     cell_id_df = pd.DataFrame(d)
 
     window_3d.reset_index(drop=True, inplace=True)
@@ -456,7 +456,7 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
 
     L1_counter = 0
     L2_counter = 0
-    for l in tqdm(
+    for _ in tqdm(
         range(len(temp_ID_WINDOW.index)), desc="Data association after split."
     ):
 
@@ -482,11 +482,11 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
         select_one = temp_ID_WINDOW.head(1)
         # Remove selected cell from data
         temp_ID_WINDOW = temp_ID_WINDOW[
-            ~temp_ID_WINDOW["cell_ID_number"].isin(select_one["cell_ID_number"].values)
+            ~temp_ID_WINDOW["cell_id_number"].isin(select_one["cell_id_number"].values)
         ]
 
         # Delete cell ID column
-        del select_one["cell_ID_number"]
+        del select_one["cell_id_number"]
         # Calculate euclidean distance
         L1_Data_euclidean_distance = np.linalg.norm(L1_mean.values - select_one.values)
         L2_Data_euclidean_distance = np.linalg.norm(L2_mean.values - select_one.values)
