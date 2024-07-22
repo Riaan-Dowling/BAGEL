@@ -459,21 +459,21 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
     for _ in tqdm(
         range(len(temp_ID_WINDOW.index)), desc="Data association after split."
     ):
-
+        # TODO update paper to use mean
         # TODO uncomment for mean average of cells instead of single cell
         if len(Lineage_1.index) <= 50:
-            # L1_mean = Lineage_1.tail(len(Lineage_1.index)).mean(axis=0)
-            L1_mean = Lineage_1.tail(1)
+            L1_mean = Lineage_1.tail(len(Lineage_1.index)).mean(axis=0)
+            # L1_mean = Lineage_1.tail(1)
         else:
-            # L1_mean = Lineage_1.tail(50).mean(axis=0)
-            L1_mean = Lineage_1.tail(1)
+            L1_mean = Lineage_1.tail(50).mean(axis=0)
+            # L1_mean = Lineage_1.tail(1)
 
         if len(Lineage_2.index) <= 50:
-            # L2_mean = Lineage_2.tail(len(Lineage_2.index)).mean(axis=0)
-            L2_mean = Lineage_2.tail(1)
+            L2_mean = Lineage_2.tail(len(Lineage_2.index)).mean(axis=0)
+            # L2_mean = Lineage_2.tail(1)
         else:
-            # L2_mean = Lineage_2.tail(50).mean(axis=0)
-            L2_mean = Lineage_2.tail(1)
+            L2_mean = Lineage_2.tail(50).mean(axis=0)
+            # L2_mean = Lineage_2.tail(1)
 
         L1_mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
         L2_mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
