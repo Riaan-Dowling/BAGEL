@@ -27,20 +27,32 @@ import library.gaussian_process as gp_sup
 plt.rcParams["font.family"] = "Times New Roman"
 
 
-class Arrow3D(FancyArrowPatch):
-    """
-    arrow plot class
-    """
+# class Arrow3D(FancyArrowPatch):
+#     """
+#     arrow plot class
+#     """
 
+#     def __init__(self, xs, ys, zs, *args, **kwargs):
+#         FancyArrowPatch.__init__(self, (0, 0), (0, 0), *args, **kwargs)
+#         self._verts3d = xs, ys, zs
+
+
+#     def draw(self, renderer):
+#         xs3d, ys3d, zs3d = self._verts3d
+#         xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, renderer.M)
+#         self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
+#         FancyArrowPatch.draw(self, renderer)
+class Arrow3D(FancyArrowPatch):
     def __init__(self, xs, ys, zs, *args, **kwargs):
-        FancyArrowPatch.__init__(self, (0, 0), (0, 0), *args, **kwargs)
+        super().__init__((0, 0), (0, 0), *args, **kwargs)
         self._verts3d = xs, ys, zs
 
-    def draw(self, renderer):
+    def do_3d_projection(self, renderer=None):
         xs3d, ys3d, zs3d = self._verts3d
-        xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, renderer.M)
+        xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, self.axes.M)
         self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
-        FancyArrowPatch.draw(self, renderer)
+
+        return np.min(zs)
 
 
 def load_all_data():
@@ -769,24 +781,26 @@ def results(
             ax.view_init(elev=12, azim=-100)
             for t in range(final_lineage_counter):
 
-                Frenet_frame_NORMAL_VECTOR = joblib.load(
-                    "Frenet_frame_NORMAL_VECTOR" + str(t) + ".pkl"
+                frenet_frame_normal_vector = joblib.load(
+                    f"{result_folder}/frenet_frame_normal_vector" + str(t) + ".pkl"
                 )
-                Frenet_frame_MEAN = joblib.load("Frenet_frame_MEAN" + str(t) + ".pkl")
-                Frenet_frame_COUNTER = joblib.load(
-                    "Frenet_frame_COUNTER" + str(t) + ".pkl"
+                frenet_frame_mean = joblib.load(
+                    f"{result_folder}/frenet_frame_mean" + str(t) + ".pkl"
+                )
+                frenet_frame_counter = joblib.load(
+                    f"{result_folder}/frenet_frame_counter" + str(t) + ".pkl"
                 )
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
-                for e in range(Frenet_frame_COUNTER):
+                for e in range(frenet_frame_counter):
 
                     covariance_length = (
-                        Frenet_frame_NORMAL_VECTOR.iloc[:, 0:1].values
+                        frenet_frame_normal_vector.iloc[:, 0:1].values
                     ).T
                     covariance_length = covariance_length[0]
 
                     MEAN_window_bagel_loop_data = (
-                        Frenet_frame_MEAN.iloc[:, 0:1].values
+                        frenet_frame_mean.iloc[:, 0:1].values
                     ).T
                     MEAN_window_bagel_loop_data = MEAN_window_bagel_loop_data[0]
 
@@ -817,17 +831,17 @@ def results(
                         ax.add_artist(line)
 
                     # Remove used arrows
-                    Frenet_frame_NORMAL_VECTOR.columns = range(
-                        Frenet_frame_NORMAL_VECTOR.shape[1]
+                    frenet_frame_normal_vector.columns = range(
+                        frenet_frame_normal_vector.shape[1]
                     )  # Rename column names
-                    Frenet_frame_NORMAL_VECTOR = Frenet_frame_NORMAL_VECTOR.drop(
+                    frenet_frame_normal_vector = frenet_frame_normal_vector.drop(
                         [0], axis=1
                     )  # Remove new pseudo data lineage from data
 
-                    Frenet_frame_MEAN.columns = range(
-                        Frenet_frame_MEAN.shape[1]
+                    frenet_frame_mean.columns = range(
+                        frenet_frame_mean.shape[1]
                     )  # Rename column names
-                    Frenet_frame_MEAN = Frenet_frame_MEAN.drop(
+                    frenet_frame_mean = frenet_frame_mean.drop(
                         [0], axis=1
                     )  # Remove new pseudo data lineage from data
             ax.scatter(
@@ -1800,24 +1814,26 @@ def results(
             ax.view_init(elev=12, azim=-100)
             for t in range(final_lineage_counter):
 
-                Frenet_frame_NORMAL_VECTOR = joblib.load(
-                    "Frenet_frame_NORMAL_VECTOR" + str(t) + ".pkl"
+                frenet_frame_normal_vector = joblib.load(
+                    f"{result_folder}/frenet_frame_normal_vector" + str(t) + ".pkl"
                 )
-                Frenet_frame_MEAN = joblib.load("Frenet_frame_MEAN" + str(t) + ".pkl")
-                Frenet_frame_COUNTER = joblib.load(
-                    "Frenet_frame_COUNTER" + str(t) + ".pkl"
+                frenet_frame_mean = joblib.load(
+                    f"{result_folder}/frenet_frame_mean" + str(t) + ".pkl"
+                )
+                frenet_frame_counter = joblib.load(
+                    f"{result_folder}/frenet_frame_counter" + str(t) + ".pkl"
                 )
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
-                for e in range(Frenet_frame_COUNTER):
+                for e in range(frenet_frame_counter):
 
                     covariance_length = (
-                        Frenet_frame_NORMAL_VECTOR.iloc[:, 0:1].values
+                        frenet_frame_normal_vector.iloc[:, 0:1].values
                     ).T
                     covariance_length = covariance_length[0]
 
                     MEAN_window_bagel_loop_data = (
-                        Frenet_frame_MEAN.iloc[:, 0:1].values
+                        frenet_frame_mean.iloc[:, 0:1].values
                     ).T
                     MEAN_window_bagel_loop_data = MEAN_window_bagel_loop_data[0]
 
@@ -1848,17 +1864,17 @@ def results(
                         ax.add_artist(line)
 
                     # Remove used arrows
-                    Frenet_frame_NORMAL_VECTOR.columns = range(
-                        Frenet_frame_NORMAL_VECTOR.shape[1]
+                    frenet_frame_normal_vector.columns = range(
+                        frenet_frame_normal_vector.shape[1]
                     )  # Rename column names
-                    Frenet_frame_NORMAL_VECTOR = Frenet_frame_NORMAL_VECTOR.drop(
+                    frenet_frame_normal_vector = frenet_frame_normal_vector.drop(
                         [0], axis=1
                     )  # Remove new pseudo data lineage from data
 
-                    Frenet_frame_MEAN.columns = range(
-                        Frenet_frame_MEAN.shape[1]
+                    frenet_frame_mean.columns = range(
+                        frenet_frame_mean.shape[1]
                     )  # Rename column names
-                    Frenet_frame_MEAN = Frenet_frame_MEAN.drop(
+                    frenet_frame_mean = frenet_frame_mean.drop(
                         [0], axis=1
                     )  # Remove new pseudo data lineage from data
             temp1 = ax.scatter(
