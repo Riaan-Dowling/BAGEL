@@ -1106,7 +1106,7 @@ class BAGEL(object):
                 compress=3,
             )
             joblib.dump(
-                final_lineage_df,
+                final_lineage_counter,
                 f"{self.result_folder}/final_lineage_counter.pkl",
                 compress=3,
             )
@@ -1148,7 +1148,6 @@ class BAGEL(object):
             self.bagel_config["plot_config"]["gp_only_plot"],
             self.bagel_config["plot_config"]["gp_per_lineage_plot"],
             self.result_folder,
-            self.bagel_loop_data_terminal_state,
         )
 
 
