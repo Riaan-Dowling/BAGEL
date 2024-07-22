@@ -49,7 +49,7 @@ def load_all_data():
     """
 
 
-def determine_start_cell(bagel_loop_data, terminal_states, early_cell):
+def determine_start_cell(bagel_loop_data, terminal_states, early_cell, dm_boundaries):
     """
     determine_early_cell
     """
@@ -98,7 +98,6 @@ def results(
     gp_only_plot,
     gp_per_lineage_plot,
     result_folder,
-    bagel_loop_data_terminal_state,
 ):
     """
     two_dimension_manifold_plot = False #Two dimensional phenotypic manifold plot
@@ -118,6 +117,9 @@ def results(
     # LOAD DATA
     log_norm_main_df = joblib.load(f"{result_folder}/log_norm_main_df.pkl")
     bagel_loop_data = joblib.load(f"{result_folder}/bagel_loop_data.pkl")
+    bagel_loop_data_terminal_state = joblib.load(
+        f"{result_folder}/bagel_loop_data_terminal_state.pkl"
+    )
 
     # Link terminal state to normalized manifold
     terminal_states = joblib.load(f"{result_folder}/terminal_states.pkl")
@@ -136,8 +138,11 @@ def results(
     early_cell = joblib.load(f"{result_folder}/early_cell.pkl")
 
     # Define start cell
-    start_cell = determine_start_cell(bagel_loop_data, terminal_states, early_cell)
+    start_cell = determine_start_cell(
+        bagel_loop_data, terminal_states, early_cell, dm_boundaries
+    )
 
+    two_data_set_flag = joblib.load(f"{result_folder}/two_data_set_flag.pkl")
     # """
     # Create result folder
     # """
@@ -153,7 +158,7 @@ def results(
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-    if two_data_set_FLAG is True:
+    if two_data_set_flag is True:
         print("Two data sets.")
         # """
         # -----------------------------------------------------------------
@@ -1268,7 +1273,7 @@ def results(
                 img = ax[ig].scatter(
                     bagel_loop_data["pca_1"],
                     bagel_loop_data["pca_2"],
-                    c=log_norm_main_df.loc[tsne.index, genelist[ig]],
+                    c=log_norm_main_df.loc[bagel_loop_data.index, genelist[ig]],
                     s=3,
                     cmap=matplotlib.cm.Spectral_r,
                     label=Primary_label,
@@ -1413,7 +1418,7 @@ def results(
                 s=5,
                 marker="o",
                 cmap=matplotlib.cm.plasma,
-                c=c,
+                c=bagel_loop_data["pseudo_time_normal"].values.tolist(),
                 label=Primary_label,
             )
             ax.scatter(
