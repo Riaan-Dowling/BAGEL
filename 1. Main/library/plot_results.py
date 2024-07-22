@@ -604,7 +604,7 @@ def results(
                 ax = fig.add_subplot(111, projection="3d")
                 ax.view_init(elev=12, azim=-100)
 
-                # ax.scatter( Lineage.pseudo_time_normal, Lineage.tsne_1,  Lineage.tsne_2, color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(z + 1))
+                # ax.scatter( Lineage.pseudo_time_normal, Lineage.pca_1,  Lineage.pca_2, color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(z + 1))
 
                 temp1 = ax.scatter(
                     Lineage_mouse["pseudo_time_normal"],
@@ -1653,7 +1653,7 @@ def results(
 
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
 
-            temp = final_lineage_df
+            temp = final_lineage_df.copy()
 
             for z in range(final_lineage_counter):
                 Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
@@ -1698,8 +1698,8 @@ def results(
 
                 ax.scatter(
                     Lineage.pseudo_time_normal,
-                    Lineage.tsne_1,
-                    Lineage.tsne_2,
+                    Lineage.pca_1,
+                    Lineage.pca_2,
                     color=colors[z],
                     marker="o",
                     s=5,
@@ -1742,8 +1742,8 @@ def results(
                 Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
                 temp1 = ax.scatter(
                     Lineage.pseudo_time_normal,
-                    Lineage.tsne_1,
-                    Lineage.tsne_2,
+                    Lineage.pca_1,
+                    Lineage.pca_2,
                     color=colors[a],
                     alpha=1,
                     marker="o",
