@@ -18,21 +18,21 @@ def estimate_guassians_on_manifold(
     split,
     final_window,
     window_pseudo_time_interval,
-    data_output_gibbs_ORIGNAL,
+    data_output_gibbs_ORIGNAl,
     data_output_gibbs_PROJECTED,
     first_time_association,
-    once_data_ORIGNAL,
+    once_data_ORIGNAl,
     once_data_PROJECTED,
-    twice_data_ORIGNAL,
+    twice_data_ORIGNAl,
     twice_data_PROJECTED,
-    Lineage_1,
-    Lineage_2,
-    previouse_window_L1,
-    previouse_window_L2,
-    previouse_window_L1_PROJECTED,
-    previouse_window_L2_PROJECTED,
-    Model_1_Lineage_1_counter,
-    Model_1_Lineage_2_counter,
+    lineage_1,
+    lineage_2,
+    previouse_window_l1,
+    previouse_window_l2,
+    previouse_window_l1_PROJECTED,
+    previouse_window_l2_PROJECTED,
+    Model_1_lineage_1_counter,
+    Model_1_lineage_2_counter,
 ):
 
     # Rectify false positves
@@ -42,19 +42,19 @@ def estimate_guassians_on_manifold(
 
             # Ascociate data after mis detection
             # Asociate data to lineage
-            # once_data_ORIGNAL
+            # once_data_ORIGNAl
             (
                 once,
                 twice,
-                Lineage_1,
-                Lineage_2,
-                previouse_window_L1,
-                previouse_window_L2,
-                previouse_window_L1_PROJECTED,
-                previouse_window_L2_PROJECTED,
+                lineage_1,
+                lineage_2,
+                previouse_window_l1,
+                previouse_window_l2,
+                previouse_window_l1_PROJECTED,
+                previouse_window_l2_PROJECTED,
                 first_time_association,
-                Model_1_Lineage_1_counter,
-                Model_1_Lineage_2_counter,
+                Model_1_lineage_1_counter,
+                Model_1_lineage_2_counter,
             ) = association(
                 once,
                 twice,
@@ -62,21 +62,21 @@ def estimate_guassians_on_manifold(
                 window_3d,
                 Model_1,
                 Model_2,
-                Lineage_1,
-                Lineage_2,
-                data_output_gibbs_ORIGNAL,
+                lineage_1,
+                lineage_2,
+                data_output_gibbs_ORIGNAl,
                 data_output_gibbs_PROJECTED,
                 once_data,
                 once_data_PROJECTED,
                 twice_data,
                 twice_data_PROJECTED,
                 first_time_association,
-                previouse_window_L1,
-                previouse_window_L2,
-                previouse_window_L1_PROJECTED,
-                previouse_window_L2_PROJECTED,
-                Model_1_Lineage_1_counter,
-                Model_1_Lineage_2_counter,
+                previouse_window_l1,
+                previouse_window_l2,
+                previouse_window_l1_PROJECTED,
+                previouse_window_l2_PROJECTED,
+                Model_1_lineage_1_counter,
+                Model_1_lineage_2_counter,
             )
             # Reset Flags
             once = False
@@ -89,15 +89,15 @@ def estimate_guassians_on_manifold(
             (
                 once,
                 twice,
-                Lineage_1,
-                Lineage_2,
-                previouse_window_L1,
-                previouse_window_L2,
-                previouse_window_L1_PROJECTED,
-                previouse_window_L2_PROJECTED,
+                lineage_1,
+                lineage_2,
+                previouse_window_l1,
+                previouse_window_l2,
+                previouse_window_l1_PROJECTED,
+                previouse_window_l2_PROJECTED,
                 first_time_association,
-                Model_1_Lineage_1_counter,
-                Model_1_Lineage_2_counter,
+                Model_1_lineage_1_counter,
+                Model_1_lineage_2_counter,
             ) = association(
                 once,
                 twice,
@@ -105,42 +105,42 @@ def estimate_guassians_on_manifold(
                 window_3d,
                 Model_1,
                 Model_2,
-                Lineage_1,
-                Lineage_2,
-                data_output_gibbs_ORIGNAL,
+                lineage_1,
+                lineage_2,
+                data_output_gibbs_ORIGNAl,
                 data_output_gibbs_PROJECTED,
                 once_data,
                 once_data_PROJECTED,
                 twice_data,
                 twice_data_PROJECTED,
                 first_time_association,
-                previouse_window_L1,
-                previouse_window_L2,
-                previouse_window_L1_PROJECTED,
-                previouse_window_L2_PROJECTED,
-                Model_1_Lineage_1_counter,
-                Model_1_Lineage_2_counter,
+                previouse_window_l1,
+                previouse_window_l2,
+                previouse_window_l1_PROJECTED,
+                previouse_window_l2_PROJECTED,
+                Model_1_lineage_1_counter,
+                Model_1_lineage_2_counter,
             )
             # Reset Flags
             once = False
             twice = False
-    """
-    -----------------------------------------------------------------
-    Ensure 3 consequtive splits
-    -----------------------------------------------------------------
-    """
+    # """
+    # -----------------------------------------------------------------
+    # Ensure 3 consequtive splits
+    # -----------------------------------------------------------------
+    # """
     if (Model_2 is True) and (once is False) and (split is False):
         once = True  # First split
         once_data = window_3d
         # Once guassian split data
-        once_data_ORIGNAL = data_output_gibbs_ORIGNAL
+        once_data_ORIGNAl = data_output_gibbs_ORIGNAl
         once_data_PROJECTED = data_output_gibbs_PROJECTED
 
     elif (Model_2 is True) and (once is True) and (twice is False) and (split is False):
         twice = True  # Second split is true
         twice_data = window_3d
         # Twice gaussian split data
-        twice_data_ORIGNAL = data_output_gibbs_ORIGNAL
+        twice_data_ORIGNAl = data_output_gibbs_ORIGNAl
         twice_data_PROJECTED = data_output_gibbs_PROJECTED
 
     elif (
@@ -159,13 +159,13 @@ def estimate_guassians_on_manifold(
         split,
         once_data,
         twice_data,
-        once_data_ORIGNAL,
+        once_data_ORIGNAl,
         once_data_PROJECTED,
-        twice_data_ORIGNAL,
+        twice_data_ORIGNAl,
         twice_data_PROJECTED,
         first_time_association,
-        Lineage_1,
-        Lineage_2,
+        lineage_1,
+        lineage_2,
     )
 
 
@@ -176,35 +176,35 @@ def association(
     before_split,
     Model_1,
     Model_2,
-    Lineage_1,
-    Lineage_2,
-    data_output_gibbs_ORIGNAL,
+    lineage_1,
+    lineage_2,
+    data_output_gibbs_ORIGNAl,
     data_output_gibbs_PROJECTED,
-    once_data_ORIGNAL,
+    once_data_ORIGNAl,
     once_data_PROJECTED,
-    twice_data_ORIGNAL,
+    twice_data_ORIGNAl,
     twice_data_PROJECTED,
     first_time_association,
-    previouse_window_L1,
-    previouse_window_L2,
-    previouse_window_L1_PROJECTED,
-    previouse_window_L2_PROJECTED,
-    Model_1_Lineage_1_counter,
-    Model_1_Lineage_2_counter,
+    previouse_window_l1,
+    previouse_window_l2,
+    previouse_window_l1_PROJECTED,
+    previouse_window_l2_PROJECTED,
+    Model_1_lineage_1_counter,
+    Model_1_lineage_2_counter,
 ):
     # There is no split in data
     if (split is False) and (Model_1 is True) and (once is False) and (twice is False):
-        # Lineage 1
+        # lineage 1
         before_split.columns = [
             "pseudo_time_normal",
             "pca_1",
             "pca_2",
         ]  # Set to lineage formating
-        frames = [Lineage_1, before_split]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
-        # Lineage 2
-        frames = [Lineage_2, before_split]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, before_split]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        # lineage 2
+        frames = [lineage_2, before_split]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
         before_split.columns = [
             "g1_pseudo_time_normal",
@@ -213,54 +213,54 @@ def association(
         ]  # Reset to orignal formating4
 
     elif (split is False) and (Model_1 is True) and (once is True) and (twice is False):
-        # Lineage 1
+        # lineage 1
         # Once data
-        frames = [Lineage_1, once_data_ORIGNAL]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, once_data_ORIGNAl]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
         before_split.columns = [
             "pseudo_time_normal",
             "pca_1",
             "pca_2",
         ]  # Set to lineage formating
-        frames = [Lineage_1, before_split]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, before_split]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-        # Lineage 2
+        # lineage 2
         # Once data
-        frames = [Lineage_2, once_data_ORIGNAL]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, once_data_ORIGNAl]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
-        frames = [Lineage_2, before_split]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, before_split]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
     elif (split is False) and (Model_1 is True) and (once is True) and (twice is True):
-        # Lineage 1
+        # lineage 1
         # Once data
-        frames = [Lineage_1, once_data_ORIGNAL]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, once_data_ORIGNAl]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Twice data
-        frames = [Lineage_1, twice_data_ORIGNAL]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, twice_data_ORIGNAl]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
         before_split.columns = [
             "pseudo_time_normal",
             "pca_1",
             "pca_2",
         ]  # Set to lineage formating
-        frames = [Lineage_1, before_split]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, before_split]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-        # Lineage 2
+        # lineage 2
         # Once data
-        frames = [Lineage_2, once_data_ORIGNAL]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, once_data_ORIGNAl]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Twice data
-        frames = [Lineage_2, twice_data_ORIGNAL]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, twice_data_ORIGNAl]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         # Current data
-        frames = [Lineage_2, before_split]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, before_split]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
         before_split.columns = [
             "g1_pseudo_time_normal",
             "g1_pca_1",
@@ -298,62 +298,62 @@ def association(
 
             # Data in original 3d window
             d = {
-                "pseudo_time_normal": once_data_ORIGNAL["g1_pseudo_time_normal"],
-                "pca_1": once_data_ORIGNAL["g1_pca_1"],
-                "pca_2": once_data_ORIGNAL["g1_pca_2"],
+                "pseudo_time_normal": once_data_ORIGNAl["g1_pseudo_time_normal"],
+                "pca_1": once_data_ORIGNAl["g1_pca_1"],
+                "pca_2": once_data_ORIGNAl["g1_pca_2"],
             }
-            current_ORIGINAL_window_g1_3d = pd.DataFrame(d)
-            current_ORIGINAL_window_g1_3d = (
-                current_ORIGINAL_window_g1_3d.dropna()
+            current_ORIGINAl_window_g1_3d = pd.DataFrame(d)
+            current_ORIGINAl_window_g1_3d = (
+                current_ORIGINAl_window_g1_3d.dropna()
             )  # Drop NAN rows
 
             d = {
-                "pseudo_time_normal": once_data_ORIGNAL["g2_pseudo_time_normal"],
-                "pca_1": once_data_ORIGNAL["g2_pca_1"],
-                "pca_2": once_data_ORIGNAL["g2_pca_2"],
+                "pseudo_time_normal": once_data_ORIGNAl["g2_pseudo_time_normal"],
+                "pca_1": once_data_ORIGNAl["g2_pca_1"],
+                "pca_2": once_data_ORIGNAl["g2_pca_2"],
             }
-            current_ORIGINAL_window_g2_3d = pd.DataFrame(d)
-            current_ORIGINAL_window_g2_3d = (
-                current_ORIGINAL_window_g2_3d.dropna()
+            current_ORIGINAl_window_g2_3d = pd.DataFrame(d)
+            current_ORIGINAl_window_g2_3d = (
+                current_ORIGINAl_window_g2_3d.dropna()
             )  # Drop NAN rows
 
             # Data in original 2d window
             d = {
-                "pca_1": once_data_ORIGNAL["g1_pca_1"],
-                "pca_2": once_data_ORIGNAL["g1_pca_2"],
+                "pca_1": once_data_ORIGNAl["g1_pca_1"],
+                "pca_2": once_data_ORIGNAl["g1_pca_2"],
             }
-            current_ORIGINAL_window_g1_2d = pd.DataFrame(d)
-            current_ORIGINAL_window_g1_2d = (
-                current_ORIGINAL_window_g1_2d.dropna()
+            current_ORIGINAl_window_g1_2d = pd.DataFrame(d)
+            current_ORIGINAl_window_g1_2d = (
+                current_ORIGINAl_window_g1_2d.dropna()
             )  # Drop NAN rows
 
             d = {
-                "pca_1": once_data_ORIGNAL["g2_pca_1"],
-                "pca_2": once_data_ORIGNAL["g2_pca_2"],
+                "pca_1": once_data_ORIGNAl["g2_pca_1"],
+                "pca_2": once_data_ORIGNAl["g2_pca_2"],
             }
-            current_ORIGINAL_window_g2_2d = pd.DataFrame(d)
-            current_ORIGINAL_window_g2_2d = (
-                current_ORIGINAL_window_g2_2d.dropna()
+            current_ORIGINAl_window_g2_2d = pd.DataFrame(d)
+            current_ORIGINAl_window_g2_2d = (
+                current_ORIGINAl_window_g2_2d.dropna()
             )  # Drop NAN rows
 
             # Assign NEW previouse windows
-            previouse_window_L1 = (
-                current_ORIGINAL_window_g1_3d  # current_PROJECTED_window_g1
+            previouse_window_l1 = (
+                current_ORIGINAl_window_g1_3d  # current_PROJECTED_window_g1
             )
-            previouse_window_L2 = (
-                current_ORIGINAL_window_g2_3d  # current_PROJECTED_window_g2
+            previouse_window_l2 = (
+                current_ORIGINAl_window_g2_3d  # current_PROJECTED_window_g2
             )
 
-            previouse_window_L1_PROJECTED = current_ORIGINAL_window_g1_3d
-            previouse_window_L2_PROJECTED = current_ORIGINAL_window_g2_3d
+            previouse_window_l1_PROJECTED = current_ORIGINAl_window_g1_3d
+            previouse_window_l2_PROJECTED = current_ORIGINAl_window_g2_3d
 
             # Add data to lineage
             if once is True:
-                frames = [Lineage_1, current_ORIGINAL_window_g1_3d]
-                Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+                frames = [lineage_1, current_ORIGINAl_window_g1_3d]
+                lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-                frames = [Lineage_2, current_ORIGINAL_window_g2_3d]
-                Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+                frames = [lineage_2, current_ORIGINAl_window_g2_3d]
+                lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
             # """
             # -----------------------------------------------------------------
@@ -362,27 +362,27 @@ def association(
             # """
             if twice is True:
                 (
-                    Lineage_1,
-                    Lineage_2,
-                    previouse_window_L1,
-                    previouse_window_L2,
-                    previouse_window_L1_PROJECTED,
-                    previouse_window_L2_PROJECTED,
-                    Model_1_Lineage_1_counter,
-                    Model_1_Lineage_2_counter,
+                    lineage_1,
+                    lineage_2,
+                    previouse_window_l1,
+                    previouse_window_l2,
+                    previouse_window_l1_PROJECTED,
+                    previouse_window_l2_PROJECTED,
+                    Model_1_lineage_1_counter,
+                    Model_1_lineage_2_counter,
                 ) = euclidean_dist_association(
-                    previouse_window_L1,
-                    previouse_window_L2,
-                    previouse_window_L1_PROJECTED,
-                    previouse_window_L2_PROJECTED,
-                    twice_data_ORIGNAL,
+                    previouse_window_l1,
+                    previouse_window_l2,
+                    previouse_window_l1_PROJECTED,
+                    previouse_window_l2_PROJECTED,
+                    twice_data_ORIGNAl,
                     twice_data_PROJECTED,
-                    Lineage_1,
-                    Lineage_2,
+                    lineage_1,
+                    lineage_2,
                     Model_1,
                     Model_2,
-                    Model_1_Lineage_1_counter,
-                    Model_1_Lineage_2_counter,
+                    Model_1_lineage_1_counter,
+                    Model_1_lineage_2_counter,
                 )
             # """
             # -----------------------------------------------------------------
@@ -391,27 +391,27 @@ def association(
             # """
             if (once is True) and (twice is True):
                 (
-                    Lineage_1,
-                    Lineage_2,
-                    previouse_window_L1,
-                    previouse_window_L2,
-                    previouse_window_L1_PROJECTED,
-                    previouse_window_L2_PROJECTED,
-                    Model_1_Lineage_1_counter,
-                    Model_1_Lineage_2_counter,
+                    lineage_1,
+                    lineage_2,
+                    previouse_window_l1,
+                    previouse_window_l2,
+                    previouse_window_l1_PROJECTED,
+                    previouse_window_l2_PROJECTED,
+                    Model_1_lineage_1_counter,
+                    Model_1_lineage_2_counter,
                 ) = euclidean_dist_association(
-                    previouse_window_L1,
-                    previouse_window_L2,
-                    previouse_window_L1_PROJECTED,
-                    previouse_window_L2_PROJECTED,
-                    data_output_gibbs_ORIGNAL,
+                    previouse_window_l1,
+                    previouse_window_l2,
+                    previouse_window_l1_PROJECTED,
+                    previouse_window_l2_PROJECTED,
+                    data_output_gibbs_ORIGNAl,
                     data_output_gibbs_PROJECTED,
-                    Lineage_1,
-                    Lineage_2,
+                    lineage_1,
+                    lineage_2,
                     Model_1,
                     Model_2,
-                    Model_1_Lineage_1_counter,
-                    Model_1_Lineage_2_counter,
+                    Model_1_lineage_1_counter,
+                    Model_1_lineage_2_counter,
                 )
 
             first_time_association = False  # Ensure only do this step once
@@ -422,19 +422,25 @@ def association(
     return (
         once,
         twice,
-        Lineage_1,
-        Lineage_2,
-        previouse_window_L1,
-        previouse_window_L2,
-        previouse_window_L1_PROJECTED,
-        previouse_window_L2_PROJECTED,
+        lineage_1,
+        lineage_2,
+        previouse_window_l1,
+        previouse_window_l2,
+        previouse_window_l1_PROJECTED,
+        previouse_window_l2_PROJECTED,
         first_time_association,
-        Model_1_Lineage_1_counter,
-        Model_1_Lineage_2_counter,
+        Model_1_lineage_1_counter,
+        Model_1_lineage_2_counter,
     )
 
 
-def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
+def after_split_euclidean_dist_association(lineage_1, lineage_2, window_3d):
+    """
+    after_split_euclidean_dist_association
+    """
+
+    lineage_1 = lineage_1.reset_index(drop=True)
+    lineage_2 = lineage_2.reset_index(drop=True)
 
     window_3d = window_3d.iloc[:, 0:3]
 
@@ -450,80 +456,92 @@ def after_split_euclidean_dist_association(Lineage_1, Lineage_2, window_3d):
     cell_id_df.reset_index(drop=True, inplace=True)
 
     # Append column
-    Frames = [window_3d, cell_id_df]
-    con = pd.concat(Frames, axis=1, sort=False)
-    temp_ID_WINDOW = pd.DataFrame(con.values, index=label, columns=con.columns)
 
-    L1_counter = 0
-    L2_counter = 0
+    con = pd.concat([window_3d, cell_id_df], axis=1, sort=False)
+    temp_id_window = pd.DataFrame(con.values, index=label, columns=con.columns)
+
+    l1_counter = 0
+    l2_counter = 0
+    counter = 0
     for _ in tqdm(
-        range(len(temp_ID_WINDOW.index)), desc="Data association after split."
+        range(len(temp_id_window.index)), desc="Data association after split."
     ):
-        # TODO update paper to use mean
-        # TODO uncomment for mean average of cells instead of single cell
-        if len(Lineage_1.index) <= 50:
-            L1_mean = Lineage_1.tail(len(Lineage_1.index)).mean(axis=0)
-            # L1_mean = Lineage_1.tail(1)
+        # NOTE possibel uncomment for mean average of cells instead of single cell
+        if len(lineage_1.index) <= 50:
+            # l1_mean = lineage_1.tail(len(lineage_1.index)).mean(axis=0)
+            l1_mean = lineage_1.tail(1)
         else:
-            L1_mean = Lineage_1.tail(50).mean(axis=0)
-            # L1_mean = Lineage_1.tail(1)
+            # l1_mean = lineage_1.tail(50).mean(axis=0)
+            l1_mean = lineage_1.tail(1)
 
-        if len(Lineage_2.index) <= 50:
-            L2_mean = Lineage_2.tail(len(Lineage_2.index)).mean(axis=0)
-            # L2_mean = Lineage_2.tail(1)
+        if len(lineage_2.index) <= 50:
+            # l2_mean = lineage_2.tail(len(lineage_2.index)).mean(axis=0)
+            l2_mean = lineage_2.tail(1)
         else:
-            L2_mean = Lineage_2.tail(50).mean(axis=0)
-            # L2_mean = Lineage_2.tail(1)
+            # l2_mean = lineage_2.tail(50).mean(axis=0)
+            l2_mean = lineage_2.tail(1)
 
-        L1_mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
-        L2_mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+        l1_mean.columns = lineage_1.columns
+        l2_mean.columns = lineage_2.columns
 
         # Select one cell
-        select_one = temp_ID_WINDOW.head(1)
+        select_one = temp_id_window.head(1)
         # Remove selected cell from data
-        temp_ID_WINDOW = temp_ID_WINDOW[
-            ~temp_ID_WINDOW["cell_id_number"].isin(select_one["cell_id_number"].values)
+        temp_id_window = temp_id_window[
+            ~temp_id_window["cell_id_number"].isin(select_one["cell_id_number"].values)
         ]
 
         # Delete cell ID column
         del select_one["cell_id_number"]
         # Calculate euclidean distance
-        L1_Data_euclidean_distance = np.linalg.norm(L1_mean.values - select_one.values)
-        L2_Data_euclidean_distance = np.linalg.norm(L2_mean.values - select_one.values)
+        # fmt:off
+        l1_data_euclidean_distance = np.linalg.norm(l1_mean[['pseudo_time_normal', 'pca_1', 'pca_2']].values - select_one[['pseudo_time_normal', 'pca_1', 'pca_2']].values)
+        l2_data_euclidean_distance = np.linalg.norm(l2_mean[['pseudo_time_normal', 'pca_1', 'pca_2']].values - select_one[['pseudo_time_normal', 'pca_1', 'pca_2']].values)
+        # fmt:on
+        # print(f"l1_data_euclidean_distance - {l1_data_euclidean_distance}")
+        # print(f"l2_data_euclidean_distance - {l2_data_euclidean_distance}")
+        # print()
 
-        if L1_Data_euclidean_distance <= L2_Data_euclidean_distance:
-            Frames = [Lineage_1, select_one]
-            Lineage_1 = pd.concat(Frames, axis=0, sort=False)
-            L1_counter = L1_counter + 1
+        if l1_data_euclidean_distance < l2_data_euclidean_distance:
+            lineage_1 = pd.concat([lineage_1, select_one], axis=0).reset_index(
+                drop=True
+            )
+            lineage_1 = lineage_1.sort_values(by="pseudo_time_normal", ascending=True)
+            l1_counter = l1_counter + 1
         else:
-            Frames = [Lineage_2, select_one]
-            Lineage_2 = pd.concat(Frames, axis=0, sort=False)
-            L2_counter = L2_counter + 1
+            lineage_2 = pd.concat([lineage_2, select_one], axis=0).reset_index(
+                drop=True
+            )
+            lineage_2 = lineage_2.sort_values(by="pseudo_time_normal", ascending=True)
+            l2_counter = l2_counter + 1
+        counter = counter + 1
+        # if counter > 300:
+        #     print()
 
-    previouse_window_L1 = Lineage_1.tail(L1_counter)
-    previouse_window_L2 = Lineage_2.tail(L2_counter)
+    previouse_window_l1 = lineage_1.tail(l1_counter)
+    previouse_window_l2 = lineage_2.tail(l2_counter)
 
-    return Lineage_1, Lineage_2, previouse_window_L1, previouse_window_L2
+    return lineage_1, lineage_2, previouse_window_l1, previouse_window_l2
 
 
 def euclidean_dist_association(
-    previouse_window_L1,
-    previouse_window_L2,
-    previouse_window_L1_PROJECTED,
-    previouse_window_L2_PROJECTED,
-    data_output_gibbs_ORIGNAL,
+    previouse_window_l1,
+    previouse_window_l2,
+    previouse_window_l1_PROJECTED,
+    previouse_window_l2_PROJECTED,
+    data_output_gibbs_ORIGNAl,
     data_output_gibbs_PROJECTED,
-    Lineage_1,
-    Lineage_2,
+    lineage_1,
+    lineage_2,
     Model_1,
     Model_2,
-    Model_1_Lineage_1_counter,
-    Model_1_Lineage_2_counter,
+    Model_1_lineage_1_counter,
+    Model_1_lineage_2_counter,
 ):
 
     # Reset model 1 count
-    Model_1_Lineage_1_counter = 0
-    Model_1_Lineage_2_counter = 0
+    Model_1_lineage_1_counter = 0
+    Model_1_lineage_2_counter = 0
 
     # Data projected onto plane
     d = {
@@ -542,107 +560,107 @@ def euclidean_dist_association(
 
     # Data in original 3d window
     d = {
-        "pseudo_time_normal": data_output_gibbs_ORIGNAL["g1_pseudo_time_normal"],
-        "pca_1": data_output_gibbs_ORIGNAL["g1_pca_1"],
-        "pca_2": data_output_gibbs_ORIGNAL["g1_pca_2"],
+        "pseudo_time_normal": data_output_gibbs_ORIGNAl["g1_pseudo_time_normal"],
+        "pca_1": data_output_gibbs_ORIGNAl["g1_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAl["g1_pca_2"],
     }
-    current_ORIGINAL_window_g1_3d = pd.DataFrame(d)
-    current_ORIGINAL_window_g1_3d = (
-        current_ORIGINAL_window_g1_3d.dropna()
+    current_ORIGINAl_window_g1_3d = pd.DataFrame(d)
+    current_ORIGINAl_window_g1_3d = (
+        current_ORIGINAl_window_g1_3d.dropna()
     )  # Drop NAN rows
 
     d = {
-        "pseudo_time_normal": data_output_gibbs_ORIGNAL["g2_pseudo_time_normal"],
-        "pca_1": data_output_gibbs_ORIGNAL["g2_pca_1"],
-        "pca_2": data_output_gibbs_ORIGNAL["g2_pca_2"],
+        "pseudo_time_normal": data_output_gibbs_ORIGNAl["g2_pseudo_time_normal"],
+        "pca_1": data_output_gibbs_ORIGNAl["g2_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAl["g2_pca_2"],
     }
-    current_ORIGINAL_window_g2_3d = pd.DataFrame(d)
-    current_ORIGINAL_window_g2_3d = (
-        current_ORIGINAL_window_g2_3d.dropna()
+    current_ORIGINAl_window_g2_3d = pd.DataFrame(d)
+    current_ORIGINAl_window_g2_3d = (
+        current_ORIGINAl_window_g2_3d.dropna()
     )  # Drop NAN rows
 
     d = {
-        "pca_1": data_output_gibbs_ORIGNAL["g1_pca_1"],
-        "pca_2": data_output_gibbs_ORIGNAL["g1_pca_2"],
+        "pca_1": data_output_gibbs_ORIGNAl["g1_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAl["g1_pca_2"],
     }
-    current_ORIGINAL_window_g1 = pd.DataFrame(d)
-    current_ORIGINAL_window_g1_2d = current_ORIGINAL_window_g1.dropna()  # Drop NAN rows
+    current_ORIGINAl_window_g1 = pd.DataFrame(d)
+    current_ORIGINAl_window_g1_2d = current_ORIGINAl_window_g1.dropna()  # Drop NAN rows
 
     d = {
-        "pca_1": data_output_gibbs_ORIGNAL["g2_pca_1"],
-        "pca_2": data_output_gibbs_ORIGNAL["g2_pca_2"],
+        "pca_1": data_output_gibbs_ORIGNAl["g2_pca_1"],
+        "pca_2": data_output_gibbs_ORIGNAl["g2_pca_2"],
     }
-    current_ORIGINAL_window_g2_2d = pd.DataFrame(d)
-    current_ORIGINAL_window_g2_2d = (
-        current_ORIGINAL_window_g2_2d.dropna()
+    current_ORIGINAl_window_g2_2d = pd.DataFrame(d)
+    current_ORIGINAl_window_g2_2d = (
+        current_ORIGINAl_window_g2_2d.dropna()
     )  # Drop NAN rows
 
-    if len(previouse_window_L1.index) > len(previouse_window_L2.index):
-        previouse_window_L1 = previouse_window_L1.sample(
-            n=len(previouse_window_L2.index)
+    if len(previouse_window_l1.index) > len(previouse_window_l2.index):
+        previouse_window_l1 = previouse_window_l1.sample(
+            n=len(previouse_window_l2.index)
         )
     else:
-        previouse_window_L2 = previouse_window_L2.sample(
-            n=len(previouse_window_L1.index)
+        previouse_window_l2 = previouse_window_l2.sample(
+            n=len(previouse_window_l1.index)
         )
 
     # The prevouse data is known as the image and the current data as the template
     # Data frame of mean meseure distance to mean
-    mean = previouse_window_L1.mean(axis=0)
+    mean = previouse_window_l1.mean(axis=0)
     mean.columns = ["pca_1", "pca_2"]
     # Calculate euclidean distance
-    euclidean_distance_L1_g1 = (
-        (current_ORIGINAL_window_g1_3d - mean).pow(2).sum(1).pow(0.5)
+    euclidean_distance_l1_g1 = (
+        (current_ORIGINAl_window_g1_3d - mean).pow(2).sum(1).pow(0.5)
     )
-    euclidean_distance_L1_g1 = euclidean_distance_L1_g1.mean(axis=0)
+    euclidean_distance_l1_g1 = euclidean_distance_l1_g1.mean(axis=0)
 
-    mean = previouse_window_L2.mean(axis=0)
+    mean = previouse_window_l2.mean(axis=0)
     mean.columns = ["pca_1", "pca_2"]
-    euclidean_distance_L2_g1 = (
-        (current_ORIGINAL_window_g1_3d - mean).pow(2).sum(1).pow(0.5)
+    euclidean_distance_l2_g1 = (
+        (current_ORIGINAl_window_g1_3d - mean).pow(2).sum(1).pow(0.5)
     )
-    euclidean_distance_L2_g1 = euclidean_distance_L2_g1.mean(axis=0)
+    euclidean_distance_l2_g1 = euclidean_distance_l2_g1.mean(axis=0)
 
     # Bigger distance is bad!
-    if euclidean_distance_L1_g1 > euclidean_distance_L2_g1:
-        NEW_previouse_window_L1 = current_ORIGINAL_window_g2_3d  # Assign the current window as future previose window
-        NEW_previouse_window_L2 = current_ORIGINAL_window_g1_3d  # Assign the current window as future previose window
+    if euclidean_distance_l1_g1 > euclidean_distance_l2_g1:
+        NEW_previouse_window_l1 = current_ORIGINAl_window_g2_3d  # Assign the current window as future previose window
+        NEW_previouse_window_l2 = current_ORIGINAl_window_g1_3d  # Assign the current window as future previose window
 
-        NEW_previouse_window_L1_PROJECTED = current_ORIGINAL_window_g2_3d
-        NEW_previouse_window_L2_PROJECTED = current_ORIGINAL_window_g1_3d
+        NEW_previouse_window_l1_PROJECTED = current_ORIGINAl_window_g2_3d
+        NEW_previouse_window_l2_PROJECTED = current_ORIGINAl_window_g1_3d
 
         # Correctly append asociated data to new lineage
 
-        frames = [Lineage_1, current_ORIGINAL_window_g2_3d]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, current_ORIGINAl_window_g2_3d]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-        frames = [Lineage_2, current_ORIGINAL_window_g1_3d]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, current_ORIGINAl_window_g1_3d]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
     else:
-        NEW_previouse_window_L1 = current_ORIGINAL_window_g1_3d  # Assign the current window as future previose window
-        NEW_previouse_window_L2 = current_ORIGINAL_window_g2_3d  # Assign the current window as future previose window
+        NEW_previouse_window_l1 = current_ORIGINAl_window_g1_3d  # Assign the current window as future previose window
+        NEW_previouse_window_l2 = current_ORIGINAl_window_g2_3d  # Assign the current window as future previose window
 
-        NEW_previouse_window_L1_PROJECTED = current_ORIGINAL_window_g1_3d
-        NEW_previouse_window_L2_PROJECTED = current_ORIGINAL_window_g2_3d
+        NEW_previouse_window_l1_PROJECTED = current_ORIGINAl_window_g1_3d
+        NEW_previouse_window_l2_PROJECTED = current_ORIGINAl_window_g2_3d
 
-        frames = [Lineage_1, current_ORIGINAL_window_g1_3d]
-        Lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_1, current_ORIGINAl_window_g1_3d]
+        lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
-        frames = [Lineage_2, current_ORIGINAL_window_g2_3d]
-        Lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+        frames = [lineage_2, current_ORIGINAl_window_g2_3d]
+        lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
 
     # Associate lineage_1 and lineage_2 with before_split and after_split due to window and step size mis match
 
     return (
-        Lineage_1,
-        Lineage_2,
-        NEW_previouse_window_L1,
-        NEW_previouse_window_L2,
-        NEW_previouse_window_L1_PROJECTED,
-        NEW_previouse_window_L2_PROJECTED,
-        Model_1_Lineage_1_counter,
-        Model_1_Lineage_2_counter,
+        lineage_1,
+        lineage_2,
+        NEW_previouse_window_l1,
+        NEW_previouse_window_l2,
+        NEW_previouse_window_l1_PROJECTED,
+        NEW_previouse_window_l2_PROJECTED,
+        Model_1_lineage_1_counter,
+        Model_1_lineage_2_counter,
     )
 
 
@@ -665,3 +683,56 @@ def bifurcation_points(
             total_bifurcations = total_bifurcations + 1
 
     return bifurcation_data, bifurcate_once, total_bifurcations
+
+
+# import matplotlib.pyplot as plt
+# import time
+# for step in range(20):
+#     fig = plt.figure()
+#     ax = fig.add_subplot(111, projection="3d")
+#     ax.view_init(elev=10, azim=10 + 20*step)
+#     ax.scatter(
+#         lineage_2["pseudo_time_normal"],
+#         lineage_2["pca_1"],
+#         lineage_2["pca_2"],
+#         c="c",
+#         marker="X",
+#         s=50,
+#         alpha=0.1,
+#     )
+#     ax.scatter(
+#         lineage_1["pseudo_time_normal"],
+#         lineage_1["pca_1"],
+#         lineage_1["pca_2"],
+#         c="m",
+#         marker="X",
+#         s=50,
+#         alpha=0.1,
+#     )
+#     ax.scatter(
+#         select_one["pseudo_time_normal"],
+#         select_one["pca_1"],
+#         select_one["pca_2"],
+#         c="r",
+#         marker="o",
+#         s=70,
+#     )
+#     ax.scatter(
+#         l1_mean["pseudo_time_normal"],
+#         l1_mean["pca_1"],
+#         l1_mean["pca_2"],
+#         c="orange",
+#         marker="o",
+#         s=70,
+#     )
+#     ax.scatter(
+#         l2_mean["pseudo_time_normal"],
+#         l2_mean["pca_1"],
+#         l2_mean["pca_2"],
+#         c="blue",
+#         marker="o",
+#         s=70,
+#     )
+#     plt.savefig("temp.png")
+#     plt.show()
+#     time.sleep(0.5)
