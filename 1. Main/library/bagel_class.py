@@ -51,9 +51,6 @@ class BAGEL(object):
         self.result_folder = os.path.join(
             self.parent_dir, f"run_{self.output_version_no}_result_folder"
         )
-        self.video_result_pictures = os.path.join(
-            self.result_folder, "video_result_pictures"
-        )
 
         # Init phenotypic manifold variables
         self.phenotypic_manifold_pca_projections = ""
@@ -83,10 +80,6 @@ class BAGEL(object):
             joblib.dump(
                 self.early_cell, f"{self.result_folder}/early_cell.pkl", compress=3
             )
-
-            # Video folder
-            if not os.path.exists(self.video_result_pictures):
-                os.makedirs(self.video_result_pictures)
 
     def palantir_clean_up_cell_data_files(self, df_in):
         """
@@ -468,6 +461,7 @@ class BAGEL(object):
                 # p1_rotate = mean_window_bagel_loop_data,
                 # Model_1 = one_model_flag
                 # Model_2 = two_model_flag
+                # window_3d = window_bagel_loop_data_no_cell_id
 
                 # window_pseudo_data = window_bagel_loop_data
                 (
@@ -750,8 +744,8 @@ class BAGEL(object):
                                     previouse_window_l1_projected,
                                     previouse_window_l2_projected,
                                 ) = majority_sup.after_split_euclidean_dist_association(
-                                    main_lineage_1_df,
-                                    main_lineage_2_df,
+                                    lineage_1_test,
+                                    lineage_2_test,
                                     self.window_removed_bagel_loop_data,
                                 )
 
@@ -820,6 +814,7 @@ class BAGEL(object):
                                     )
                                 ]
 
+                            # State if valid split
                             if (lineage_1_terminal_state.empty is True) or (
                                 lineage_2_terminal_state.empty is True
                             ):
