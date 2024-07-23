@@ -42,17 +42,17 @@ def gibbs_sampler_2_gaussians(
 
     ran_out_of_data_split = False  # If ran out of data is true
 
-    pseudo_time = window_3d.pseudo_time_normal
-    tsne_1 = window_3d.pca_1
-    tsne_2 = window_3d.pca_2
-
-    d = {"pseudo_time_normal": pseudo_time, "pca_1": tsne_1, "pca_2": tsne_2}
+    d = {
+        "pseudo_time_normal": window_3d.pseudo_time_normal,
+        "pca_1": window_3d.pca_1,
+        "pca_2": window_3d.pca_2,
+    }
     df = pd.DataFrame(d)
 
     d = {
-        "pseudo_time_normal": pseudo_time,
-        "pca_1": tsne_1,
-        "pca_2": tsne_2,
+        "pseudo_time_normal": window_3d.pseudo_time_normal,
+        "pca_1": window_3d.pca_1,
+        "pca_2": window_3d.pca_2,
         "cell_id_number": window_3d["cell_id_number"].values,
     }
     df_cell_ID = pd.DataFrame(d)
@@ -82,13 +82,19 @@ def gibbs_sampler_2_gaussians(
     mean = mean_data.mean(axis=0)
     mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
     # Calculate euclidean distance as prior
-    euclidean_distance_1 = (mean_data.iloc[:, 0:1] - mean[0]).pow(2).sum(1).pow(0.5)
+    euclidean_distance_1 = (
+        (mean_data.iloc[:, 0:1] - mean.iloc[0]).pow(2).sum(1).pow(0.5)
+    )
     euclidean_distance_mean_1 = euclidean_distance_1.mean(axis=0)
 
-    euclidean_distance_2 = (mean_data.iloc[:, 1:2] - mean[1]).pow(2).sum(1).pow(0.5)
+    euclidean_distance_2 = (
+        (mean_data.iloc[:, 1:2] - mean.iloc[1]).pow(2).sum(1).pow(0.5)
+    )
     euclidean_distance_mean_2 = euclidean_distance_2.mean(axis=0)
 
-    euclidean_distance_3 = (mean_data.iloc[:, 2:3] - mean[2]).pow(2).sum(1).pow(0.5)
+    euclidean_distance_3 = (
+        (mean_data.iloc[:, 2:3] - mean.iloc[2]).pow(2).sum(1).pow(0.5)
+    )
     euclidean_distance_mean_3 = euclidean_distance_3.mean(axis=0)
 
     df_prior_opinion_cov = pd.DataFrame(
