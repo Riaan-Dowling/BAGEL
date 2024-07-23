@@ -1669,16 +1669,18 @@ def results(
 
             temp = final_lineage_df.copy()
 
-            for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
+            for a in range(final_lineage_counter):
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
+                # Lineage = Lineage.dropna()  # Drop possible NAN data
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
+                # temp.columns = range(temp.shape[1])  # Rename column names
+                # temp = temp.drop(
+                #     [0, 1, 2], axis=1
+                # )  # Remove new pseudo data lineage from data
 
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+                # Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
 
                 # Terminal states of the lineage
                 lineage_TERMINAL_STATE = Lineage[
@@ -1714,10 +1716,10 @@ def results(
                     Lineage.pseudo_time_normal,
                     Lineage.pca_1,
                     Lineage.pca_2,
-                    color=colors[z],
+                    color=colors[a],
                     marker="o",
                     s=5,
-                    label="PC-lineage-" + str(z + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
                 ax.set_zlabel(r"PC$_{\mathrm{v}}$2")
                 ax.set_ylabel(r"PC$_{\mathrm{v}}$1")
@@ -1732,7 +1734,8 @@ def results(
                     bbox_transform=ax.transData,
                 )
                 # plt.show()
-                picknm = output_prefix_label + "_lineage_" + str(z + 1) + ".png"
+                picknm = output_prefix_label + "_lineage_" + str(a + 1) + ".png"
+                plt.show()
                 plt.savefig(f"{output_dir}/{picknm}")
                 plt.close()
         if all_lineage_plot is True:
@@ -1747,14 +1750,17 @@ def results(
             ax = fig.add_subplot(111, projection="3d")
             ax.view_init(elev=12, azim=-100)
             for a in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
-                temp1 = ax.scatter(
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
+                # Lineage = Lineage.dropna()  # Drop possible NAN data
+                # temp.columns = range(temp.shape[1])  # Rename column names
+                # temp = temp.drop(
+                #     [0, 1, 2], axis=1
+                # )  # Remove new pseudo data lineage from data
+                # Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+                # Lineage.columns = ["pca_1", "pca_2", "pseudo_time_normal"]
+                ax.scatter(
                     Lineage.pseudo_time_normal,
                     Lineage.pca_1,
                     Lineage.pca_2,
