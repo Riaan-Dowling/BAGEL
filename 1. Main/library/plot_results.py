@@ -167,14 +167,14 @@ def results(
         # Parameters
         # -----------------------------------------------------------------
         # """
-        total_Secondary_cells_used = joblib.load("total_Secondary_cells_used.pkl")
+        total_secondary_cells_used = joblib.load("total_secondary_cells_used.pkl")
         total_length = len(bagel_loop_data.index)
-        main_length = total_length - total_Secondary_cells_used
+        main_length = total_length - total_secondary_cells_used
         main_data = bagel_loop_data.head(main_length)
-        secondary_Data = bagel_loop_data.tail(total_Secondary_cells_used)
+        secondary_Data = bagel_loop_data.tail(total_secondary_cells_used)
 
         Main_bagel_loop_data = bagel_loop_data.head(main_length)
-        Secondary_bagel_loop_data = bagel_loop_data.tail(total_Secondary_cells_used)
+        Secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
 
         sizes = log_norm_main_df.sum(axis=1)  # Define the expressions per cell
 
@@ -314,7 +314,7 @@ def results(
                 marker="D",
                 cmap=matplotlib.cm.plasma,
                 c=bagel_loop_data["pseudo_time_normal"].tail(
-                    total_Secondary_cells_used
+                    total_secondary_cells_used
                 ),
                 label=secondary_label,
             )
