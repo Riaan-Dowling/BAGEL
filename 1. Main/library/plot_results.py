@@ -183,8 +183,8 @@ def results(
             # -----------------------------------------------------------------
             # """
             try:
-                Selected_cell_row = joblib.load("Selected_cell_row.pkl")
-                Selected_cell_row = bagel_loop_data.loc[Selected_cell_row.index]
+                selected_cell_row = joblib.load("selected_cell_row.pkl")
+                selected_cell_row = bagel_loop_data.loc[selected_cell_row.index]
                 fig = plt.figure()
                 ax = fig.add_subplot(111)
                 ax.scatter(
@@ -204,8 +204,8 @@ def results(
                     label=secondary_label,
                 )
                 ax.scatter(
-                    Selected_cell_row["pca_1"],
-                    Selected_cell_row["pca_2"],
+                    selected_cell_row["pca_1"],
+                    selected_cell_row["pca_2"],
                     c="g",
                     marker="s",
                     s=50,
@@ -1307,8 +1307,8 @@ def results(
             # """
 
             try:
-                Selected_cell_row = joblib.load("Selected_cell_row.pkl")
-                Selected_cell_row = bagel_loop_data.loc[Selected_cell_row.index]
+                selected_cell_row = joblib.load("selected_cell_row.pkl")
+                selected_cell_row = bagel_loop_data.loc[selected_cell_row.index]
                 fig = plt.figure()
                 ax = fig.add_subplot(111)
                 ax.scatter(
@@ -1320,8 +1320,8 @@ def results(
                     label=primary_label,
                 )
                 ax.scatter(
-                    Selected_cell_row["pca_1"],
-                    Selected_cell_row["pca_2"],
+                    selected_cell_row["pca_1"],
+                    selected_cell_row["pca_2"],
                     c="g",
                     marker="s",
                     s=50,
