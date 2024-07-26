@@ -41,8 +41,8 @@ def frenet_math(
     )  # returns a numpy array
     d = {
         "pseudo_time_normal": x_scaled,
-        "pca_1": pca_window_bagel_loop_data.pca_1,
-        "pca_2": pca_window_bagel_loop_data.pca_2,
+        "pca_1": pca_window_bagel_loop_data["pca_1"],
+        "pca_2": pca_window_bagel_loop_data["pca_2"],
     }
     df = pd.DataFrame(d)
     df.reset_index(drop=True, inplace=True)
@@ -57,14 +57,14 @@ def frenet_math(
     # define a matrix
     # A = np.array([[1, 2], [3, 4], [5, 6]])
     # calculate the mean of each column
-    M = np.mean(df.iloc[:, 0:3].values.T, axis=1)
-    # center columns by subtracting column means
-    C = df.iloc[:, 0:3].values - M
-    # calculate covariance matrix of centered matrix
-    V = np.cov(C.T)
-    # eigendecomposition of covariance matrix
-    values, vectors = eig(V)
-    P = vectors.T.dot(C.T)
+    # M = np.mean(df.iloc[:, 0:3].values.T, axis=1)
+    # # center columns by subtracting column means
+    # C = df.iloc[:, 0:3].values - M
+    # # calculate covariance matrix of centered matrix
+    # V = np.cov(C.T)
+    # # eigendecomposition of covariance matrix
+    # values, vectors = eig(V)
+    # P = vectors.T.dot(C.T)
 
     # Built in PCA
     pca = PCA(n_components=1)
@@ -90,7 +90,7 @@ def frenet_math(
     # center columns by subtracting column means
     C_2 = df.iloc[:, 0:3].values - M
     # calculate covariance matrix of centered matrix
-    V = np.cov(C.T)
+    V = np.cov(C_2.T)
     # eigendecomposition of covariance matrix
     values, vectors = eig(V)
     # project data
