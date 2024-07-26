@@ -192,6 +192,11 @@ def association(
     Model_1_lineage_1_counter,
     Model_1_lineage_2_counter,
 ):
+    # TODO
+    # FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+    #   lineage_1 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
+    # FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+    #   lineage_2 = pd.concat(frames, axis=0, ignore_index=False, sort=True)
     # There is no split in data
     if (split is False) and (Model_1 is True) and (once is False) and (twice is False):
         # lineage 1
