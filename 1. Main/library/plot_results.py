@@ -14,8 +14,6 @@ import joblib
 from mpl_toolkits.mplot3d import proj3d
 import matplotlib.patches as mpatches
 
-from sklearn import preprocessing  # Normalise data [-1, 1]
-
 import os
 
 from matplotlib.patches import FancyArrowPatch
@@ -251,7 +249,7 @@ def results(
                 plt.savefig(f"{output_dir}/{picknm}")
                 plt.close()
             except Exception as e:
-                print("No reference cell")
+                print(f"No reference cell - {e}")
 
                 fig = plt.figure()
                 ax = fig.add_subplot(111)
@@ -314,7 +312,7 @@ def results(
                 s=5,
                 marker="o",
                 cmap=matplotlib.cm.plasma,
-                c=c.head(main_length),
+                c=bagel_loop_data["pseudo_time_normal"].head(main_length),
                 label=Primary_label,
             )
             ax.scatter(
@@ -323,7 +321,9 @@ def results(
                 s=20,
                 marker="D",
                 cmap=matplotlib.cm.plasma,
-                c=c.tail(total_Secondary_cells_used),
+                c=bagel_loop_data["pseudo_time_normal"].tail(
+                    total_Secondary_cells_used
+                ),
                 label=Secondary_label,
             )
 
@@ -543,7 +543,7 @@ def results(
                     new_data_FRAME = pd.concat(Frames, axis=0, sort=False)
 
                     test = new_data_FRAME.mean(axis=0)
-                    test.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+
                     ax.scatter(
                         (test["pseudo_time_normal"]),
                         test["pca_1"],
@@ -583,18 +583,11 @@ def results(
             # """
 
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
-            temp = final_lineage_df
 
             for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
-
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
 
                 lineage_TERMINAL_STATE = Lineage[
                     Lineage["pseudo_time_normal"].isin(
@@ -683,18 +676,14 @@ def results(
             # -----------------------------------------------------------------
             # """
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
-            temp = final_lineage_df
             fig = plt.figure()
             ax = fig.add_subplot(111, projection="3d")
             ax.view_init(elev=12, azim=-100)
             for a in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
 
                 lineage_TERMINAL_STATE = Lineage[
                     Lineage["pseudo_time_normal"].isin(
@@ -979,14 +968,10 @@ def results(
             # Plot final lineages plot
             temp = final_lineage_df
             for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
@@ -1072,16 +1057,17 @@ def results(
             # Gaussian per lineage
             # -----------------------------------------------------------------
             # """
-            temp = final_lineage_df
             for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
+                # Lineage = Lineage.dropna()  # Drop possible NAN data
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+                # temp.columns = range(temp.shape[1])  # Rename column names
+                # temp = temp.drop(
+                #     [0, 1, 2], axis=1
+                # )  # Remove new pseudo data lineage from data
+
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
@@ -1202,16 +1188,11 @@ def results(
             ax.view_init(elev=12, azim=-100)
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # Plot final lineages plot
-            temp = final_lineage_df
             for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
@@ -1627,7 +1608,7 @@ def results(
                     new_data_FRAME = pd.concat(Frames, axis=0, sort=False)
 
                     test = new_data_FRAME.mean(axis=0)
-                    test.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+
                     ax.scatter(
                         (test["pseudo_time_normal"]),
                         test["pca_1"],
@@ -1679,8 +1660,6 @@ def results(
                 # temp = temp.drop(
                 #     [0, 1, 2], axis=1
                 # )  # Remove new pseudo data lineage from data
-
-                # Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
 
                 # Terminal states of the lineage
                 lineage_TERMINAL_STATE = Lineage[
@@ -1735,7 +1714,7 @@ def results(
                 )
                 # plt.show()
                 picknm = output_prefix_label + "_lineage_" + str(a + 1) + ".png"
-                plt.show()
+                # plt.show()
                 plt.savefig(f"{output_dir}/{picknm}")
                 plt.close()
         if all_lineage_plot is True:
@@ -1758,8 +1737,6 @@ def results(
                 # temp = temp.drop(
                 #     [0, 1, 2], axis=1
                 # )  # Remove new pseudo data lineage from data
-                # Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
-                # Lineage.columns = ["pca_1", "pca_2", "pseudo_time_normal"]
                 ax.scatter(
                     Lineage.pseudo_time_normal,
                     Lineage.pca_1,
@@ -1943,17 +1920,19 @@ def results(
             ax = fig.add_subplot(111, projection="3d")
             ax.view_init(elev=12, azim=-100)
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
-            temp = final_lineage_df
+            # temp = final_lineage_df
             # Plot final lineages plot
             for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
+                # Lineage = Lineage.dropna()  # Drop possible NAN data
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+                # temp.columns = range(temp.shape[1])  # Rename column names
+                # temp = temp.drop(
+                #     [0, 1, 2], axis=1
+                # )  # Remove new pseudo data lineage from data
+
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
@@ -2031,17 +2010,18 @@ def results(
             ax = fig.add_subplot(111, projection="3d")
             ax.view_init(elev=12, azim=-100)
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
-            temp = final_lineage_df
             # Plot final lineages plot
             for z in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
+                # Lineage = Lineage.dropna()  # Drop possible NAN data
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+                # temp.columns = range(temp.shape[1])  # Rename column names
+                # temp = temp.drop(
+                #     [0, 1, 2], axis=1
+                # )  # Remove new pseudo data lineage from data
+
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
@@ -2102,16 +2082,12 @@ def results(
             # Gaussian per lineage
             # -----------------------------------------------------------------
             # """
-            temp = final_lineage_df
-            for q in range(final_lineage_counter):
-                Lineage = temp.iloc[:, 0:3]  # Select first three columns as new input
-                Lineage = Lineage.dropna()  # Drop possible NAN data
 
-                temp.columns = range(temp.shape[1])  # Rename column names
-                temp = temp.drop(
-                    [0, 1, 2], axis=1
-                )  # Remove new pseudo data lineage from data
-                Lineage.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+            for q in range(final_lineage_counter):
+                Lineage = final_lineage_df.iloc[
+                    :, 0 + a * 3 : 3 + a * 3
+                ].dropna()  # Select first three columns as new input
+
                 # Dataframe to array data
                 X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
                 Y_train = Lineage["pca_1"].to_numpy()
