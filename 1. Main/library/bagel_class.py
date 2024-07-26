@@ -64,6 +64,7 @@ class BAGEL(object):
         # dataset
         self.bagel_loop_data_terminal_state = None
         self.bagel_loop_data = None
+        self.bagel_loop_data_columns = []
         self.window_removed_bagel_loop_data = None
 
     def create_processing_dir(self):
@@ -191,6 +192,9 @@ class BAGEL(object):
             {"pseudo_time_normal": pseudo_time, "pca_1": pca_1, "pca_2": pca_2},
             index=self.phenotypic_manifold_pca_projections.index,
         )
+        bagel_loop_data = bagel_loop_data.sort_values("pseudo_time_normal")
+        self.bagel_loop_data_columns = bagel_loop_data.columns.tolist()
+
         joblib.dump(
             bagel_loop_data,
             f"{self.result_folder}/bagel_loop_data.pkl",
@@ -207,7 +211,6 @@ class BAGEL(object):
         )
 
         # Add cell id number
-        bagel_loop_data = bagel_loop_data.sort_values("pseudo_time_normal")
         cell_id_number = range(len(self.phenotypic_manifold_pca_projections["x"]))
         bagel_loop_data["cell_id_number"] = cell_id_number
 
@@ -973,7 +976,7 @@ class BAGEL(object):
                     # plots.estimate_guassians_on_manifold_plot(before_split,after_split, estimate_guassians_on_manifold_plot_FLAG)
                     # plots.two_lineage_plot(Lineage_1, Lineage_2, two_lineage_plot_FLAG)
 
-                    if to_be_determinded.empty:
+                    if to_be_determinded.empty is True:
                         main_lineage_1_df.reset_index(drop=True, inplace=True)
                         main_lineage_2_df.reset_index(drop=True, inplace=True)
                         to_be_determinded.reset_index(drop=True, inplace=True)
@@ -996,11 +999,6 @@ class BAGEL(object):
                     self.bagel_loop_data = (
                         self.bagel_loop_data.dropna()
                     )  # Drop possible NAN data
-                    self.bagel_loop_data.columns = [
-                        "pseudo_time_normal",
-                        "pca_1",
-                        "pca_2",
-                    ]
 
                     # Sort data
                     self.bagel_loop_data = self.bagel_loop_data.sort_values(
@@ -1012,12 +1010,15 @@ class BAGEL(object):
                     # Number of cell
                     self.bagel_loop_data["cell_id_number"] = cell_id_number
 
-                    to_be_determinded.columns = range(
-                        to_be_determinded.shape[1]
-                    )  # Rename column names
-                    to_be_determinded = to_be_determinded.drop(
-                        [0, 1, 2], axis=1
-                    )  # Remove new pseudo data lineage from data
+                    # Remove lineage from from to_be
+                    to_be_determinded = to_be_determinded.iloc[:, 3:]
+
+                    # to_be_determinded.columns = range(
+                    #     to_be_determinded.shape[1]
+                    # )  # Rename column names
+                    # to_be_determinded = to_be_determinded.drop(
+                    #     [0, 1, 2], axis=1
+                    # )  # Remove new pseudo data lineage from data
 
                 else:
 
@@ -1071,11 +1072,6 @@ class BAGEL(object):
                         self.bagel_loop_data = (
                             self.bagel_loop_data.dropna()
                         )  # Drop possible NAN data
-                        self.bagel_loop_data.columns = [
-                            "pseudo_time_normal",
-                            "pca_1",
-                            "pca_2",
-                        ]
 
                         # Sort data
                         self.bagel_loop_data = self.bagel_loop_data.sort_values(
@@ -1087,12 +1083,15 @@ class BAGEL(object):
                         # Number of cell
                         self.bagel_loop_data["cell_id_number"] = cell_id_number
 
-                        to_be_determinded.columns = range(
-                            to_be_determinded.shape[1]
-                        )  # Rename column names
-                        to_be_determinded = to_be_determinded.drop(
-                            [0, 1, 2], axis=1
-                        )  # Remove new pseudo data lineage from data
+                        # Remove lineage from from to_be
+                        to_be_determinded = to_be_determinded.iloc[:, 3:]
+
+                        # to_be_determinded.columns = range(
+                        #     to_be_determinded.shape[1]
+                        # )  # Rename column names
+                        # to_be_determinded = to_be_determinded.drop(
+                        #     [0, 1, 2], axis=1
+                        # )  # Remove new pseudo data lineage from data
 
             # Dump pkl file
             joblib.dump(
