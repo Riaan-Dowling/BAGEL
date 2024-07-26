@@ -80,7 +80,7 @@ def gibbs_sampler_2_gaussians(
     # Data frame of mean meseure distance to mean
     mean_data = df.iloc[:, 0:3]
     mean = mean_data.mean(axis=0)
-    mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
+    # mean.columns = ["pseudo_time_normal", "pca_1", "pca_2"]
     # Calculate euclidean distance as prior
     euclidean_distance_1 = (
         (mean_data.iloc[:, 0:1] - mean.iloc[0]).pow(2).sum(1).pow(0.5)
@@ -595,11 +595,11 @@ def gibbs_sampler_2_gaussians(
 
     print("Gibbs sampler end.")
 
-    """
-    -----------------------------------------------------------------
-    Model 1 Maximum a posteriori
-    -----------------------------------------------------------------
-    """
+    # """
+    # -----------------------------------------------------------------
+    # Model 1 Maximum a posteriori
+    # -----------------------------------------------------------------
+    # """
     # mu
     df_model_1_mu_sample_array_1 = pd.DataFrame(
         model_1_mu_sample_array[1:],
@@ -615,11 +615,11 @@ def gibbs_sampler_2_gaussians(
     model_1_map_cov = model_1_map_cov / (itterations - burn_period)
 
     print("Model evidence:")
-    """
-    -----------------------------------------------------------------
-    Model 1 Evidence / Marginal likelihood
-    -----------------------------------------------------------------
-    """
+    # """
+    # -----------------------------------------------------------------
+    # Model 1 Evidence / Marginal likelihood
+    # -----------------------------------------------------------------
+    # """
     # print('model_1_log_Evidence start')
     # Log Prior
     model_1_prior_mu = multivariate_normal.pdf(
@@ -651,16 +651,16 @@ def gibbs_sampler_2_gaussians(
     # print('model_1_log_Evidence End')
     print("Model 1 (No bifurcation point) log evidence: " + str(model_1_log_Evidence))
 
-    """
-    -----------------------------------------------------------------
-    Plots
-    -----------------------------------------------------------------
-    """
+    # """
+    # -----------------------------------------------------------------
+    # Plots
+    # -----------------------------------------------------------------
+    # """
 
     # LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-    """
-    Model 1 Map result
-    """
+    # """
+    # Model 1 Map result
+    # """
     # LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
     # Cr
     x, y = np.mgrid[-1:0.1:0.01, -1:1:0.01]
@@ -675,11 +675,11 @@ def gibbs_sampler_2_gaussians(
     # Model_1_plot_FLAG = True
     # plots.Model_1_plot(x, y, model_1_predict_distrebution, pos, df, Model_1_plot_FLAG)
 
-    """
-    -----------------------------------------------------------------
-    Model 2 Maximum a posteriori
-    -----------------------------------------------------------------
-    """
+    # """
+    # -----------------------------------------------------------------
+    # Model 2 Maximum a posteriori
+    # -----------------------------------------------------------------
+    # """
     # mu
     model_2_df_mu_samples_G1 = pd.DataFrame(
         model_2_mu_sample_array_G1[1:], columns=["pseudo_time_normal", "pca_1", "pca_2"]
