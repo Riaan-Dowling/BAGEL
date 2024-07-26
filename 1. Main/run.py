@@ -70,12 +70,10 @@ def main():
     )
     bagel_object.create_processing_dir()
     bagel_object.load_datasets()
-    bagel_object.load_phenotypic_manifold()
 
-    # TODO complete formating
-    bagel_object.bagel_loop()
-
-    # TODO plotting
+    if results_only is False:
+        bagel_object.load_phenotypic_manifold()
+        bagel_object.bagel_loop()
     bagel_object.plot()
     print("BAGEL -- END.")
 
