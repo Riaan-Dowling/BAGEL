@@ -85,8 +85,8 @@ def determine_start_cell(bagel_loop_data, terminal_states, early_cell, dm_bounda
 
 
 def results(
-    Primary_label,
-    Secondary_label,
+    primary_label,
+    secondary_label,
     output_prefix_label,
     genelist,
     two_dimension_manifold_plot,
@@ -195,7 +195,7 @@ def results(
                     marker="o",
                     s=10,
                     c="r",
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax.scatter(
                     secondary_Data["pca_1"],
@@ -203,7 +203,7 @@ def results(
                     marker="D",
                     s=10,
                     c="k",
-                    label=Secondary_label,
+                    label=secondary_label,
                 )
                 ax.scatter(
                     Selected_cell_row["pca_1"],
@@ -251,7 +251,7 @@ def results(
                     marker="o",
                     s=10,
                     c="r",
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax.scatter(
                     secondary_Data["pca_1"],
@@ -259,7 +259,7 @@ def results(
                     marker="D",
                     s=10,
                     c="k",
-                    label=Secondary_label,
+                    label=secondary_label,
                 )
 
                 ax.scatter(
@@ -305,7 +305,7 @@ def results(
                 marker="o",
                 cmap=matplotlib.cm.plasma,
                 c=bagel_loop_data["pseudo_time_normal"].head(main_length),
-                label=Primary_label,
+                label=primary_label,
             )
             ax.scatter(
                 secondary_Data["pca_1"],
@@ -316,7 +316,7 @@ def results(
                 c=bagel_loop_data["pseudo_time_normal"].tail(
                     total_Secondary_cells_used
                 ),
-                label=Secondary_label,
+                label=secondary_label,
             )
 
             ax.scatter(
@@ -384,7 +384,7 @@ def results(
                 c="r",
                 marker="o",
                 s=5,
-                label=Primary_label,
+                label=primary_label,
                 alpha=1,
             )
             temp2 = ax.scatter(
@@ -394,7 +394,7 @@ def results(
                 c="k",
                 marker="D",
                 s=20,
-                label=Secondary_label,
+                label=secondary_label,
                 alpha=1,
             )
 
@@ -459,7 +459,7 @@ def results(
                     c="r",
                     marker="o",
                     s=5,
-                    label=Primary_label,
+                    label=primary_label,
                     alpha=1,
                 )
                 temp2 = ax.scatter(
@@ -469,7 +469,7 @@ def results(
                     c="k",
                     marker="D",
                     s=20,
-                    label=Secondary_label,
+                    label=secondary_label,
                     alpha=1,
                 )
 
@@ -610,7 +610,7 @@ def results(
                     c="r",
                     marker="o",
                     s=5,
-                    label=Primary_label,
+                    label=primary_label,
                     alpha=1,
                 )
                 temp2 = ax.scatter(
@@ -620,7 +620,7 @@ def results(
                     c="k",
                     marker="D",
                     s=20,
-                    label=Secondary_label,
+                    label=secondary_label,
                     alpha=1,
                 )
 
@@ -700,7 +700,7 @@ def results(
                     c="r",
                     marker="o",
                     s=5,
-                    label=Primary_label,
+                    label=primary_label,
                     alpha=0.3,
                 )
                 temp2 = ax.scatter(
@@ -710,7 +710,7 @@ def results(
                     c="k",
                     marker="D",
                     s=20,
-                    label=Secondary_label,
+                    label=secondary_label,
                     alpha=0.3,
                 )
                 ax.scatter(
@@ -856,7 +856,7 @@ def results(
                 c="r",
                 marker="o",
                 s=5,
-                label=Primary_label,
+                label=primary_label,
                 alpha=1,
             )
             temp2 = ax.scatter(
@@ -866,7 +866,7 @@ def results(
                 c="k",
                 marker="D",
                 s=20,
-                label=Secondary_label,
+                label=secondary_label,
                 alpha=1,
             )
 
@@ -912,7 +912,7 @@ def results(
                     c=log_norm_main_df.loc[Main_bagel_loop_data.index, genelist[ig]],
                     marker="o",
                     s=5,
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax[ig].scatter(
                     Secondary_bagel_loop_data["pca_1"],
@@ -923,7 +923,7 @@ def results(
                     ],
                     marker="D",
                     s=20,
-                    label=Secondary_label,
+                    label=secondary_label,
                 )
                 ax[ig].scatter(
                     bagel_loop_data_terminal_state["pca_1"],
@@ -1015,7 +1015,7 @@ def results(
                 c="r",
                 marker="o",
                 s=5,
-                label=Primary_label,
+                label=primary_label,
                 alpha=1,
             )
             temp2 = ax.scatter(
@@ -1115,7 +1115,7 @@ def results(
                     c="r",
                     marker="o",
                     s=5,
-                    label=Primary_label,
+                    label=primary_label,
                     alpha=1,
                 )
                 temp2 = ax.scatter(
@@ -1269,7 +1269,7 @@ def results(
                     c=log_norm_main_df.loc[bagel_loop_data.index, genelist[ig]],
                     s=3,
                     cmap=matplotlib.cm.Spectral_r,
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax[ig].scatter(
                     bagel_loop_data_terminal_state["pca_1"],
@@ -1319,7 +1319,7 @@ def results(
                     marker="o",
                     s=10,
                     c="r",
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax.scatter(
                     Selected_cell_row["pca_1"],
@@ -1368,7 +1368,7 @@ def results(
                     marker="o",
                     s=10,
                     c="r",
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax.scatter(
                     bagel_loop_data_terminal_state["pca_1"],
@@ -1413,7 +1413,7 @@ def results(
                 marker="o",
                 cmap=matplotlib.cm.plasma,
                 c=bagel_loop_data["pseudo_time_normal"].values.tolist(),
-                label=Primary_label,
+                label=primary_label,
             )
             ax.scatter(
                 bagel_loop_data_terminal_state["pca_1"],
@@ -1479,7 +1479,7 @@ def results(
                 c="r",
                 marker="o",
                 s=5,
-                label=Primary_label,
+                label=primary_label,
                 alpha=1,
             )
             ax.set_zlabel(r"PC$_{\mathrm{v}}$2")
@@ -1524,7 +1524,7 @@ def results(
                     c="r",
                     marker="o",
                     s=5,
-                    label=Primary_label,
+                    label=primary_label,
                     alpha=1,
                 )
                 ax.scatter(
@@ -1853,7 +1853,7 @@ def results(
                 marker="o",
                 s=10,
                 alpha=1,
-                label=Primary_label,
+                label=primary_label,
             )
             ax.scatter(
                 bagel_loop_data_terminal_state["pseudo_time_normal"],
@@ -1964,7 +1964,7 @@ def results(
                 marker="o",
                 s=10,
                 alpha=1,
-                label=Primary_label,
+                label=primary_label,
             )
 
             ax.set_zlabel(r"PC$_{\mathrm{v}}$2")
@@ -2113,7 +2113,7 @@ def results(
                     marker="x",
                     s=2,
                     alpha=1,
-                    label=Primary_label,
+                    label=primary_label,
                 )
                 ax.scatter(
                     lineage_TERMINAL_STATE["pseudo_time_normal"],
