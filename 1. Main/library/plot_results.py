@@ -25,27 +25,19 @@ import library.gaussian_process as gp_sup
 plt.rcParams["font.family"] = "Times New Roman"
 
 
-# class Arrow3D(FancyArrowPatch):
-#     """
-#     arrow plot class
-#     """
-
-#     def __init__(self, xs, ys, zs, *args, **kwargs):
-#         FancyArrowPatch.__init__(self, (0, 0), (0, 0), *args, **kwargs)
-#         self._verts3d = xs, ys, zs
-
-
-#     def draw(self, renderer):
-#         xs3d, ys3d, zs3d = self._verts3d
-#         xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, renderer.M)
-#         self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
-#         FancyArrowPatch.draw(self, renderer)
 class Arrow3D(FancyArrowPatch):
+    """
+    Arrow3D
+    """
+
     def __init__(self, xs, ys, zs, *args, **kwargs):
         super().__init__((0, 0), (0, 0), *args, **kwargs)
         self._verts3d = xs, ys, zs
 
     def do_3d_projection(self, renderer=None):
+        """
+        do_3d_projection
+        """
         xs3d, ys3d, zs3d = self._verts3d
         xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, self.axes.M)
         self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
@@ -609,7 +601,7 @@ def results(
                 ax = fig.add_subplot(111, projection="3d")
                 ax.view_init(elev=12, azim=-100)
 
-                # ax.scatter( Lineage.pseudo_time_normal, Lineage.pca_1,  Lineage.pca_2, color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(a + 1))
+                # ax.scatter( Lineage.pseudo_time_normal, Lineage["pca_1"],  Lineage["pca_2"], color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(a + 1))
 
                 temp1 = ax.scatter(
                     Lineage_mouse["pseudo_time_normal"],
@@ -770,35 +762,39 @@ def results(
             ax.view_init(elev=12, azim=-100)
             for t in range(final_lineage_counter):
 
-                frenet_frame_normal_vector = joblib.load(
-                    f"{result_folder}/frenet_frame_normal_vector" + str(t) + ".pkl"
+                frenet_frame_window_variance_vector = joblib.load(
+                    f"{result_folder}/frenet_frame_window_variance_vector"
+                    + str(t)
+                    + ".pkl"
                 )
-                frenet_frame_mean = joblib.load(
-                    f"{result_folder}/frenet_frame_mean" + str(t) + ".pkl"
+                frenet_frame_window_mean = joblib.load(
+                    f"{result_folder}/frenet_frame_window_mean" + str(t) + ".pkl"
                 )
-                frenet_frame_counter = joblib.load(
-                    f"{result_folder}/frenet_frame_counter" + str(t) + ".pkl"
+                frenet_frame_window_counter = joblib.load(
+                    f"{result_folder}/frenet_frame_window_counter" + str(t) + ".pkl"
                 )
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
-                for e in range(frenet_frame_counter):
+                for e in range(frenet_frame_window_counter):
 
-                    covariance_length = (
-                        frenet_frame_normal_vector.iloc[:, 0:1].values
+                    variance_vector = (
+                        frenet_frame_window_variance_vector.iloc[:, 0:1].values
                     ).T
-                    covariance_length = covariance_length[0]
+                    variance_vector = variance_vector[0]
 
-                    MEAN_window_bagel_loop_data = (
-                        frenet_frame_mean.iloc[:, 0:1].values
+                    mean_window_bagel_loop_data = (
+                        frenet_frame_window_mean.iloc[:, 0:1].values
                     ).T
-                    MEAN_window_bagel_loop_data = MEAN_window_bagel_loop_data[0]
+                    mean_window_bagel_loop_data = mean_window_bagel_loop_data[0]
 
-                    if (500 * covariance_length[0]) > MEAN_window_bagel_loop_data[0]:
-                        test_1 = covariance_length + MEAN_window_bagel_loop_data
+                    if (500 * variance_vector[0]) > mean_window_bagel_loop_data[0]:
+                        frenet_frame_arrow_end = (
+                            variance_vector + mean_window_bagel_loop_data
+                        )
                         line = Arrow3D(
-                            [MEAN_window_bagel_loop_data[0], test_1[0]],
-                            [MEAN_window_bagel_loop_data[1], test_1[1]],
-                            [MEAN_window_bagel_loop_data[2], test_1[2]],
+                            [mean_window_bagel_loop_data[0], frenet_frame_arrow_end[0]],
+                            [mean_window_bagel_loop_data[1], frenet_frame_arrow_end[1]],
+                            [mean_window_bagel_loop_data[2], frenet_frame_arrow_end[2]],
                             mutation_scale=10,
                             lw=2,
                             arrowstyle="-|>",
@@ -807,11 +803,13 @@ def results(
                         ax.add_artist(line)
 
                     else:
-                        test_1 = -covariance_length + MEAN_window_bagel_loop_data
+                        frenet_frame_arrow_end = (
+                            -variance_vector + mean_window_bagel_loop_data
+                        )
                         line = Arrow3D(
-                            [MEAN_window_bagel_loop_data[0], test_1[0]],
-                            [MEAN_window_bagel_loop_data[1], test_1[1]],
-                            [MEAN_window_bagel_loop_data[2], test_1[2]],
+                            [mean_window_bagel_loop_data[0], frenet_frame_arrow_end[0]],
+                            [mean_window_bagel_loop_data[1], frenet_frame_arrow_end[1]],
+                            [mean_window_bagel_loop_data[2], frenet_frame_arrow_end[2]],
                             mutation_scale=10,
                             lw=2,
                             arrowstyle="-|>",
@@ -820,17 +818,17 @@ def results(
                         ax.add_artist(line)
 
                     # Remove used arrows
-                    frenet_frame_normal_vector.columns = range(
-                        frenet_frame_normal_vector.shape[1]
+                    frenet_frame_window_variance_vector.columns = range(
+                        frenet_frame_window_variance_vector.shape[1]
                     )  # Rename column names
-                    frenet_frame_normal_vector = frenet_frame_normal_vector.drop(
-                        [0], axis=1
+                    frenet_frame_window_variance_vector = (
+                        frenet_frame_window_variance_vector.drop([0], axis=1)
                     )  # Remove new pseudo data lineage from data
 
-                    frenet_frame_mean.columns = range(
-                        frenet_frame_mean.shape[1]
+                    frenet_frame_window_mean.columns = range(
+                        frenet_frame_window_mean.shape[1]
                     )  # Rename column names
-                    frenet_frame_mean = frenet_frame_mean.drop(
+                    frenet_frame_window_mean = frenet_frame_window_mean.drop(
                         [0], axis=1
                     )  # Remove new pseudo data lineage from data
             ax.scatter(
@@ -891,7 +889,7 @@ def results(
             temp1.set_alpha(0.01)
             temp2.set_alpha(0.05)
             # plt.show()
-            picknm = output_prefix_label + "_Frenet_frame.png"
+            picknm = output_prefix_label + "_frenet_frame.png"
             plt.savefig(f"{output_dir}/{picknm}")
             plt.close()
 
@@ -1358,7 +1356,8 @@ def results(
                 picknm = output_prefix_label + "_2d_manifold.png"
                 plt.savefig(f"{output_dir}/{picknm}")
                 plt.close()
-            except:
+            except Exception as e:
+                print(e)
                 matplotlib.pyplot.hsv()
                 print("No reference cell")
                 fig = plt.figure()
@@ -1693,8 +1692,8 @@ def results(
 
                 ax.scatter(
                     Lineage.pseudo_time_normal,
-                    Lineage.pca_1,
-                    Lineage.pca_2,
+                    Lineage["pca_1"],
+                    Lineage["pca_2"],
                     color=colors[a],
                     marker="o",
                     s=5,
@@ -1739,8 +1738,8 @@ def results(
                 # )  # Remove new pseudo data lineage from data
                 ax.scatter(
                     Lineage.pseudo_time_normal,
-                    Lineage.pca_1,
-                    Lineage.pca_2,
+                    Lineage["pca_1"],
+                    Lineage["pca_2"],
                     color=colors[a],
                     alpha=1,
                     marker="o",
@@ -1797,69 +1796,55 @@ def results(
             ax.view_init(elev=12, azim=-100)
             for t in range(final_lineage_counter):
 
-                frenet_frame_normal_vector = joblib.load(
-                    f"{result_folder}/frenet_frame_normal_vector" + str(t) + ".pkl"
+                frenet_frame_window_variance_vector = joblib.load(
+                    f"{result_folder}/frenet_frame_window_variance_vector"
+                    + str(t)
+                    + ".pkl"
                 )
-                frenet_frame_mean = joblib.load(
-                    f"{result_folder}/frenet_frame_mean" + str(t) + ".pkl"
+                frenet_frame_window_mean = joblib.load(
+                    f"{result_folder}/frenet_frame_window_mean" + str(t) + ".pkl"
                 )
-                frenet_frame_counter = joblib.load(
-                    f"{result_folder}/frenet_frame_counter" + str(t) + ".pkl"
+                frenet_frame_window_counter = joblib.load(
+                    f"{result_folder}/frenet_frame_window_counter" + str(t) + ".pkl"
                 )
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
-                for e in range(frenet_frame_counter):
+                # for variance_vector,mean_window_bagel_loop_data in range(frenet_frame_window_counter):
+                for (_, variance_vector), (_, mean_window_bagel_loop_data) in zip(
+                    frenet_frame_window_variance_vector.iterrows(),
+                    frenet_frame_window_mean.iterrows(),
+                ):
 
-                    covariance_length = (
-                        frenet_frame_normal_vector.iloc[:, 0:1].values
-                    ).T
-                    covariance_length = covariance_length[0]
-
-                    MEAN_window_bagel_loop_data = (
-                        frenet_frame_mean.iloc[:, 0:1].values
-                    ).T
-                    MEAN_window_bagel_loop_data = MEAN_window_bagel_loop_data[0]
-
-                    if (500 * covariance_length[0]) > MEAN_window_bagel_loop_data[0]:
-                        test_1 = covariance_length + MEAN_window_bagel_loop_data
-                        line = Arrow3D(
-                            [MEAN_window_bagel_loop_data[0], test_1[0]],
-                            [MEAN_window_bagel_loop_data[1], test_1[1]],
-                            [MEAN_window_bagel_loop_data[2], test_1[2]],
-                            mutation_scale=10,
-                            lw=2,
-                            arrowstyle="-|>",
-                            color="g",
+                    if (
+                        500 * variance_vector["pseudo_time_normal"]
+                    ) > mean_window_bagel_loop_data["pseudo_time_normal"]:
+                        frenet_frame_arrow_end = (
+                            variance_vector + mean_window_bagel_loop_data
                         )
-                        ax.add_artist(line)
 
                     else:
-                        test_1 = -covariance_length + MEAN_window_bagel_loop_data
-                        line = Arrow3D(
-                            [MEAN_window_bagel_loop_data[0], test_1[0]],
-                            [MEAN_window_bagel_loop_data[1], test_1[1]],
-                            [MEAN_window_bagel_loop_data[2], test_1[2]],
-                            mutation_scale=10,
-                            lw=2,
-                            arrowstyle="-|>",
-                            color="g",
+                        frenet_frame_arrow_end = (
+                            -variance_vector + mean_window_bagel_loop_data
                         )
-                        ax.add_artist(line)
-
-                    # Remove used arrows
-                    frenet_frame_normal_vector.columns = range(
-                        frenet_frame_normal_vector.shape[1]
-                    )  # Rename column names
-                    frenet_frame_normal_vector = frenet_frame_normal_vector.drop(
-                        [0], axis=1
-                    )  # Remove new pseudo data lineage from data
-
-                    frenet_frame_mean.columns = range(
-                        frenet_frame_mean.shape[1]
-                    )  # Rename column names
-                    frenet_frame_mean = frenet_frame_mean.drop(
-                        [0], axis=1
-                    )  # Remove new pseudo data lineage from data
+                    line = Arrow3D(
+                        [
+                            mean_window_bagel_loop_data["pseudo_time_normal"],
+                            frenet_frame_arrow_end["pseudo_time_normal"],
+                        ],
+                        [
+                            mean_window_bagel_loop_data["pca_1"],
+                            frenet_frame_arrow_end["pca_1"],
+                        ],
+                        [
+                            mean_window_bagel_loop_data["pca_2"],
+                            frenet_frame_arrow_end["pca_2"],
+                        ],
+                        mutation_scale=10,
+                        lw=2,
+                        arrowstyle="-|>",
+                        color="g",
+                    )
+                    ax.add_artist(line)
             temp1 = ax.scatter(
                 bagel_loop_data["pseudo_time_normal"],
                 bagel_loop_data["pca_1"],
@@ -1905,7 +1890,8 @@ def results(
                 bbox_transform=ax.transData,
             )
             temp1.set_alpha(0.01)
-            picknm = output_prefix_label + "_Frenet_frame.png"
+            picknm = output_prefix_label + "_frenet_frame.png"
+            plt.show()
             plt.savefig(f"{output_dir}/{picknm}")
             plt.close()
 
@@ -2083,7 +2069,7 @@ def results(
             # -----------------------------------------------------------------
             # """
 
-            for q in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -2115,9 +2101,9 @@ def results(
                     X_star,
                     f_star_1,
                     f_star_2,
-                    color=colors[q],
+                    color=colors[a],
                     linewidth=5,
-                    label="PC-lineage-" + str(q + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
                 temp1 = ax.scatter(
                     Lineage["pseudo_time_normal"],
@@ -2164,7 +2150,7 @@ def results(
                 picknm = (
                     output_prefix_label
                     + "_Gaussian_process_PER_lineage_"
-                    + str(q + 1)
+                    + str(a + 1)
                     + ".png"
                 )
                 plt.savefig(f"{output_dir}/{picknm}")

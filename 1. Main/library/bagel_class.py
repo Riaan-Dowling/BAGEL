@@ -413,7 +413,6 @@ class BAGEL(object):
             # """
             self.create_bagel_loop_data()
 
-            previouse_window_number = 0
             while all_lineages_detected is False:
 
                 # """
@@ -555,9 +554,9 @@ class BAGEL(object):
                 self.window_removed_bagel_loop_data = self.bagel_loop_data.copy()
 
                 # Frenet frame
-                frenet_frame_normal_vector = pd.DataFrame()
-                frenet_frame_mean = pd.DataFrame()
-                frenet_frame_counter = 0
+                frenet_frame_window_variance_vector = pd.DataFrame()
+                frenet_frame_window_mean = pd.DataFrame()
+                frenet_frame_window_counter = 0
 
                 current_window_itteration = 0  # Plot number counter
 
@@ -604,7 +603,7 @@ class BAGEL(object):
                         (
                             _,
                             _,
-                            covariance_length,
+                            current_window_frenet_frame_variance_vector,
                             window_bagel_loop_data,
                             _,
                             self.window_removed_bagel_loop_data,
@@ -866,14 +865,16 @@ class BAGEL(object):
                             model_1_lineage_2_counter,
                         )
 
-                        frenet_frame_counter = frenet_frame_counter + 1
+                        frenet_frame_window_counter = frenet_frame_window_counter + 1
 
                         # Create Frenet Frame
 
-                        if frenet_frame_normal_vector.empty:
-                            # covariance_length.reset_index(drop=True, inplace=True)
-                            frenet_frame_normal_vector = covariance_length
-                            frenet_frame_mean = pd.DataFrame(
+                        if frenet_frame_window_variance_vector.empty:
+                            # variance_vector.reset_index(drop=True, inplace=True)
+                            frenet_frame_window_variance_vector = (
+                                current_window_frenet_frame_variance_vector
+                            )
+                            frenet_frame_window_mean = pd.DataFrame(
                                 [
                                     window_bagel_loop_data.iloc[:, 0:3]
                                     .mean(axis=0)
@@ -886,22 +887,24 @@ class BAGEL(object):
 
                         else:
                             # Normal vectors
-                            frenet_frame_normal_vector = pd.concat(
+                            frenet_frame_window_variance_vector = pd.concat(
                                 [
-                                    frenet_frame_normal_vector,
-                                    covariance_length,
+                                    frenet_frame_window_variance_vector,
+                                    current_window_frenet_frame_variance_vector,
                                 ],
                                 axis=0,
                                 sort=False,
                             )
-                            frenet_frame_normal_vector = (
-                                frenet_frame_normal_vector.reset_index(drop=True)
+                            frenet_frame_window_variance_vector = (
+                                frenet_frame_window_variance_vector.reset_index(
+                                    drop=True
+                                )
                             )
 
                             # Mean data
-                            frenet_frame_mean = pd.concat(
+                            frenet_frame_window_mean = pd.concat(
                                 [
-                                    frenet_frame_mean,
+                                    frenet_frame_window_mean,
                                     pd.DataFrame(
                                         [
                                             window_bagel_loop_data.iloc[:, 0:3]
@@ -916,7 +919,9 @@ class BAGEL(object):
                                 axis=0,
                                 sort=False,
                             )
-                            frenet_frame_mean = frenet_frame_mean.reset_index(drop=True)
+                            frenet_frame_window_mean = (
+                                frenet_frame_window_mean.reset_index(drop=True)
+                            )
 
                     elif lineage_split_flag is True:
                         (
@@ -935,30 +940,12 @@ class BAGEL(object):
                         self.window_bagel_loop_data = (
                             self.window_removed_bagel_loop_data
                         )
-                        # not_window_bagel_loop_data = self.bagel_loop_data[
-                        #     ~self.bagel_loop_data["cell_id_number"].isin(
-                        #         window_bagel_loop_data["cell_id_number"].values
-                        #     )
-                        # ]
-
-                    # """
-                    # -----------------------------------------------------------------
-                    # Display
-                    # -----------------------------------------------------------------
-                    # """
-
-                    # Plot VIDEO window data on manifold
-                    window_number = previouse_window_number + current_window_itteration
 
                     # --------------------------------------
                     # ------------Split detection start-----
                     # --------------------------------------
                     if lineage_split_flag is False:
                         previouse_window_l1_projected = window_bagel_loop_data
-
-                previouse_window_number = (
-                    window_number  # Adjust labeling for VIDEO output
-                )
 
                 # Remove any duplicate assignments due to window and stepsize mismatch
                 main_lineage_1_df = main_lineage_1_df.drop_duplicates()
@@ -1031,22 +1018,22 @@ class BAGEL(object):
 
                     # Dump frenet frame data
                     joblib.dump(
-                        frenet_frame_normal_vector,
-                        f"{self.result_folder}/frenet_frame_normal_vector"
+                        frenet_frame_window_variance_vector,
+                        f"{self.result_folder}/frenet_frame_window_variance_vector"
                         + str(final_lineage_counter)
                         + ".pkl",
                         compress=3,
                     )
                     joblib.dump(
-                        frenet_frame_mean,
-                        f"{self.result_folder}/frenet_frame_mean"
+                        frenet_frame_window_mean,
+                        f"{self.result_folder}/frenet_frame_window_mean"
                         + str(final_lineage_counter)
                         + ".pkl",
                         compress=3,
                     )
                     joblib.dump(
-                        frenet_frame_counter,
-                        f"{self.result_folder}/frenet_frame_counter"
+                        frenet_frame_window_counter,
+                        f"{self.result_folder}/frenet_frame_window_counter"
                         + str(final_lineage_counter)
                         + ".pkl",
                         compress=3,
@@ -1121,18 +1108,12 @@ class BAGEL(object):
                 f"{self.result_folder}/total_bifurcations.pkl",
                 compress=3,
             )
-            joblib.dump(
-                previouse_window_number,
-                f"{self.result_folder}/previouse_window_number.pkl",
-                compress=3,
-            )
-            print()
 
     def plot(self):
         """
         plot
         """
-        # TODO update plot script
+
         plot_sup.results(
             self.bagel_config["plot_config"]["primary_label"],
             self.bagel_config["plot_config"]["secondary_label"],
