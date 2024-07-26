@@ -171,12 +171,10 @@ def results(
         total_length = len(bagel_loop_data.index)
         main_length = total_length - total_secondary_cells_used
         main_data = bagel_loop_data.head(main_length)
-        secondary_Data = bagel_loop_data.tail(total_secondary_cells_used)
+        secondary_data = bagel_loop_data.tail(total_secondary_cells_used)
 
-        Main_bagel_loop_data = bagel_loop_data.head(main_length)
-        Secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
-
-        sizes = log_norm_main_df.sum(axis=1)  # Define the expressions per cell
+        main_bagel_loop_data = bagel_loop_data.head(main_length)
+        secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
 
         if two_dimension_manifold_plot is True:
             # """
@@ -198,8 +196,8 @@ def results(
                     label=primary_label,
                 )
                 ax.scatter(
-                    secondary_Data["pca_1"],
-                    secondary_Data["pca_2"],
+                    secondary_data["pca_1"],
+                    secondary_data["pca_2"],
                     marker="D",
                     s=10,
                     c="k",
@@ -254,8 +252,8 @@ def results(
                     label=primary_label,
                 )
                 ax.scatter(
-                    secondary_Data["pca_1"],
-                    secondary_Data["pca_2"],
+                    secondary_data["pca_1"],
+                    secondary_data["pca_2"],
                     marker="D",
                     s=10,
                     c="k",
@@ -308,8 +306,8 @@ def results(
                 label=primary_label,
             )
             ax.scatter(
-                secondary_Data["pca_1"],
-                secondary_Data["pca_2"],
+                secondary_data["pca_1"],
+                secondary_data["pca_2"],
                 s=20,
                 marker="D",
                 cmap=matplotlib.cm.plasma,
@@ -378,9 +376,9 @@ def results(
                 label="Start cell datapoint",
             )
             temp1 = ax.scatter(
-                Main_bagel_loop_data["pseudo_time_normal"],
-                Main_bagel_loop_data["pca_1"],
-                Main_bagel_loop_data["pca_2"],
+                main_bagel_loop_data["pseudo_time_normal"],
+                main_bagel_loop_data["pca_1"],
+                main_bagel_loop_data["pca_2"],
                 c="r",
                 marker="o",
                 s=5,
@@ -388,9 +386,9 @@ def results(
                 alpha=1,
             )
             temp2 = ax.scatter(
-                Secondary_bagel_loop_data["pseudo_time_normal"],
-                Secondary_bagel_loop_data["pca_1"],
-                Secondary_bagel_loop_data["pca_2"],
+                secondary_bagel_loop_data["pseudo_time_normal"],
+                secondary_bagel_loop_data["pca_1"],
+                secondary_bagel_loop_data["pca_2"],
                 c="k",
                 marker="D",
                 s=20,
@@ -453,9 +451,9 @@ def results(
                     label="Start cell datapoint",
                 )
                 temp1 = ax.scatter(
-                    Main_bagel_loop_data["pseudo_time_normal"],
-                    Main_bagel_loop_data["pca_1"],
-                    Main_bagel_loop_data["pca_2"],
+                    main_bagel_loop_data["pseudo_time_normal"],
+                    main_bagel_loop_data["pca_1"],
+                    main_bagel_loop_data["pca_2"],
                     c="r",
                     marker="o",
                     s=5,
@@ -463,9 +461,9 @@ def results(
                     alpha=1,
                 )
                 temp2 = ax.scatter(
-                    Secondary_bagel_loop_data["pseudo_time_normal"],
-                    Secondary_bagel_loop_data["pca_1"],
-                    Secondary_bagel_loop_data["pca_2"],
+                    secondary_bagel_loop_data["pseudo_time_normal"],
+                    secondary_bagel_loop_data["pca_1"],
+                    secondary_bagel_loop_data["pca_2"],
                     c="k",
                     marker="D",
                     s=20,
@@ -588,12 +586,12 @@ def results(
                 ]
                 Lineage_mouse = Lineage[
                     Lineage["pseudo_time_normal"].isin(
-                        Main_bagel_loop_data["pseudo_time_normal"].values
+                        main_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
                 Lineage_human = Lineage[
                     Lineage["pseudo_time_normal"].isin(
-                        Secondary_bagel_loop_data["pseudo_time_normal"].values
+                        secondary_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
 
@@ -684,12 +682,12 @@ def results(
                 ]
                 Lineage_mouse = Lineage[
                     Lineage["pseudo_time_normal"].isin(
-                        Main_bagel_loop_data["pseudo_time_normal"].values
+                        main_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
                 Lineage_human = Lineage[
                     Lineage["pseudo_time_normal"].isin(
-                        Secondary_bagel_loop_data["pseudo_time_normal"].values
+                        secondary_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
 
@@ -850,9 +848,9 @@ def results(
                 label="Start cell datapoint",
             )
             temp1 = ax.scatter(
-                Main_bagel_loop_data["pseudo_time_normal"],
-                Main_bagel_loop_data["pca_1"],
-                Main_bagel_loop_data["pca_2"],
+                main_bagel_loop_data["pseudo_time_normal"],
+                main_bagel_loop_data["pca_1"],
+                main_bagel_loop_data["pca_2"],
                 c="r",
                 marker="o",
                 s=5,
@@ -860,9 +858,9 @@ def results(
                 alpha=1,
             )
             temp2 = ax.scatter(
-                Secondary_bagel_loop_data["pseudo_time_normal"],
-                Secondary_bagel_loop_data["pca_1"],
-                Secondary_bagel_loop_data["pca_2"],
+                secondary_bagel_loop_data["pseudo_time_normal"],
+                secondary_bagel_loop_data["pca_1"],
+                secondary_bagel_loop_data["pca_2"],
                 c="k",
                 marker="D",
                 s=20,
@@ -906,20 +904,20 @@ def results(
 
             for ig, g in enumerate(genelist):
                 img = ax[ig].scatter(
-                    Main_bagel_loop_data["pca_1"],
-                    Main_bagel_loop_data["pca_2"],
+                    main_bagel_loop_data["pca_1"],
+                    main_bagel_loop_data["pca_2"],
                     cmap=matplotlib.cm.Spectral_r,
-                    c=log_norm_main_df.loc[Main_bagel_loop_data.index, genelist[ig]],
+                    c=log_norm_main_df.loc[main_bagel_loop_data.index, genelist[ig]],
                     marker="o",
                     s=5,
                     label=primary_label,
                 )
                 ax[ig].scatter(
-                    Secondary_bagel_loop_data["pca_1"],
-                    Secondary_bagel_loop_data["pca_2"],
+                    secondary_bagel_loop_data["pca_1"],
+                    secondary_bagel_loop_data["pca_2"],
                     cmap=matplotlib.cm.Spectral_r,
                     c=log_norm_main_df.loc[
-                        Secondary_bagel_loop_data.index, genelist[ig]
+                        secondary_bagel_loop_data.index, genelist[ig]
                     ],
                     marker="D",
                     s=20,
@@ -1009,9 +1007,9 @@ def results(
                 label="Start cell datapoint",
             )
             temp1 = ax.scatter(
-                Main_bagel_loop_data["pseudo_time_normal"],
-                Main_bagel_loop_data["pca_1"],
-                Main_bagel_loop_data["pca_2"],
+                main_bagel_loop_data["pseudo_time_normal"],
+                main_bagel_loop_data["pca_1"],
+                main_bagel_loop_data["pca_2"],
                 c="r",
                 marker="o",
                 s=5,
@@ -1019,9 +1017,9 @@ def results(
                 alpha=1,
             )
             temp2 = ax.scatter(
-                Secondary_bagel_loop_data["pseudo_time_normal"],
-                Secondary_bagel_loop_data["pca_1"],
-                Secondary_bagel_loop_data["pca_2"],
+                secondary_bagel_loop_data["pseudo_time_normal"],
+                secondary_bagel_loop_data["pca_1"],
+                secondary_bagel_loop_data["pca_2"],
                 c="k",
                 marker="D",
                 s=20,
@@ -1086,12 +1084,12 @@ def results(
 
                 Lineage_mouse = Lineage[
                     Lineage["pseudo_time_normal"].isin(
-                        Main_bagel_loop_data["pseudo_time_normal"].values
+                        main_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
                 Lineage_human = Lineage[
                     Lineage["pseudo_time_normal"].isin(
-                        Secondary_bagel_loop_data["pseudo_time_normal"].values
+                        secondary_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
 
