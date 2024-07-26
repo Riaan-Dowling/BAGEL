@@ -872,44 +872,51 @@ class BAGEL(object):
 
                         if frenet_frame_normal_vector.empty:
                             # covariance_length.reset_index(drop=True, inplace=True)
-                            frenet_frame_normal_vector = pd.DataFrame(covariance_length)
+                            frenet_frame_normal_vector = covariance_length
                             frenet_frame_mean = pd.DataFrame(
-                                (
-                                    window_bagel_loop_data.iloc[:, 0:3].mean(axis=0)
-                                ).values
+                                [
+                                    window_bagel_loop_data.iloc[:, 0:3]
+                                    .mean(axis=0)
+                                    .values.tolist()
+                                ],
+                                columns=window_bagel_loop_data.iloc[
+                                    :, 0:3
+                                ].columns.tolist(),
                             )
 
                         else:
                             # Normal vectors
-                            frenet_frame_normal_vector.reset_index(
-                                drop=True, inplace=True
-                            )
-                            # covariance_length.reset_index(drop=True, inplace=True)
                             frenet_frame_normal_vector = pd.concat(
                                 [
                                     frenet_frame_normal_vector,
-                                    pd.DataFrame(covariance_length),
+                                    covariance_length,
                                 ],
-                                axis=1,
+                                axis=0,
                                 sort=False,
+                            )
+                            frenet_frame_normal_vector = (
+                                frenet_frame_normal_vector.reset_index(drop=True)
                             )
 
                             # Mean data
-                            frenet_frame_mean.reset_index(drop=True, inplace=True)
                             frenet_frame_mean = pd.concat(
                                 [
                                     frenet_frame_mean,
                                     pd.DataFrame(
-                                        (
-                                            window_bagel_loop_data.iloc[:, 0:3].mean(
-                                                axis=0
-                                            )
-                                        ).values
+                                        [
+                                            window_bagel_loop_data.iloc[:, 0:3]
+                                            .mean(axis=0)
+                                            .values.tolist()
+                                        ],
+                                        columns=window_bagel_loop_data.iloc[
+                                            :, 0:3
+                                        ].columns.tolist(),
                                     ),
                                 ],
-                                axis=1,
+                                axis=0,
                                 sort=False,
                             )
+                            frenet_frame_mean = frenet_frame_mean.reset_index(drop=True)
 
                     elif lineage_split_flag is True:
                         (
@@ -928,11 +935,11 @@ class BAGEL(object):
                         self.window_bagel_loop_data = (
                             self.window_removed_bagel_loop_data
                         )
-                        not_window_bagel_loop_data = self.bagel_loop_data[
-                            ~self.bagel_loop_data["cell_id_number"].isin(
-                                window_bagel_loop_data["cell_id_number"].values
-                            )
-                        ]
+                        # not_window_bagel_loop_data = self.bagel_loop_data[
+                        #     ~self.bagel_loop_data["cell_id_number"].isin(
+                        #         window_bagel_loop_data["cell_id_number"].values
+                        #     )
+                        # ]
 
                     # """
                     # -----------------------------------------------------------------

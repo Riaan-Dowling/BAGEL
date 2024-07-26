@@ -146,6 +146,20 @@ def frenet_math(
         window_bagel_loop_data.iloc[:, 0:3].mean(axis=0)
     ).values
 
+    # Create return df
+    columns_df = [
+        a for a in window_bagel_loop_data.columns.tolist() if "cell_id_number" not in a
+    ]
+    normal_vector = pd.DataFrame(
+        [normal_vector.tolist()],
+        columns=columns_df,
+    )
+
+    covariance_length = pd.DataFrame(
+        [covariance_length.tolist()],
+        columns=columns_df,
+    )
+
     return (
         mean_window_bagel_loop_data,
         normal_vector,
