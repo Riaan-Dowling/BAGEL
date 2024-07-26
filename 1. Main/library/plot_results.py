@@ -584,7 +584,7 @@ def results(
 
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
 
-            for z in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -609,7 +609,7 @@ def results(
                 ax = fig.add_subplot(111, projection="3d")
                 ax.view_init(elev=12, azim=-100)
 
-                # ax.scatter( Lineage.pseudo_time_normal, Lineage.pca_1,  Lineage.pca_2, color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(z + 1))
+                # ax.scatter( Lineage.pseudo_time_normal, Lineage.pca_1,  Lineage.pca_2, color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(a + 1))
 
                 temp1 = ax.scatter(
                     Lineage_mouse["pseudo_time_normal"],
@@ -665,7 +665,7 @@ def results(
                 temp1.set_alpha(0.3)
                 temp2.set_alpha(0.3)
                 # plt.show()
-                picknm = output_prefix_label + "_lineage_" + str(z + 1) + ".png"
+                picknm = output_prefix_label + "_lineage_" + str(a + 1) + ".png"
                 plt.savefig(f"{output_dir}/{picknm}")
                 plt.close()
 
@@ -967,7 +967,7 @@ def results(
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # Plot final lineages plot
             temp = final_lineage_df
-            for z in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -988,9 +988,9 @@ def results(
                     X_star,
                     f_star_1,
                     f_star_2,
-                    color=colors[z],
+                    color=colors[a],
                     linewidth=5,
-                    label="PC-lineage-" + str(z + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
             ax.scatter(
                 bagel_loop_data_terminal_state["pseudo_time_normal"],
@@ -1057,7 +1057,7 @@ def results(
             # Gaussian per lineage
             # -----------------------------------------------------------------
             # """
-            for z in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -1106,9 +1106,9 @@ def results(
                     X_star,
                     f_star_1,
                     f_star_2,
-                    color=colors[z],
+                    color=colors[a],
                     linewidth=5,
-                    label="PC-lineage-" + str(z + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
                 temp1 = ax.scatter(
                     Lineage_mouse["pseudo_time_normal"],
@@ -1171,7 +1171,7 @@ def results(
                 picknm = (
                     output_prefix_label
                     + "_Gaussian_process_PER_lineage_"
-                    + str(z + 1)
+                    + str(a + 1)
                     + ".png"
                 )
                 plt.savefig(f"{output_dir}/{picknm}")
@@ -1188,7 +1188,7 @@ def results(
             ax.view_init(elev=12, azim=-100)
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # Plot final lineages plot
-            for z in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -1209,9 +1209,9 @@ def results(
                     X_star,
                     f_star_1,
                     f_star_2,
-                    color=colors[z],
+                    color=colors[a],
                     linewidth=5,
-                    label="PC-lineage-" + str(z + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
             ax.scatter(
                 bagel_loop_data_terminal_state["pseudo_time_normal"],
@@ -1922,7 +1922,7 @@ def results(
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # temp = final_lineage_df
             # Plot final lineages plot
-            for z in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -1948,9 +1948,9 @@ def results(
                     X_star,
                     f_star_1,
                     f_star_2,
-                    color=colors[z],
+                    color=colors[a],
                     linewidth=5,
-                    label="PC-lineage-" + str(z + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
             ax.scatter(
                 bagel_loop_data_terminal_state["pseudo_time_normal"],
@@ -2011,7 +2011,7 @@ def results(
             ax.view_init(elev=12, azim=-100)
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # Plot final lineages plot
-            for z in range(final_lineage_counter):
+            for a in range(final_lineage_counter):
                 Lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
@@ -2038,9 +2038,9 @@ def results(
                     X_star,
                     f_star_1,
                     f_star_2,
-                    color=colors[z],
+                    color=colors[a],
                     linewidth=5,
-                    label="PC-lineage-" + str(z + 1),
+                    label="PC-lineage-" + str(a + 1),
                 )
             ax.scatter(
                 bagel_loop_data_terminal_state["pseudo_time_normal"],
