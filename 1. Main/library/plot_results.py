@@ -182,7 +182,9 @@ def results(
         # Parameters
         # -----------------------------------------------------------------
         # """
-        total_secondary_cells_used = joblib.load("total_secondary_cells_used.pkl")
+        total_secondary_cells_used = joblib.load(
+            f"{result_folder}/total_secondary_cells_used.pkl"
+        )
         total_length = len(bagel_loop_data.index)
         main_length = total_length - total_secondary_cells_used
         main_data = bagel_loop_data.head(main_length)
@@ -198,7 +200,9 @@ def results(
             # -----------------------------------------------------------------
             # """
             try:
-                selected_cell_row = joblib.load("selected_cell_row.pkl")
+                selected_cell_row = joblib.load(
+                    f"{result_folder}/selected_cell_row.pkl"
+                )
                 selected_cell_row = bagel_loop_data.loc[selected_cell_row.index]
                 fig = plt.figure()
                 ax = fig.add_subplot(111)
