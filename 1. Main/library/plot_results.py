@@ -132,7 +132,7 @@ def results(
     colors = ["b", "g", "gold", "sienna", "silver"]
 
     # lOAD DATA
-    log_norm_main_df = joblib.load(f"{result_folder}/log_norm_main_df.pkl")
+    log_norm_bagel_df = joblib.load(f"{result_folder}/log_norm_bagel_df.pkl")
     bagel_loop_data = joblib.load(f"{result_folder}/bagel_loop_data.pkl")
     bagel_loop_data_terminal_state = joblib.load(
         f"{result_folder}/bagel_loop_data_terminal_state.pkl"
@@ -933,7 +933,7 @@ def results(
                     main_bagel_loop_data["pca_1"],
                     main_bagel_loop_data["pca_2"],
                     cmap=matplotlib.cm.Spectral_r,
-                    c=log_norm_main_df.loc[main_bagel_loop_data.index, genelist[ig]],
+                    c=log_norm_bagel_df.loc[main_bagel_loop_data.index, genelist[ig]],
                     marker="o",
                     s=5,
                     label=primary_label,
@@ -942,7 +942,7 @@ def results(
                     secondary_bagel_loop_data["pca_1"],
                     secondary_bagel_loop_data["pca_2"],
                     cmap=matplotlib.cm.Spectral_r,
-                    c=log_norm_main_df.loc[
+                    c=log_norm_bagel_df.loc[
                         secondary_bagel_loop_data.index, genelist[ig]
                     ],
                     marker="D",
@@ -1290,7 +1290,7 @@ def results(
                 img = ax[ig].scatter(
                     bagel_loop_data["pca_1"],
                     bagel_loop_data["pca_2"],
-                    c=log_norm_main_df.loc[bagel_loop_data.index, genelist[ig]],
+                    c=log_norm_bagel_df.loc[bagel_loop_data.index, genelist[ig]],
                     s=3,
                     cmap=matplotlib.cm.Spectral_r,
                     label=primary_label,
