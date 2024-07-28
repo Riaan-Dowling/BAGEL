@@ -17,12 +17,6 @@ def run_bagel():
     run_bagel
     """
 
-
-def main():
-    """
-    main
-    """
-
     print("BAGEL -- START.")
 
     parent_dir = os.path.dirname(os.path.realpath(__file__))
@@ -79,7 +73,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_bagel()
 
 
 # TODO remove below
