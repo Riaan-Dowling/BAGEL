@@ -51,7 +51,10 @@ class PhenotypicManifold(object):
         self.total_secondary_cells_used = 0
 
     def pca_combine_two_datasets(
-        self, n_components_pca, _cell_min_molecules, _genes_min_cells
+        self,
+        n_components_pca,
+        _cell_min_molecules,
+        _genes_min_cells,
     ):
         """
         -----------------------------------------------------------------
@@ -60,6 +63,7 @@ class PhenotypicManifold(object):
         """
 
         print("Combining data sets.")
+        print("(1/4) - Filter datasets.")
 
         # """
         # -----------------------------------------------------------------
@@ -177,24 +181,28 @@ class PhenotypicManifold(object):
             compress=3,
         )
 
-        # Data set 1 calculations
-        print("Compute manifold.")
-        print("PCA (1/4)")
-        # Palantir pre-process data
-        filtered_counts = self.palantir_filter_counts_data(
+        # Palantir pre-process data MAIN DF and secondary df
+        filtered_counts_main = self.palantir_filter_counts_data(
             self.main_df,
             cell_min_molecules=_cell_min_molecules,
             genes_min_cells=_genes_min_cells,
         )
-        norm_df = self.palantir_normalize_counts(filtered_counts)
-        log_norm_df = self.palantir_log_transform(norm_df)
+        norm_df_main = self.palantir_normalize_counts(filtered_counts_main)
+        log_norm_main_df = self.palantir_log_transform(norm_df_main)
+        log_norm_secondary_df = self.palantir_log_transform(
+            secondary_df_with_missing_data_norm
+        )
 
+        log_norm_bagel_df = pd.concat(
+            [log_norm_main_df, log_norm_secondary_df], axis=0
+        ).fillna(0)
         # Select PCA
+        print("(2/4) - PCA")
         pca_projections_main_df = self.run_pca(
-            log_norm_df, n_components=n_components_pca
+            log_norm_main_df, n_components=n_components_pca
         )
         pca_projections_main_df = pd.DataFrame(
-            pca_projections_main_df, index=norm_df.index
+            pca_projections_main_df, index=norm_df_main.index
         )
 
         # obtain indexes
@@ -230,7 +238,7 @@ class PhenotypicManifold(object):
         )
 
         print("Combining data sets end.")
-        return export_combined_main_and_secondary_pca
+        return export_combined_main_and_secondary_pca, log_norm_bagel_df
 
     def palantir_filter_counts_data(
         self, data, cell_min_molecules=1000, genes_min_cells=10
@@ -831,15 +839,26 @@ class PhenotypicManifold(object):
             n_components_pca = self.bagel_config["phenotypic_manifold_config"][
                 "palantir"
             ]["_cell_min_molecules"]
+
+            print("Compute manifold.")
+
             two_data_set_flag = False
+
             if self.total_datasets == 2:
+                project_one_secondary_only = False  # Testing
+                if project_one_secondary_only is True:
+                    self.secondary_df = self.secondary_df.head(10)
                 self.total_secondary_cells_used = 2
-                phenotypic_manifold_pca_projections = self.pca_combine_two_datasets(
-                    n_components_pca, _cell_min_molecules, _genes_min_cells
+                phenotypic_manifold_pca_projections, log_norm_bagel_df = (
+                    self.pca_combine_two_datasets(
+                        n_components_pca, _cell_min_molecules, _genes_min_cells
+                    )
                 )
                 two_data_set_flag = True
 
             else:
+
+                print("(1/4) - Filter dataset.")
                 # Filter data set
                 filterd_main_df = self.palantir_filter_counts_data(
                     self.main_df,
@@ -847,18 +866,16 @@ class PhenotypicManifold(object):
                     genes_min_cells=_genes_min_cells,
                 )
                 norm_main_df = self.palantir_normalize_counts(filterd_main_df)
-                log_norm_main_df = self.palantir_log_transform(norm_main_df)
+                log_norm_bagel_df = self.palantir_log_transform(norm_main_df)
 
                 joblib.dump(
-                    log_norm_main_df,
-                    f"{self.result_folder}/log_norm_main_df.pkl",
+                    log_norm_bagel_df,
+                    f"{self.result_folder}/log_norm_bagel_df.pkl",
                     compress=3,
                 )
-
-                print("Compute manifold.")
                 # Dimensionality reduction
-                print("PCA (1/4)")
-                phenotypic_manifold_pca_projections = self.run_pca(log_norm_main_df)
+                print("(2/4) - PCA")
+                phenotypic_manifold_pca_projections = self.run_pca(log_norm_bagel_df)
 
             joblib.dump(
                 two_data_set_flag,
@@ -870,23 +887,23 @@ class PhenotypicManifold(object):
             continuous_manifold_flag = False
             while continuous_manifold_flag is False:
 
-                print("Diffusion map (2/4)")
+                print("(3/4) Diffusion map.)")
                 dm_res = self.palantir_run_diffusion_maps(
                     phenotypic_manifold_pca_projections,
                     n_components=self.diffusion_components,
                 )
 
-                print("Multi scale distance (3/4)")
+                print("(4/4) Multi scale distance.")
                 ms_data = self.palantir_determine_multiscale_space(dm_res)
 
-                print("t-SNE (4/4) - removed")
+                # print("t-SNE (4/4) - removed")
                 # tsne = dimension_reduction.run_tsne(ms_data)
 
                 # Select PCA
                 pca = PCA(n_components=2, svd_solver="randomized")
                 phenotypic_manifold_pca_projections = pca.fit_transform(ms_data)
                 phenotypic_manifold_pca_projections = pd.DataFrame(
-                    phenotypic_manifold_pca_projections, index=log_norm_main_df.index
+                    phenotypic_manifold_pca_projections, index=log_norm_bagel_df.index
                 )
                 phenotypic_manifold_pca_projections.columns = ["x", "y"]
 
@@ -897,7 +914,7 @@ class PhenotypicManifold(object):
                         self.total_secondary_cells_used
                     )
                     plt.scatter(j_1["x"], j_1["y"], s=20, c="k")
-                sizes = log_norm_main_df.sum(axis=1)  # Define the expressions per cell
+                sizes = log_norm_bagel_df.sum(axis=1)  # Define the expressions per cell
                 plt.scatter(
                     phenotypic_manifold_pca_projections["x"],
                     phenotypic_manifold_pca_projections["y"],
@@ -909,12 +926,15 @@ class PhenotypicManifold(object):
                 plt.title("Phenotypic manifold")
                 plt.colorbar()
                 plt.show()
+                time.sleep(1)
+                plt.close()
 
                 continuous_manifold_flag = (
                     input("Was the manifold continuous? (Type True or False) : ")
                     .strip()
                     .lower()
                 )
+
                 while True:
                     if continuous_manifold_flag == "true":
                         continuous_manifold_flag = True
@@ -1019,7 +1039,7 @@ class PhenotypicManifold(object):
                 compress=3,
             )
 
-            sizes = log_norm_main_df.sum(axis=1)  # Define the expressions per cell
+            sizes = log_norm_bagel_df.sum(axis=1)  # Define the expressions per cell
 
             # TODO plot output for debug
             # plt.scatter(
@@ -1029,7 +1049,12 @@ class PhenotypicManifold(object):
             #     c=sizes,
             #     cmap=matplotlib.cm.Spectral_r,
             # )
-            # plt.scatter(wp_data_TSNE_ROW["x"], wp_data_TSNE_ROW["y"], s=20, c="k")
+            # plt.scatter(
+            #     phenotypic_manifold_pca_projections["x"],
+            #     phenotypic_manifold_pca_projections["y"],
+            #     s=20,
+            #     c="k",
+            # )
             # plt.axis("off")
             # plt.title("Phenotypic manifold")
             # plt.colorbar()
