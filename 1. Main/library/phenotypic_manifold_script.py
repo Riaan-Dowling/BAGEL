@@ -868,14 +868,14 @@ class PhenotypicManifold(object):
                 norm_main_df = self.palantir_normalize_counts(filterd_main_df)
                 log_norm_bagel_df = self.palantir_log_transform(norm_main_df)
 
-                joblib.dump(
-                    log_norm_bagel_df,
-                    f"{self.result_folder}/log_norm_bagel_df.pkl",
-                    compress=3,
-                )
                 # Dimensionality reduction
                 print("(2/4) - PCA")
                 phenotypic_manifold_pca_projections = self.run_pca(log_norm_bagel_df)
+            joblib.dump(
+                log_norm_bagel_df,
+                f"{self.result_folder}/log_norm_bagel_df.pkl",
+                compress=3,
+            )
 
             joblib.dump(
                 two_data_set_flag,
