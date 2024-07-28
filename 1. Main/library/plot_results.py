@@ -45,10 +45,25 @@ class Arrow3D(FancyArrowPatch):
         return np.min(zs)
 
 
-def load_all_data():
+def frenet_frame_plot_helper(column, variance_vector, mean_window_bagel_loop_data):
     """
-    load_all_data
-    """
+    frenet_frame_plot_helper"""
+    # TODO check functionality
+    if (500 * variance_vector[column].values[0]) > mean_window_bagel_loop_data[
+        column
+    ].values[0]:
+        return_value = (
+            mean_window_bagel_loop_data[column].values[0]
+            + variance_vector[column].values[0]
+        )
+
+    else:
+        return_value = (
+            mean_window_bagel_loop_data[column].values[0]
+            + variance_vector[column].values[0]
+        )
+
+    return return_value
 
 
 def determine_start_cell(bagel_loop_data, terminal_states, early_cell, dm_boundaries):
@@ -67,7 +82,7 @@ def determine_start_cell(bagel_loop_data, terminal_states, early_cell, dm_bounda
     else:
         start_cell_data = bagel_loop_data.loc[excluded_boundaries]
         previous_dist = 1000000
-        for i in range(len(excluded_boundaries)):
+        for _ in range(len(excluded_boundaries)):
             # Select one cell
             select_one = start_cell_data.head(1)
             # Remove selected cell from data
@@ -77,10 +92,10 @@ def determine_start_cell(bagel_loop_data, terminal_states, early_cell, dm_bounda
                 )
             ]
             # Calculate euclidean distance
-            Data_euclidean_distance = np.linalg.norm(select_one - early_cell_data)
-            if Data_euclidean_distance < previous_dist:
+            data_euclidean_distance = np.linalg.norm(select_one - early_cell_data)
+            if data_euclidean_distance < previous_dist:
                 start_cell = select_one
-            previous_dist = Data_euclidean_distance
+            previous_dist = data_euclidean_distance
     return start_cell
 
 
@@ -116,18 +131,18 @@ def results(
     # Colours of graphs
     colors = ["b", "g", "gold", "sienna", "silver"]
 
-    # LOAD DATA
+    # lOAD DATA
     log_norm_main_df = joblib.load(f"{result_folder}/log_norm_main_df.pkl")
     bagel_loop_data = joblib.load(f"{result_folder}/bagel_loop_data.pkl")
     bagel_loop_data_terminal_state = joblib.load(
         f"{result_folder}/bagel_loop_data_terminal_state.pkl"
     )
 
-    # Link terminal state to normalized manifold
+    # link terminal state to normalized manifold
     terminal_states = joblib.load(f"{result_folder}/terminal_states.pkl")
     final_lineage_df = joblib.load(
         f"{result_folder}/final_lineage_df.pkl"
-    )  # Lineage clustes
+    )  # lineage clustes
     final_lineage_counter = joblib.load(
         f"{result_folder}/final_lineage_counter.pkl"
     )  # Total lineageas
@@ -149,7 +164,7 @@ def results(
     # Create result folder
     # """
 
-    output_dir = os.path.join(result_folder, "BAGEL_results")
+    output_dir = os.path.join(result_folder, "BAGEl_results")
     # delete old video folder if possible
     try:
         shutil.rmtree(output_dir)
@@ -479,7 +494,7 @@ def results(
                     bifurcation_point = bifurcation_data.iloc[
                         :, 0:6
                     ]  # Select first SIX columns as new input
-                    # Data = {'g1_pseudo_time_normal':ORIGINAL_window_1['pseudo_time_normal'],'g1_pca_1':ORIGINAL_window_1['tsne_1'],'g1_pca_2':ORIGINAL_window_1['tsne_2'],'g2_pseudo_time_normal':ORIGINAL_window_2['pseudo_time_normal'], 'g2_pca_1':ORIGINAL_window_2['tsne_1'],'g2_pca_2':ORIGINAL_window_2['tsne_2']}
+                    # Data = {'g1_pseudo_time_normal':ORIGINAl_window_1['pseudo_time_normal'],'g1_pca_1':ORIGINAl_window_1['tsne_1'],'g1_pca_2':ORIGINAl_window_1['tsne_2'],'g2_pseudo_time_normal':ORIGINAl_window_2['pseudo_time_normal'], 'g2_pca_1':ORIGINAl_window_2['tsne_1'],'g2_pca_2':ORIGINAl_window_2['tsne_2']}
                     bifurcation_point = (
                         bifurcation_point.dropna()
                     )  # Drop possible NAN data
@@ -507,9 +522,9 @@ def results(
                         "pca_1": bifurcation_point["g1_pca_1"],
                         "pca_2": bifurcation_point["g1_pca_2"],
                     }
-                    current_ORIGINAL_window_g1_3d = pd.DataFrame(d)
-                    current_ORIGINAL_window_g1_3d = (
-                        current_ORIGINAL_window_g1_3d.dropna()
+                    current_ORIGINAl_window_g1_3d = pd.DataFrame(d)
+                    current_ORIGINAl_window_g1_3d = (
+                        current_ORIGINAl_window_g1_3d.dropna()
                     )  # Drop NAN rows
 
                     d = {
@@ -519,13 +534,13 @@ def results(
                         "pca_1": bifurcation_point["g2_pca_1"],
                         "pca_2": bifurcation_point["g2_pca_2"],
                     }
-                    current_ORIGINAL_window_g2_3d = pd.DataFrame(d)
-                    current_ORIGINAL_window_g2_3d = (
-                        current_ORIGINAL_window_g2_3d.dropna()
+                    current_ORIGINAl_window_g2_3d = pd.DataFrame(d)
+                    current_ORIGINAl_window_g2_3d = (
+                        current_ORIGINAl_window_g2_3d.dropna()
                     )  # Drop NAN rows
 
-                    bifurcation_point_mean_1 = current_ORIGINAL_window_g1_3d.head(1)
-                    bifurcation_point_mean_2 = current_ORIGINAL_window_g2_3d.head(1)
+                    bifurcation_point_mean_1 = current_ORIGINAl_window_g1_3d.head(1)
+                    bifurcation_point_mean_2 = current_ORIGINAl_window_g2_3d.head(1)
 
                     bifurcation_point_mean_1.reset_index(drop=True, inplace=True)
                     bifurcation_point_mean_2.reset_index(drop=True, inplace=True)
@@ -568,29 +583,29 @@ def results(
         if one_lineage_plot is True:
             # """
             # -----------------------------------------------------------------
-            # 1 Lineage at a time
+            # 1 lineage at a time
             # -----------------------------------------------------------------
             # """
 
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
 
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
 
-                lineage_TERMINAL_STATE = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_terminal_state = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         bagel_loop_data_terminal_state["pseudo_time_normal"].values
                     )
                 ]
-                Lineage_mouse = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_mouse = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         main_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
-                Lineage_human = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_human = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         secondary_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
@@ -599,12 +614,12 @@ def results(
                 ax = fig.add_subplot(111, projection="3d")
                 ax.view_init(elev=12, azim=-100)
 
-                # ax.scatter( Lineage.pseudo_time_normal, Lineage["pca_1"],  Lineage["pca_2"], color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(a + 1))
+                # ax.scatter( lineage.pseudo_time_normal, lineage["pca_1"],  lineage["pca_2"], color =next(colors),alpha = 0.1, marker='o', s = 5, label='PC-lineage-' + str(a + 1))
 
                 temp1 = ax.scatter(
-                    Lineage_mouse["pseudo_time_normal"],
-                    Lineage_mouse["pca_1"],
-                    Lineage_mouse["pca_2"],
+                    lineage_mouse["pseudo_time_normal"],
+                    lineage_mouse["pca_1"],
+                    lineage_mouse["pca_2"],
                     c="r",
                     marker="o",
                     s=5,
@@ -612,9 +627,9 @@ def results(
                     alpha=1,
                 )
                 temp2 = ax.scatter(
-                    Lineage_human["pseudo_time_normal"],
-                    Lineage_human["pca_1"],
-                    Lineage_human["pca_2"],
+                    lineage_human["pseudo_time_normal"],
+                    lineage_human["pca_1"],
+                    lineage_human["pca_2"],
                     c="k",
                     marker="D",
                     s=20,
@@ -623,9 +638,9 @@ def results(
                 )
 
                 ax.scatter(
-                    lineage_TERMINAL_STATE["pseudo_time_normal"],
-                    lineage_TERMINAL_STATE["pca_1"],
-                    lineage_TERMINAL_STATE["pca_2"],
+                    lineage_terminal_state["pseudo_time_normal"],
+                    lineage_terminal_state["pca_1"],
+                    lineage_terminal_state["pca_2"],
                     c="m",
                     marker="X",
                     s=50,
@@ -662,7 +677,7 @@ def results(
         if all_lineage_plot is True:
             # """
             # -----------------------------------------------------------------
-            # All Lineages
+            # All lineages
             # -----------------------------------------------------------------
             # """
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
@@ -671,30 +686,30 @@ def results(
             ax.view_init(elev=12, azim=-100)
             for a in range(final_lineage_counter):
 
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
 
-                lineage_TERMINAL_STATE = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_terminal_state = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         bagel_loop_data_terminal_state["pseudo_time_normal"].values
                     )
                 ]
-                Lineage_mouse = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_mouse = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         main_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
-                Lineage_human = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_human = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         secondary_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
 
                 temp1 = ax.scatter(
-                    Lineage_mouse["pseudo_time_normal"],
-                    Lineage_mouse["pca_1"],
-                    Lineage_mouse["pca_2"],
+                    lineage_mouse["pseudo_time_normal"],
+                    lineage_mouse["pca_1"],
+                    lineage_mouse["pca_2"],
                     c="r",
                     marker="o",
                     s=5,
@@ -702,9 +717,9 @@ def results(
                     alpha=0.3,
                 )
                 temp2 = ax.scatter(
-                    Lineage_human["pseudo_time_normal"],
-                    Lineage_human["pca_1"],
-                    Lineage_human["pca_2"],
+                    lineage_human["pseudo_time_normal"],
+                    lineage_human["pca_1"],
+                    lineage_human["pca_2"],
                     c="k",
                     marker="D",
                     s=20,
@@ -712,9 +727,9 @@ def results(
                     alpha=0.3,
                 )
                 ax.scatter(
-                    lineage_TERMINAL_STATE["pseudo_time_normal"],
-                    lineage_TERMINAL_STATE["pca_1"],
-                    lineage_TERMINAL_STATE["pca_2"],
+                    lineage_terminal_state["pseudo_time_normal"],
+                    lineage_terminal_state["pca_1"],
+                    lineage_terminal_state["pca_2"],
                     c="m",
                     marker="X",
                     s=50,
@@ -744,7 +759,7 @@ def results(
             # temp1.set_alpha(0.3)
             # temp2.set_alpha(0.3)
             # plt.show()
-            picknm = output_prefix_label + "_ALL_LINEAGE.png"
+            picknm = output_prefix_label + "_All_lINEAGE.png"
             plt.savefig(f"{output_dir}/{picknm}")
             plt.close()
 
@@ -773,47 +788,58 @@ def results(
                 )
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
-                for e in range(frenet_frame_window_counter):
-
-                    variance_vector = (
-                        frenet_frame_window_variance_vector.iloc[:, 0:1].values
-                    ).T
-                    variance_vector = variance_vector[0]
-
+                # for variance_vector,mean_window_bagel_loop_data in range(frenet_frame_window_counter):
+                for (_, variance_vector), (_, mean_window_bagel_loop_data) in zip(
+                    frenet_frame_window_variance_vector.iterrows(),
+                    frenet_frame_window_mean.iterrows(),
+                ):
+                    # load rows as dataframes
                     mean_window_bagel_loop_data = (
-                        frenet_frame_window_mean.iloc[:, 0:1].values
-                    ).T
-                    mean_window_bagel_loop_data = mean_window_bagel_loop_data[0]
+                        mean_window_bagel_loop_data.to_frame().T
+                    )
+                    variance_vector = variance_vector.to_frame().T
 
-                    if (500 * variance_vector[0]) > mean_window_bagel_loop_data[0]:
-                        frenet_frame_arrow_end = (
-                            variance_vector + mean_window_bagel_loop_data
-                        )
-                        line = Arrow3D(
-                            [mean_window_bagel_loop_data[0], frenet_frame_arrow_end[0]],
-                            [mean_window_bagel_loop_data[1], frenet_frame_arrow_end[1]],
-                            [mean_window_bagel_loop_data[2], frenet_frame_arrow_end[2]],
-                            mutation_scale=10,
-                            lw=2,
-                            arrowstyle="-|>",
-                            color="g",
-                        )
-                        ax.add_artist(line)
+                    # Determine arrow directions
+                    frenet_frame_arrow_end = mean_window_bagel_loop_data.copy()
 
-                    else:
-                        frenet_frame_arrow_end = (
-                            -variance_vector + mean_window_bagel_loop_data
+                    frenet_frame_arrow_end["pseudo_time_normal"] = (
+                        frenet_frame_plot_helper(
+                            "pseudo_time_normal",
+                            variance_vector,
+                            mean_window_bagel_loop_data,
                         )
-                        line = Arrow3D(
-                            [mean_window_bagel_loop_data[0], frenet_frame_arrow_end[0]],
-                            [mean_window_bagel_loop_data[1], frenet_frame_arrow_end[1]],
-                            [mean_window_bagel_loop_data[2], frenet_frame_arrow_end[2]],
-                            mutation_scale=10,
-                            lw=2,
-                            arrowstyle="-|>",
-                            color="g",
-                        )
-                        ax.add_artist(line)
+                    )
+                    frenet_frame_arrow_end["pca_1"] = frenet_frame_plot_helper(
+                        "pca_1",
+                        variance_vector,
+                        mean_window_bagel_loop_data,
+                    )
+                    frenet_frame_arrow_end["pca_2"] = frenet_frame_plot_helper(
+                        "pca_2",
+                        variance_vector,
+                        mean_window_bagel_loop_data,
+                    )
+
+                    # Plot arrow
+                    line = Arrow3D(
+                        [
+                            mean_window_bagel_loop_data["pseudo_time_normal"].values[0],
+                            frenet_frame_arrow_end["pseudo_time_normal"].values[0],
+                        ],
+                        [
+                            mean_window_bagel_loop_data["pca_1"].values[0],
+                            frenet_frame_arrow_end["pca_1"].values[0],
+                        ],
+                        [
+                            mean_window_bagel_loop_data["pca_2"].values[0],
+                            frenet_frame_arrow_end["pca_2"].values[0],
+                        ],
+                        mutation_scale=10,
+                        lw=2,
+                        arrowstyle="-|>",
+                        color="g",
+                    )
+                    ax.add_artist(line)
 
                     # Remove used arrows
                     frenet_frame_window_variance_vector.columns = range(
@@ -964,24 +990,24 @@ def results(
             # Plot final lineages plot
             temp = final_lineage_df
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
 
                 # Dataframe to array data
-                X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
-                Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                x_train = np.array(lineage["pseudo_time_normal"].values.tolist())
+                y_train = lineage["pca_1"].to_numpy()
+                f_star_1, sigma_1, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                y_train = lineage["pca_2"].to_numpy()
+                f_star_2, sigma_2, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
                 ax.plot(
-                    X_star,
+                    x_star,
                     f_star_1,
                     f_star_2,
                     color=colors[a],
@@ -1054,10 +1080,10 @@ def results(
             # -----------------------------------------------------------------
             # """
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
-                # Lineage = Lineage.dropna()  # Drop possible NAN data
+                # lineage = lineage.dropna()  # Drop possible NAN data
 
                 # temp.columns = range(temp.shape[1])  # Rename column names
                 # temp = temp.drop(
@@ -1065,30 +1091,30 @@ def results(
                 # )  # Remove new pseudo data lineage from data
 
                 # Dataframe to array data
-                X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
-                Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                x_train = np.array(lineage["pseudo_time_normal"].values.tolist())
+                y_train = lineage["pca_1"].to_numpy()
+                f_star_1, sigma_1, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                y_train = lineage["pca_2"].to_numpy()
+                f_star_2, sigma_2, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                lineage_TERMINAL_STATE = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_terminal_state = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         bagel_loop_data_terminal_state["pseudo_time_normal"].values
                     )
                 ]
 
-                Lineage_mouse = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_mouse = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         main_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
-                Lineage_human = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_human = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         secondary_bagel_loop_data["pseudo_time_normal"].values
                     )
                 ]
@@ -1099,7 +1125,7 @@ def results(
                 ax.view_init(elev=12, azim=-100)
 
                 ax.plot(
-                    X_star,
+                    x_star,
                     f_star_1,
                     f_star_2,
                     color=colors[a],
@@ -1107,9 +1133,9 @@ def results(
                     label="PC-lineage-" + str(a + 1),
                 )
                 temp1 = ax.scatter(
-                    Lineage_mouse["pseudo_time_normal"],
-                    Lineage_mouse["pca_1"],
-                    Lineage_mouse["pca_2"],
+                    lineage_mouse["pseudo_time_normal"],
+                    lineage_mouse["pca_1"],
+                    lineage_mouse["pca_2"],
                     c="r",
                     marker="o",
                     s=5,
@@ -1117,9 +1143,9 @@ def results(
                     alpha=1,
                 )
                 temp2 = ax.scatter(
-                    Lineage_human["pseudo_time_normal"],
-                    Lineage_human["pca_1"],
-                    Lineage_human["pca_2"],
+                    lineage_human["pseudo_time_normal"],
+                    lineage_human["pca_1"],
+                    lineage_human["pca_2"],
                     c="k",
                     marker="D",
                     s=20,
@@ -1128,9 +1154,9 @@ def results(
                 )
 
                 ax.scatter(
-                    lineage_TERMINAL_STATE["pseudo_time_normal"],
-                    lineage_TERMINAL_STATE["pca_1"],
-                    lineage_TERMINAL_STATE["pca_2"],
+                    lineage_terminal_state["pseudo_time_normal"],
+                    lineage_terminal_state["pca_1"],
+                    lineage_terminal_state["pca_2"],
                     c="m",
                     marker="X",
                     s=50,
@@ -1185,24 +1211,24 @@ def results(
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # Plot final lineages plot
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
 
                 # Dataframe to array data
-                X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
-                Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                x_train = np.array(lineage["pseudo_time_normal"].values.tolist())
+                y_train = lineage["pca_1"].to_numpy()
+                f_star_1, sigma_1, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                y_train = lineage["pca_2"].to_numpy()
+                f_star_2, sigma_2, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
                 ax.plot(
-                    X_star,
+                    x_star,
                     f_star_1,
                     f_star_2,
                     color=colors[a],
@@ -1551,7 +1577,7 @@ def results(
                     bifurcation_point = bifurcation_data.iloc[
                         :, 0:6
                     ]  # Select first SIX columns as new input
-                    # Data = {'g1_pseudo_time_normal':ORIGINAL_window_1['pseudo_time_normal'],'g1_pca_1':ORIGINAL_window_1['tsne_1'],'g1_pca_2':ORIGINAL_window_1['tsne_2'],'g2_pseudo_time_normal':ORIGINAL_window_2['pseudo_time_normal'], 'g2_pca_1':ORIGINAL_window_2['tsne_1'],'g2_pca_2':ORIGINAL_window_2['tsne_2']}
+                    # Data = {'g1_pseudo_time_normal':ORIGINAl_window_1['pseudo_time_normal'],'g1_pca_1':ORIGINAl_window_1['tsne_1'],'g1_pca_2':ORIGINAl_window_1['tsne_2'],'g2_pseudo_time_normal':ORIGINAl_window_2['pseudo_time_normal'], 'g2_pca_1':ORIGINAl_window_2['tsne_1'],'g2_pca_2':ORIGINAl_window_2['tsne_2']}
                     bifurcation_point = (
                         bifurcation_point.dropna()
                     )  # Drop possible NAN data
@@ -1579,9 +1605,9 @@ def results(
                         "pca_1": bifurcation_point["g1_pca_1"],
                         "pca_2": bifurcation_point["g1_pca_2"],
                     }
-                    current_ORIGINAL_window_g1_3d = pd.DataFrame(d)
-                    current_ORIGINAL_window_g1_3d = (
-                        current_ORIGINAL_window_g1_3d.dropna()
+                    current_ORIGINAl_window_g1_3d = pd.DataFrame(d)
+                    current_ORIGINAl_window_g1_3d = (
+                        current_ORIGINAl_window_g1_3d.dropna()
                     )  # Drop NAN rows
 
                     d = {
@@ -1591,13 +1617,13 @@ def results(
                         "pca_1": bifurcation_point["g2_pca_1"],
                         "pca_2": bifurcation_point["g2_pca_2"],
                     }
-                    current_ORIGINAL_window_g2_3d = pd.DataFrame(d)
-                    current_ORIGINAL_window_g2_3d = (
-                        current_ORIGINAL_window_g2_3d.dropna()
+                    current_ORIGINAl_window_g2_3d = pd.DataFrame(d)
+                    current_ORIGINAl_window_g2_3d = (
+                        current_ORIGINAl_window_g2_3d.dropna()
                     )  # Drop NAN rows
 
-                    bifurcation_point_mean_1 = current_ORIGINAL_window_g1_3d.head(1)
-                    bifurcation_point_mean_2 = current_ORIGINAL_window_g2_3d.head(1)
+                    bifurcation_point_mean_1 = current_ORIGINAl_window_g1_3d.head(1)
+                    bifurcation_point_mean_2 = current_ORIGINAl_window_g2_3d.head(1)
 
                     bifurcation_point_mean_1.reset_index(drop=True, inplace=True)
                     bifurcation_point_mean_2.reset_index(drop=True, inplace=True)
@@ -1639,7 +1665,7 @@ def results(
         if one_lineage_plot is True:
             # """
             # -----------------------------------------------------------------
-            # 1 Lineage at a time
+            # 1 lineage at a time
             # -----------------------------------------------------------------
             # """
 
@@ -1648,19 +1674,13 @@ def results(
             temp = final_lineage_df.copy()
 
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
-                # Lineage = Lineage.dropna()  # Drop possible NAN data
-
-                # temp.columns = range(temp.shape[1])  # Rename column names
-                # temp = temp.drop(
-                #     [0, 1, 2], axis=1
-                # )  # Remove new pseudo data lineage from data
 
                 # Terminal states of the lineage
-                lineage_TERMINAL_STATE = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_terminal_state = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         bagel_loop_data_terminal_state["pseudo_time_normal"].values
                     )
                 ]
@@ -1670,9 +1690,9 @@ def results(
                 ax.view_init(elev=12, azim=-100)
 
                 ax.scatter(
-                    lineage_TERMINAL_STATE["pseudo_time_normal"],
-                    lineage_TERMINAL_STATE["pca_1"],
-                    lineage_TERMINAL_STATE["pca_2"],
+                    lineage_terminal_state["pseudo_time_normal"],
+                    lineage_terminal_state["pca_1"],
+                    lineage_terminal_state["pca_2"],
                     c="m",
                     marker="X",
                     s=50,
@@ -1689,9 +1709,9 @@ def results(
                 )
 
                 ax.scatter(
-                    Lineage.pseudo_time_normal,
-                    Lineage["pca_1"],
-                    Lineage["pca_2"],
+                    lineage.pseudo_time_normal,
+                    lineage["pca_1"],
+                    lineage["pca_2"],
                     color=colors[a],
                     marker="o",
                     s=5,
@@ -1717,7 +1737,7 @@ def results(
         if all_lineage_plot is True:
             # """
             # -----------------------------------------------------------------
-            # All Lineages
+            # All lineages
             # -----------------------------------------------------------------
             # """
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
@@ -1726,18 +1746,18 @@ def results(
             ax = fig.add_subplot(111, projection="3d")
             ax.view_init(elev=12, azim=-100)
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
-                # Lineage = Lineage.dropna()  # Drop possible NAN data
+                # lineage = lineage.dropna()  # Drop possible NAN data
                 # temp.columns = range(temp.shape[1])  # Rename column names
                 # temp = temp.drop(
                 #     [0, 1, 2], axis=1
                 # )  # Remove new pseudo data lineage from data
                 ax.scatter(
-                    Lineage.pseudo_time_normal,
-                    Lineage["pca_1"],
-                    Lineage["pca_2"],
+                    lineage.pseudo_time_normal,
+                    lineage["pca_1"],
+                    lineage["pca_2"],
                     color=colors[a],
                     alpha=1,
                     marker="o",
@@ -1778,7 +1798,7 @@ def results(
             )
             temp1.set_alpha(0.3)
             # plt.show()
-            picknm = output_prefix_label + "_ALL_LINEAGE.png"
+            picknm = output_prefix_label + "_All_lINEAGE.png"
             plt.savefig(f"{output_dir}/{picknm}")
             plt.close()
 
@@ -1812,30 +1832,46 @@ def results(
                     frenet_frame_window_variance_vector.iterrows(),
                     frenet_frame_window_mean.iterrows(),
                 ):
+                    # load rows as dataframes
+                    mean_window_bagel_loop_data = (
+                        mean_window_bagel_loop_data.to_frame().T
+                    )
+                    variance_vector = variance_vector.to_frame().T
 
-                    if (
-                        500 * variance_vector["pseudo_time_normal"]
-                    ) > mean_window_bagel_loop_data["pseudo_time_normal"]:
-                        frenet_frame_arrow_end = (
-                            variance_vector + mean_window_bagel_loop_data
-                        )
+                    # Determine arrow directions
+                    frenet_frame_arrow_end = mean_window_bagel_loop_data.copy()
 
-                    else:
-                        frenet_frame_arrow_end = (
-                            -variance_vector + mean_window_bagel_loop_data
+                    frenet_frame_arrow_end["pseudo_time_normal"] = (
+                        frenet_frame_plot_helper(
+                            "pseudo_time_normal",
+                            variance_vector,
+                            mean_window_bagel_loop_data,
                         )
+                    )
+                    frenet_frame_arrow_end["pca_1"] = frenet_frame_plot_helper(
+                        "pca_1",
+                        variance_vector,
+                        mean_window_bagel_loop_data,
+                    )
+                    frenet_frame_arrow_end["pca_2"] = frenet_frame_plot_helper(
+                        "pca_2",
+                        variance_vector,
+                        mean_window_bagel_loop_data,
+                    )
+
+                    # Plot arrow
                     line = Arrow3D(
                         [
-                            mean_window_bagel_loop_data["pseudo_time_normal"],
-                            frenet_frame_arrow_end["pseudo_time_normal"],
+                            mean_window_bagel_loop_data["pseudo_time_normal"].values[0],
+                            frenet_frame_arrow_end["pseudo_time_normal"].values[0],
                         ],
                         [
-                            mean_window_bagel_loop_data["pca_1"],
-                            frenet_frame_arrow_end["pca_1"],
+                            mean_window_bagel_loop_data["pca_1"].values[0],
+                            frenet_frame_arrow_end["pca_1"].values[0],
                         ],
                         [
-                            mean_window_bagel_loop_data["pca_2"],
-                            frenet_frame_arrow_end["pca_2"],
+                            mean_window_bagel_loop_data["pca_2"].values[0],
+                            frenet_frame_arrow_end["pca_2"].values[0],
                         ],
                         mutation_scale=10,
                         lw=2,
@@ -1889,7 +1925,7 @@ def results(
             )
             temp1.set_alpha(0.01)
             picknm = output_prefix_label + "_frenet_frame.png"
-            plt.show()
+            # plt.show()
             plt.savefig(f"{output_dir}/{picknm}")
             plt.close()
 
@@ -1907,10 +1943,10 @@ def results(
             # temp = final_lineage_df
             # Plot final lineages plot
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
-                # Lineage = Lineage.dropna()  # Drop possible NAN data
+                # lineage = lineage.dropna()  # Drop possible NAN data
 
                 # temp.columns = range(temp.shape[1])  # Rename column names
                 # temp = temp.drop(
@@ -1918,18 +1954,18 @@ def results(
                 # )  # Remove new pseudo data lineage from data
 
                 # Dataframe to array data
-                X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
-                Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                x_train = np.array(lineage["pseudo_time_normal"].values.tolist())
+                y_train = lineage["pca_1"].to_numpy()
+                f_star_1, sigma_1, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                y_train = lineage["pca_2"].to_numpy()
+                f_star_2, sigma_2, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
                 ax.plot(
-                    X_star,
+                    x_star,
                     f_star_1,
                     f_star_2,
                     color=colors[a],
@@ -1996,10 +2032,10 @@ def results(
             # colors = iter(cm.rainbow(np.linspace(0.7, 1, final_lineage_counter)))
             # Plot final lineages plot
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
-                # Lineage = Lineage.dropna()  # Drop possible NAN data
+                # lineage = lineage.dropna()  # Drop possible NAN data
 
                 # temp.columns = range(temp.shape[1])  # Rename column names
                 # temp = temp.drop(
@@ -2007,19 +2043,19 @@ def results(
                 # )  # Remove new pseudo data lineage from data
 
                 # Dataframe to array data
-                X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
-                Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                x_train = np.array(lineage["pseudo_time_normal"].values.tolist())
+                y_train = lineage["pca_1"].to_numpy()
+                f_star_1, sigma_1, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                y_train = lineage["pca_2"].to_numpy()
+                f_star_2, sigma_2, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
                 ax.plot(
-                    X_star,
+                    x_star,
                     f_star_1,
                     f_star_2,
                     color=colors[a],
@@ -2068,24 +2104,24 @@ def results(
             # """
 
             for a in range(final_lineage_counter):
-                Lineage = final_lineage_df.iloc[
+                lineage = final_lineage_df.iloc[
                     :, 0 + a * 3 : 3 + a * 3
                 ].dropna()  # Select first three columns as new input
 
                 # Dataframe to array data
-                X_train = np.array(Lineage["pseudo_time_normal"].values.tolist())
-                Y_train = Lineage["pca_1"].to_numpy()
-                f_star_1, sigma_1, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                x_train = np.array(lineage["pseudo_time_normal"].values.tolist())
+                y_train = lineage["pca_1"].to_numpy()
+                f_star_1, sigma_1, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                Y_train = Lineage["pca_2"].to_numpy()
-                f_star_2, sigma_2, X_star = gp_sup.Gaussian_process_algorithm(
-                    X_train, Y_train
+                y_train = lineage["pca_2"].to_numpy()
+                f_star_2, sigma_2, x_star = gp_sup.Gaussian_process_algorithm(
+                    x_train, y_train
                 )
 
-                lineage_TERMINAL_STATE = Lineage[
-                    Lineage["pseudo_time_normal"].isin(
+                lineage_terminal_state = lineage[
+                    lineage["pseudo_time_normal"].isin(
                         bagel_loop_data_terminal_state["pseudo_time_normal"].values
                     )
                 ]
@@ -2096,7 +2132,7 @@ def results(
                 ax.view_init(elev=12, azim=-100)
 
                 ax.plot(
-                    X_star,
+                    x_star,
                     f_star_1,
                     f_star_2,
                     color=colors[a],
@@ -2104,9 +2140,9 @@ def results(
                     label="PC-lineage-" + str(a + 1),
                 )
                 temp1 = ax.scatter(
-                    Lineage["pseudo_time_normal"],
-                    Lineage["pca_1"],
-                    Lineage["pca_2"],
+                    lineage["pseudo_time_normal"],
+                    lineage["pca_1"],
+                    lineage["pca_2"],
                     c="k",
                     marker="x",
                     s=2,
@@ -2114,9 +2150,9 @@ def results(
                     label=primary_label,
                 )
                 ax.scatter(
-                    lineage_TERMINAL_STATE["pseudo_time_normal"],
-                    lineage_TERMINAL_STATE["pca_1"],
-                    lineage_TERMINAL_STATE["pca_2"],
+                    lineage_terminal_state["pseudo_time_normal"],
+                    lineage_terminal_state["pca_1"],
+                    lineage_terminal_state["pca_2"],
                     c="m",
                     marker="X",
                     s=50,
