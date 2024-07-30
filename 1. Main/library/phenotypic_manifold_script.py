@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
+from sklearn.preprocessing import MinMaxScaler
 from scipy.sparse import csr_matrix, find, issparse, linalg, csgraph
 from scipy.stats import pearsonr, norm
 from sklearn.neighbors import NearestNeighbors
@@ -94,16 +95,29 @@ class PhenotypicManifold(object):
         # -----------------------------------------------------------------
         # """
 
-        secondary_df_cell_sum = secondary_df_with_missing_data.sum(axis=1)
-        main_df_cell_sum = self.main_df.sum(axis=1)
-        # secondary_df_with_missing_data_norm = (secondary_df_with_missing_data - secondary_df_with_missing_data.min()) / (secondary_df_with_missing_data.max() - secondary_df_with_missing_data.min())
+        # Scale secondary df to fit main df
+        # Scale secondary df to fit main df
+        # 1) Row count sum
+        secondary_df_cell_counts_sum = secondary_df_with_missing_data.sum(axis=1)
+        main_df_cell_count_sum = self.main_df.sum(axis=1)
 
-        # Multiply with median of Dataset 2
-        secondary_df_with_missing_data_norm = (
-            secondary_df_with_missing_data.div(secondary_df_cell_sum, axis=0)
-            .mul(np.median(main_df_cell_sum), axis=0)
-            .fillna(0)
+        # 2) Scale secondary counts to fit max min of main counts
+        scaler_max_min = MinMaxScaler(
+            feature_range=(main_df_cell_count_sum.min(), main_df_cell_count_sum.max())
         )
+        max_min_secondary_df_cell_counts_sum = scaler_max_min.fit_transform(
+            secondary_df_cell_counts_sum.values.reshape(-1, 1)
+        )
+
+        # 3) Scale
+        secondary_df_with_missing_data_norm = (
+            secondary_df_with_missing_data.div(secondary_df_cell_counts_sum, axis=0)
+            .fillna(0)
+            .mul(max_min_secondary_df_cell_counts_sum, axis=0)
+        )
+
+        # NOTE old bug:
+        # secondary_df_with_missing_data_norm = secondary_df_with_missing_data.fillna(0)
 
         # Rerange data in correct column order and MERGE with dataset 1
         secondary_df_with_missing_data_ordered = secondary_df_with_missing_data_norm[
@@ -928,6 +942,29 @@ class PhenotypicManifold(object):
                 plt.show()
                 time.sleep(1)
                 plt.close()
+
+                # Debug plot
+                # temp = phenotypic_manifold_pca_projections.copy().reset_index()
+                # temp_data1 = temp[temp["index"].str.contains("|".join(["Run"]))]
+                # temp_data2 = temp[~temp["index"].str.contains("|".join(["Run"]))]
+                # plt.scatter(
+                #     temp_data1["x"],
+                #     temp_data1["y"],
+                #     s=3,
+                #     c="r"
+                # )
+                # plt.scatter(
+                #     temp_data2["x"],
+                #     temp_data2["y"],
+                #     s=3,
+                #     c="g"
+                # )
+                # plot_label = f"{self.result_folder}/test_own.png"
+                # plt.savefig(
+                # plot_label,
+                # bbox_inches="tight",
+                # )
+                # plt.close()
 
                 continuous_manifold_flag = (
                     input("Was the manifold continuous? (Type True or False) : ")
