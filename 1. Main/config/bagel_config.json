@@ -1,13 +1,13 @@
 {
     "output": {
         "results_only": false,
-        "output_version_no": 1,
+        "output_name": "1"
     },
     "phenotypic_manifold_config": {
-        "load_old_manifold": true,
-        "main_data_file": "data/sample_scseq_data.csv",
-        "secondary_data_file": "",
-        "early_cell": "W30258",
+        "load_old_manifold": false,
+        "main_data_file": "data/marrow_sample_scseq_counts.csv.gz",
+        "secondary_data_file": "data/human_UCB.csv",
+        "early_cell": "Run5_164698952452459",
         "palantir": {
             "diffusion_components": 5,
             "_cell_min_molecules": 1000,

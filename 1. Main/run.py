@@ -52,7 +52,7 @@ def run_bagel():
     # -----------------------------------------------------------------
     # """
 
-    output_version_no = bagel_config["output"]["output_version_no"]
+    output_version_no = bagel_config["output"]["output_name"]
     bagel_object = bagel_class_script.BAGEL(
         bagel_config,
         load_old_manifold,
