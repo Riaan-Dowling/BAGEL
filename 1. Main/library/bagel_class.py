@@ -102,7 +102,7 @@ class BAGEL(object):
         df_in = df_in.loc[:, df_in.columns[df_in.sum() > 0]]  # colums  -> genes
         return df_in
 
-    def read_from_csv(self, csv_path, delimiter=","):
+    def read_from_csv(self, csv_path, clean_up_data_flag, delimiter=","):
         """
         read_from_csv
         """
@@ -111,7 +111,10 @@ class BAGEL(object):
             df_in = pd.read_csv(
                 f"{self.parent_dir}/{csv_path}", sep=delimiter, index_col=[0]
             )  # obtain data frame
-            clean_df = self.palantir_clean_up_cell_data_files(df_in)
+            if clean_up_data_flag is True:
+                clean_df = self.palantir_clean_up_cell_data_files(df_in)
+            else:
+                clean_df = df_in
         else:
             print(
                 "The input data set does not exist. Please ensure that the correct file name is specified (Hint: Confirm spelling)."
@@ -128,13 +131,19 @@ class BAGEL(object):
             if self.main_data_file != self.secondary_data_file:
                 print("Input: Two datasets.")
                 self.total_datasets = 2
-                self.main_df = self.read_from_csv(self.main_data_file)
-                self.secondary_df = self.read_from_csv(self.secondary_data_file)
+                clean_up_data_flag = True
+                self.main_df = self.read_from_csv(
+                    self.main_data_file, clean_up_data_flag
+                )
+                self.secondary_df = self.read_from_csv(
+                    self.secondary_data_file, clean_up_data_flag
+                )
 
         else:
             print("Input: One dataset.")
             # Import MAIN data set
-            self.main_df = self.read_from_csv(self.main_data_file)
+            clean_up_data_flag = True
+            self.main_df = self.read_from_csv(self.main_data_file, clean_up_data_flag)
 
     def load_phenotypic_manifold(self):
         """
