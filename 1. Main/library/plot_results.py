@@ -115,6 +115,8 @@ def results(
     gp_only_plot,
     gp_per_lineage_plot,
     result_folder,
+    main_cell_index_prefix,
+    secondary_cell_index_prefix,
 ):
     """
     two_dimension_manifold_plot = False #Two dimensional phenotypic manifold plot
@@ -127,6 +129,8 @@ def results(
     gp_with_data_plot = False # Gaussian process with data plot
     gp_only_plot = False # Gaussian process only plot
     gp_per_lineage_plot = True # Plot one detected lineage with Gaussian process at a time
+    main_cell_index_prefix
+    secondary_cell_index_prefix
     """
     # Colours of graphs
     colors = ["b", "g", "gold", "sienna", "silver"]
@@ -182,16 +186,23 @@ def results(
         # Parameters
         # -----------------------------------------------------------------
         # """
-        total_secondary_cells_used = joblib.load(
-            f"{result_folder}/total_secondary_cells_used.pkl"
-        )
-        total_length = len(bagel_loop_data.index)
-        main_length = total_length - total_secondary_cells_used
-        main_data = bagel_loop_data.head(main_length)
-        secondary_data = bagel_loop_data.tail(total_secondary_cells_used)
+        # total_secondary_cells_used = joblib.load(
+        #     f"{result_folder}/total_secondary_cells_used.pkl"
+        # )
+        # total_length = len(bagel_loop_data.index)
+        # main_length = total_length - total_secondary_cells_used
+        # main_data = bagel_loop_data.head(main_length)
+        # secondary_data = bagel_loop_data.tail(total_secondary_cells_used)
 
-        main_bagel_loop_data = bagel_loop_data.head(main_length)
-        secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
+        # main_bagel_loop_data = bagel_loop_data.head(main_length)
+        # secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
+
+        main_bagel_loop_data = bagel_loop_data[
+            bagel_loop_data["index"].str.contains("|".join(["Run"]))
+        ]
+        secondary_bagel_loop_data = bagel_loop_data[
+            bagel_loop_data["index"].str.contains("|".join(["Run"]))
+        ]
 
         if two_dimension_manifold_plot is True:
             # """
@@ -845,20 +856,6 @@ def results(
                     )
                     ax.add_artist(line)
 
-                    # Remove used arrows
-                    frenet_frame_window_variance_vector.columns = range(
-                        frenet_frame_window_variance_vector.shape[1]
-                    )  # Rename column names
-                    frenet_frame_window_variance_vector = (
-                        frenet_frame_window_variance_vector.drop([0], axis=1)
-                    )  # Remove new pseudo data lineage from data
-
-                    frenet_frame_window_mean.columns = range(
-                        frenet_frame_window_mean.shape[1]
-                    )  # Rename column names
-                    frenet_frame_window_mean = frenet_frame_window_mean.drop(
-                        [0], axis=1
-                    )  # Remove new pseudo data lineage from data
             ax.scatter(
                 bagel_loop_data_terminal_state["pseudo_time_normal"],
                 bagel_loop_data_terminal_state["pca_1"],

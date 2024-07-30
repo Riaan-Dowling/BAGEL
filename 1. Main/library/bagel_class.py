@@ -29,6 +29,8 @@ class BAGEL(object):
         secondary_data_file,
         early_cell,
         output_version_no,
+        main_cell_index_prefix,
+        secondary_cell_index_prefix,
     ):
         self.bagel_config = bagel_config
         self.load_old_manifold = load_old_manifold
@@ -36,6 +38,8 @@ class BAGEL(object):
         self.main_data_file = main_data_file
         self.secondary_data_file = secondary_data_file
         self.early_cell = early_cell
+        self.main_cell_index_prefix = main_cell_index_prefix
+        self.secondary_cell_index_prefix = secondary_cell_index_prefix
 
         self.output_version_no = output_version_no
         self.total_datasets = 1
@@ -1139,6 +1143,8 @@ class BAGEL(object):
             self.bagel_config["plot_config"]["gp_only_plot"],
             self.bagel_config["plot_config"]["gp_per_lineage_plot"],
             self.result_folder,
+            self.main_cell_index_prefix,
+            self.secondary_cell_index_prefix,
         )
 
 

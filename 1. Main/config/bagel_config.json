@@ -1,12 +1,20 @@
 {
     "output": {
-        "results_only": false,
-        "output_name": "1"
+        "results_only": true,
+        "output_name": "2"
     },
     "phenotypic_manifold_config": {
-        "load_old_manifold": false,
-        "main_data_file": "data/marrow_sample_scseq_counts.csv.gz",
-        "secondary_data_file": "data/human_UCB.csv",
+        "load_old_manifold": true,
+        "data_cofig": {
+            "main_data_config": {
+                "main_data_file": "data/marrow_sample_scseq_counts.csv.gz",
+                "cell_index_prefix": "Run"
+            },
+            "secondary_data_config": {
+                "secondary_data_file": "data/human_UCB.csv",
+                "cell_index_prefix": "E"
+            }
+        },
         "early_cell": "Run5_164698952452459",
         "palantir": {
             "diffusion_components": 5,
