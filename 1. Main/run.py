@@ -40,10 +40,20 @@ def run_bagel():
     # Input
     # -----------------------------------------------------------------
     # """
-    main_data_file = bagel_config["phenotypic_manifold_config"]["main_data_file"]
-    secondary_data_file = bagel_config["phenotypic_manifold_config"][
-        "secondary_data_file"
-    ]
+    main_data_file = bagel_config["phenotypic_manifold_config"]["data_cofig"][
+        "main_data_config"
+    ]["main_data_file"]
+    main_cell_index_prefix = bagel_config["phenotypic_manifold_config"]["data_cofig"][
+        "main_data_config"
+    ]["cell_index_prefix"]
+
+    secondary_data_file = bagel_config["phenotypic_manifold_config"]["data_cofig"][
+        "secondary_data_config"
+    ]["secondary_data_file"]
+    secondary_cell_index_prefix = bagel_config["phenotypic_manifold_config"][
+        "data_cofig"
+    ]["secondary_data_config"]["cell_index_prefix"]
+
     early_cell = bagel_config["phenotypic_manifold_config"]["early_cell"]
 
     # """
@@ -61,6 +71,8 @@ def run_bagel():
         secondary_data_file,
         early_cell,
         output_version_no,
+        main_cell_index_prefix,
+        secondary_cell_index_prefix,
     )
     bagel_object.create_processing_dir()
     bagel_object.load_datasets()
