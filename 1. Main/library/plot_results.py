@@ -186,22 +186,22 @@ def results(
         # Parameters
         # -----------------------------------------------------------------
         # """
-        # total_secondary_cells_used = joblib.load(
-        #     f"{result_folder}/total_secondary_cells_used.pkl"
-        # )
+        total_secondary_cells_used = joblib.load(
+            f"{result_folder}/total_secondary_cells_used.pkl"
+        )
         # total_length = len(bagel_loop_data.index)
         # main_length = total_length - total_secondary_cells_used
-        # main_data = bagel_loop_data.head(main_length)
-        # secondary_data = bagel_loop_data.tail(total_secondary_cells_used)
+        # main_bagel_loop_data = bagel_loop_data.head(main_length)
+        # secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
 
         # main_bagel_loop_data = bagel_loop_data.head(main_length)
         # secondary_bagel_loop_data = bagel_loop_data.tail(total_secondary_cells_used)
 
         main_bagel_loop_data = bagel_loop_data[
-            bagel_loop_data["index"].str.contains("|".join(["Run"]))
+            bagel_loop_data.index.str.contains("|".join([main_cell_index_prefix]))
         ]
         secondary_bagel_loop_data = bagel_loop_data[
-            bagel_loop_data["index"].str.contains("|".join(["Run"]))
+            bagel_loop_data.index.str.contains("|".join([secondary_cell_index_prefix]))
         ]
 
         if two_dimension_manifold_plot is True:
@@ -218,16 +218,16 @@ def results(
                 fig = plt.figure()
                 ax = fig.add_subplot(111)
                 ax.scatter(
-                    main_data["pca_1"],
-                    main_data["pca_2"],
+                    main_bagel_loop_data["pca_1"],
+                    main_bagel_loop_data["pca_2"],
                     marker="o",
                     s=10,
                     c="r",
                     label=primary_label,
                 )
                 ax.scatter(
-                    secondary_data["pca_1"],
-                    secondary_data["pca_2"],
+                    secondary_bagel_loop_data["pca_1"],
+                    secondary_bagel_loop_data["pca_2"],
                     marker="D",
                     s=10,
                     c="k",
@@ -274,16 +274,16 @@ def results(
                 fig = plt.figure()
                 ax = fig.add_subplot(111)
                 ax.scatter(
-                    main_data["pca_1"],
-                    main_data["pca_2"],
+                    main_bagel_loop_data["pca_1"],
+                    main_bagel_loop_data["pca_2"],
                     marker="o",
                     s=10,
                     c="r",
                     label=primary_label,
                 )
                 ax.scatter(
-                    secondary_data["pca_1"],
-                    secondary_data["pca_2"],
+                    secondary_bagel_loop_data["pca_1"],
+                    secondary_bagel_loop_data["pca_2"],
                     marker="D",
                     s=10,
                     c="k",
@@ -327,23 +327,21 @@ def results(
             fig = plt.figure()
             ax = fig.add_subplot(111)
             img = ax.scatter(
-                main_data["pca_1"],
-                main_data["pca_2"],
+                main_bagel_loop_data["pca_1"],
+                main_bagel_loop_data["pca_2"],
                 s=5,
                 marker="o",
                 cmap=matplotlib.cm.plasma,
-                c=bagel_loop_data["pseudo_time_normal"].head(main_length),
+                c=main_bagel_loop_data["pseudo_time_normal"],
                 label=primary_label,
             )
             ax.scatter(
-                secondary_data["pca_1"],
-                secondary_data["pca_2"],
+                secondary_bagel_loop_data["pca_1"],
+                secondary_bagel_loop_data["pca_2"],
                 s=20,
                 marker="D",
                 cmap=matplotlib.cm.plasma,
-                c=bagel_loop_data["pseudo_time_normal"].tail(
-                    total_secondary_cells_used
-                ),
+                c=secondary_bagel_loop_data["pseudo_time_normal"],
                 label=secondary_label,
             )
 
