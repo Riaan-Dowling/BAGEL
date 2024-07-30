@@ -346,7 +346,7 @@ def gibbs_sampler_2_gaussians(
             # """
             if total_searches >= 1:
                 if model_2_df_g1_sum > model_2_df_g2_sum:
-                    model_2_df_g1 = df[model_2_multinomial_samples["G1"] is 1]
+                    model_2_df_g1 = df[model_2_multinomial_samples["G1"] == 1]
                     model_2_df_g2 = df.sample(n=2)
 
                     model_2_df_g1_sum = model_2_multinomial_samples["G1"].sum()
@@ -370,7 +370,7 @@ def gibbs_sampler_2_gaussians(
 
                 else:
                     model_2_df_g1 = df.sample(n=2)
-                    model_2_df_g2 = df[model_2_multinomial_samples["G2"] is 1]
+                    model_2_df_g2 = df[model_2_multinomial_samples["G2"] == 1]
 
                     model_2_df_g1_sum = 2
                     model_2_df_g2_sum = model_2_multinomial_samples["G2"].sum()
