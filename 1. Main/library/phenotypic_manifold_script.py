@@ -157,7 +157,7 @@ class PhenotypicManifold(object):
 
             # Select PCA
             pca_projections = self.run_pca(log_norm_df, n_components=n_components_pca)
-            pca_projections = pd.DataFrame(pca_projections, index=norm_df.index)
+            pca_projections = pd.DataFrame(pca_projections, index=log_norm_df.index)
 
             computed_pca_1 = pca_projections.tail(1)
 
@@ -198,11 +198,11 @@ class PhenotypicManifold(object):
         ).fillna(0)
         # Select PCA
         print("(2/4) - PCA")
-        pca_projections_main_df = self.run_pca(
+        pca_projections_main = self.run_pca(
             log_norm_main_df, n_components=n_components_pca
         )
         pca_projections_main_df = pd.DataFrame(
-            pca_projections_main_df, index=norm_df_main.index
+            pca_projections_main, index=norm_df_main.index
         )
 
         # obtain indexes
@@ -835,10 +835,10 @@ class PhenotypicManifold(object):
             ]["_cell_min_molecules"]
             _genes_min_cells = self.bagel_config["phenotypic_manifold_config"][
                 "palantir"
-            ]["_cell_min_molecules"]
+            ]["_genes_min_cells"]
             n_components_pca = self.bagel_config["phenotypic_manifold_config"][
                 "palantir"
-            ]["_cell_min_molecules"]
+            ]["n_components_pca"]
 
             print("Compute manifold.")
 
