@@ -313,10 +313,10 @@ def gibbs_sampler_2_gaussians(
             model_2_multinomial_samples.columns = ["G1", "G2"]
 
             # Assign sampled data to Guassian
-            model_2_df_g1 = df[model_2_multinomial_samples["G1"] is 1]
+            model_2_df_g1 = df[model_2_multinomial_samples["G1"] == 1]
             # model_2_df_g1 = np.nan_to_num(model_2_df_g1)
 
-            model_2_df_g2 = df[model_2_multinomial_samples["G2"] is 1]
+            model_2_df_g2 = df[model_2_multinomial_samples["G2"] == 1]
             # model_2_df_g1 = np.nan_to_num(model_2_df_g1)
 
             model_2_df_g1_sum = model_2_multinomial_samples["G1"].sum()
