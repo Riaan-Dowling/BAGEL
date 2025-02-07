@@ -899,11 +899,14 @@ class PhenotypicManifold(object):
 
             # Loop until continuous manifold is obtained
             continuous_manifold_flag = False
+            phenotypic_manifold_pca_projections_main = (
+                phenotypic_manifold_pca_projections.copy()
+            )
             while continuous_manifold_flag is False:
 
                 print("(3/4) Diffusion map.)")
                 dm_res = self.palantir_run_diffusion_maps(
-                    phenotypic_manifold_pca_projections,
+                    phenotypic_manifold_pca_projections_main,
                     n_components=self.diffusion_components,
                 )
 
