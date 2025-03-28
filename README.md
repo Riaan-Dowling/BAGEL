@@ -2,7 +2,7 @@
 
 BAGEL can be run by:
 - 1) Creating a virtual environment with the requirements.txt document
-- 2) Opening the 1. Algorithm directory and running the Algorithm.py file. This will produce BAGELS mouse bone marrow dataset results. To change the output of BAGEL / how the modelling is done the following parameters can be set:
+- 2) Opening the 1. Main directory and running the run.py file. This will produce BAGELS mouse bone marrow dataset results. To change the output of BAGEL / how the modelling is done the following parameters can be set:
 
 # Model parameters:
 ## 1.) Algorithm/Algorithm.py
@@ -43,6 +43,6 @@ BAGEL can be run by:
 - window_interval = 150  # How many cells in window  (window_interval)
 
 ### Gibbs sampler parameters
-- itterations = 2000  # Total itterations
-- burn_period = 500  # Total itterations for "burn in period"
+- iterations = 2000  # Total iterations
+- burn_period = 500  # Total iterations for "burn in period"
 
