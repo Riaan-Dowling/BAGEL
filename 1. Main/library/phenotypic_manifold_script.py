@@ -925,7 +925,7 @@ class PhenotypicManifold(object):
             total_manifolds_created = 0
             while continuous_manifold_flag is False:
 
-                print("(3/4) Diffusion map.)")
+                print("(3/4) Diffusion map.")
                 dm_res = self.palantir_run_diffusion_maps(
                     phenotypic_manifold_pca_projections_main,
                     n_components=self.diffusion_components,
