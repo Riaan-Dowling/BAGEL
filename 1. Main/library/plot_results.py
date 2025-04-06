@@ -1,5 +1,5 @@
 """
-plotting
+Plot BAGEL's results
 """
 
 import pandas as pd
