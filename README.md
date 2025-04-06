@@ -1,8 +1,8 @@
 # BAGEL: Bayesian Analysis of Gene Expression Lineages
 
 BAGEL can be run by:
-- 1) Creating a virtual environment with the requirements.txt document
-- 2) Opening the 1. Main directory and running the run.py file. This will produce BAGELS mouse bone marrow dataset results. To change the output of BAGEL / how the modelling is done the following parameters can be set:
+- 1) First creating a python environment with the provided requirements.txt file.
+- 2) Next, BAGEL can be run by opening the 1. Main directory and running the run.py file. This run will produce BAGEL's human bone marrow dataset results. Note: BAGEL can be controlled by adjusting it's parameters in the config/bagel_config.json file as seen below.
 
 # Model parameters:
 ## 1.) Algorithm/Algorithm.py
