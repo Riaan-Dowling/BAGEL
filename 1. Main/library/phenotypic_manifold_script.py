@@ -30,6 +30,7 @@ class PhenotypicManifold(object):
 
     def __init__(
         self,
+        interactive_mode_config,
         total_datasets,
         main_df,
         secondary_df,
@@ -38,6 +39,7 @@ class PhenotypicManifold(object):
         bagel_config,
         load_old_manifold,
     ) -> None:
+        self.interactive_mode_config = interactive_mode_config
         self.total_datasets = total_datasets
         self.main_df = main_df
         self.secondary_df = secondary_df
@@ -897,11 +899,30 @@ class PhenotypicManifold(object):
                 compress=3,
             )
 
+            # Load interacrtive mode config
+            turn_interactive_mode_on_flag = self.interactive_mode_config[
+                "turn_interactive_mode_on_flag"
+            ]
+            if turn_interactive_mode_on_flag is True:
+                # Assume infinite
+                total_simulations_before_assuming_continuous_manifold = 100000000000
+            else:
+                total_simulations_before_assuming_continuous_manifold = (
+                    self.interactive_mode_config["interactive_mode_on_config"][
+                        "total_simulations_before_assuming_continuous_manifold"
+                    ]
+                )
+
             # Loop until continuous manifold is obtained
+            # or total_simulations_before_assuming_continuous_manifold
+            # is reached.
+
             continuous_manifold_flag = False
             phenotypic_manifold_pca_projections_main = (
                 phenotypic_manifold_pca_projections.copy()
             )
+
+            total_manifolds_created = 0
             while continuous_manifold_flag is False:
 
                 print("(3/4) Diffusion map.)")
@@ -926,54 +947,70 @@ class PhenotypicManifold(object):
 
                 # print("magic_imputation (5/5)")
                 # imp_df = dimension_reduction.run_magic_imputation(norm_df, dm_res)
-                if self.total_secondary_cells_used == 0:
-                    j_1 = phenotypic_manifold_pca_projections.tail(
-                        self.total_secondary_cells_used
+
+                # Only ask for human input if interactive mode is true
+                if turn_interactive_mode_on_flag is True:
+                    if self.total_secondary_cells_used == 0:
+                        j_1 = phenotypic_manifold_pca_projections.tail(
+                            self.total_secondary_cells_used
+                        )
+                        plt.scatter(j_1["x"], j_1["y"], s=20, c="k")
+                    sizes = log_norm_bagel_df.sum(
+                        axis=1
+                    )  # Define the expressions per cell
+                    plt.scatter(
+                        phenotypic_manifold_pca_projections["x"],
+                        phenotypic_manifold_pca_projections["y"],
+                        s=3,
+                        c=sizes,
+                        cmap=matplotlib.cm.Spectral_r,
                     )
-                    plt.scatter(j_1["x"], j_1["y"], s=20, c="k")
-                sizes = log_norm_bagel_df.sum(axis=1)  # Define the expressions per cell
-                plt.scatter(
-                    phenotypic_manifold_pca_projections["x"],
-                    phenotypic_manifold_pca_projections["y"],
-                    s=3,
-                    c=sizes,
-                    cmap=matplotlib.cm.Spectral_r,
-                )
-                plt.axis("off")
-                plt.title("Phenotypic manifold")
-                plt.colorbar()
-                plt.show()
-                time.sleep(1)
-                plt.close()
+                    plt.axis("off")
+                    plt.title("Phenotypic manifold")
+                    plt.colorbar()
+                    plt.show()
+                    time.sleep(1)
+                    plt.close()
 
-                # Debug plot
-                # temp = phenotypic_manifold_pca_projections.copy().reset_index()
-                # temp_data1 = temp[temp["index"].str.contains("|".join(["Run"]))]
-                # temp_data2 = temp[~temp["index"].str.contains("|".join(["Run"]))]
-                # plt.scatter(
-                #     temp_data1["x"],
-                #     temp_data1["y"],
-                #     s=3,
-                #     c="r"
-                # )
-                # plt.scatter(
-                #     temp_data2["x"],
-                #     temp_data2["y"],
-                #     s=3,
-                #     c="g"
-                # )
-                # plot_label = f"{self.result_folder}/test_own.png"
-                # plt.savefig(
-                # plot_label,
-                # bbox_inches="tight",
-                # )
-                # plt.close()
+                    continuous_manifold_flag = (
+                        input("Was the manifold continuous? (Type True or False) : ")
+                        .strip()
+                        .lower()
+                    )
+                else:
+                    if (
+                        total_manifolds_created
+                        == total_simulations_before_assuming_continuous_manifold
+                    ):
+                        # Mock user input
+                        continuous_manifold_flag = "true"
+                    else:
+                        # Mock user input
+                        continuous_manifold_flag = "false"
+                        print("- Retry manifold")
 
-                continuous_manifold_flag = (
-                    input("Was the manifold continuous? (Type True or False) : ")
-                    .strip()
-                    .lower()
-                )
+                    # Debug plot
+                    # temp = phenotypic_manifold_pca_projections.copy().reset_index()
+                    # temp_data1 = temp[temp["index"].str.contains("|".join(["Run"]))]
+                    # temp_data2 = temp[~temp["index"].str.contains("|".join(["Run"]))]
+                    # plt.scatter(
+                    #     temp_data1["x"],
+                    #     temp_data1["y"],
+                    #     s=3,
+                    #     c="r"
+                    # )
+                    # plt.scatter(
+                    #     temp_data2["x"],
+                    #     temp_data2["y"],
+                    #     s=3,
+                    #     c="g"
+                    # )
+                    # plot_label = f"{self.result_folder}/test_own.png"
+                    # plt.savefig(
+                    # plot_label,
+                    # bbox_inches="tight",
+                    # )
+                    # plt.close()
 
                 while True:
                     if continuous_manifold_flag == "true":
@@ -991,6 +1028,9 @@ class PhenotypicManifold(object):
                             .strip()
                             .lower()
                         )
+
+                # Increment the total manifolds created.
+                total_manifolds_created = total_manifolds_created + 1
 
             # ################################################
             # Determine the boundary cell closest to user defined early cell

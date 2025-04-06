@@ -1,18 +1,24 @@
 {
+    "interactive_mode_config": {
+        "turn_interactive_mode_on_flag": false,
+        "interactive_mode_on_config": {
+            "total_simulations_before_assuming_continuous_manifold": 3
+        }
+    },
     "output": {
-        "results_only": true,
-        "output_name": "2"
+        "results_only": false,
+        "output_name": "1"
     },
     "phenotypic_manifold_config": {
-        "load_old_manifold": true,
+        "load_old_manifold": false,
         "data_cofig": {
             "main_data_config": {
                 "main_data_file": "data/marrow_sample_scseq_counts.csv.gz",
                 "cell_index_prefix": "Run"
             },
             "secondary_data_config": {
-                "secondary_data_file": "data/human_UCB.csv",
-                "cell_index_prefix": "E"
+                "secondary_data_file": "",
+                "cell_index_prefix": ""
             }
         },
         "early_cell": "Run5_164698952452459",
@@ -27,15 +33,15 @@
     },
     "bagel_loop_config": {
         "load_old_bagel_loop": false,
-        "window_interval_extra_samples": 200,
-        "window_interval_actual_samples": 150,
+        "window_interval_extra_samples": 100,
+        "window_interval_actual_samples": 50,
         "gibbs_samples": 2000,
         "gibbs_burn_in_period": 500,
         "initialize_cells_offset": 0
     },
     "plot_config": {
         "primary_label": "Human bone marrow",
-        "secondary_label": "",
+        "secondary_label": "Human UCB",
         "output_prefix_label": "human_bone_marrow_and_human_UCB",
         "gene_list": [
             "CD34",

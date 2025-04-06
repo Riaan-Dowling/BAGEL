@@ -25,6 +25,13 @@ def run_bagel():
 
     # """
     # -----------------------------------------------------------------
+    # Interactive mode - determine if user input is required or not.
+    # -----------------------------------------------------------------
+    # """
+    interactive_mode_config = bagel_config["interactive_mode_config"]
+
+    # """
+    # -----------------------------------------------------------------
     # BAGEL options
     # -----------------------------------------------------------------
     # """
@@ -64,6 +71,7 @@ def run_bagel():
 
     output_version_no = bagel_config["output"]["output_name"]
     bagel_object = bagel_class_script.BAGEL(
+        interactive_mode_config,
         bagel_config,
         load_old_manifold,
         results_only,

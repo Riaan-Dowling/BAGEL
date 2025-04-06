@@ -22,6 +22,7 @@ class BAGEL(object):
 
     def __init__(
         self,
+        interactive_mode_config,
         bagel_config,
         load_old_manifold,
         results_only,
@@ -32,6 +33,7 @@ class BAGEL(object):
         main_cell_index_prefix,
         secondary_cell_index_prefix,
     ):
+        self.interactive_mode_config = interactive_mode_config
         self.bagel_config = bagel_config
         self.load_old_manifold = load_old_manifold
         self.results_only = results_only
@@ -154,6 +156,7 @@ class BAGEL(object):
         load_phenotypic_manifold
         """
         phenotypic_manifold_object = pheno_sup.PhenotypicManifold(
+            self.interactive_mode_config,
             self.total_datasets,
             self.main_df,
             self.secondary_df,
