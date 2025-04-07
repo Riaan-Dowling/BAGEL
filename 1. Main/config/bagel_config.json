@@ -7,13 +7,13 @@
     },
     "output": {
         "results_only": false,
-        "output_name": "1"
+        "output_name": "0"
     },
     "phenotypic_manifold_config": {
         "load_old_manifold": false,
         "data_cofig": {
             "main_data_config": {
-                "main_data_file": "data/marrow_sample_scseq_counts.csv.gz",
+                "main_data_file": "marrow_sample_scseq_counts.csv.gz",
                 "cell_index_prefix": "Run"
             },
             "secondary_data_config": {

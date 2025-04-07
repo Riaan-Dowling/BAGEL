@@ -112,10 +112,10 @@ class BAGEL(object):
         """
         read_from_csv
         """
-
-        if os.path.exists(f"{self.parent_dir}/{csv_path}"):
+        data_dir = self.parent_dir.replace("1. Main", "2. Data sets")
+        if os.path.exists(f"{data_dir}/{csv_path}"):
             df_in = pd.read_csv(
-                f"{self.parent_dir}/{csv_path}", sep=delimiter, index_col=[0]
+                f"{data_dir}/{csv_path}", sep=delimiter, index_col=[0]
             )  # obtain data frame
             if clean_up_data_flag is True:
                 clean_df = self.palantir_clean_up_cell_data_files(df_in)
