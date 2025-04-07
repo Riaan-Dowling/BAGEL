@@ -23,7 +23,7 @@ BAGEL can be run by opening the *1. Main* directory and running the *run.py* fil
         - secondary_data_file: Path to secondary data file.
         - cell_index_prefix: Prefix used to extract cell index from secondary data file e.g. Run
 - early_cell : User define early cell of *MAIN* dataset.
-- palantir : Palantir algorithim parameters. NOTE, the default settings correspond to the 2019 Paper.
+- palantir : Palantir algorithim parameters. NOTE, the default settings correspond to - Setty, M. et al. Characterization of cell fate probabilities in single-cell data with palantir. Nat. biotechnology 37, 451–465 (2019).
     - diffusion_components
     - _cell_min_molecules 
     - _genes_min_cells
@@ -54,6 +54,13 @@ BAGEL can be run by opening the *1. Main* directory and running the *run.py* fil
 - gp_with_data_plot : True to create GP with data plots.
 - gp_only_plot : True to create GP only plots.
 - gp_per_lineage_plot : True to create GP per lineage plots.
+
+# 2. Data sets
+Uploaded datasets
+- human_UCB.csv : Umbilical cord blood (UCB) data.
+- marrow_sample_scseq_counts.csv : Human bone marrow dataset: publicly available (Setty, M. et al. Characterization of cell fate probabilities in single-cell data with palantir. Nat. biotechnology 37, 451–465 (2019)).
+- sample_scseq_data.csv : Mouse bone marrow dataset: publicly available (Paul, F. et al. Transcriptional heterogeneity and lineage commitment in myeloid progenitors. Cell 163, 1663–1677 (2015)).
+
 
 # 3. Results - Figures
 This folder contains all of the figures used in the paper.
