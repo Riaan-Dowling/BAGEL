@@ -33,8 +33,8 @@
     },
     "bagel_loop_config": {
         "load_old_bagel_loop": false,
-        "window_interval_extra_samples": 100,
-        "window_interval_actual_samples": 50,
+        "window_interval_extra_samples": 200,
+        "window_interval_actual_samples": 150,
         "gibbs_samples": 2000,
         "gibbs_burn_in_period": 500,
         "initialize_cells_offset": 0
