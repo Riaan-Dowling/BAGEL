@@ -1,27 +1,21 @@
 {
-    "interactive_mode_config": {
-        "turn_interactive_mode_on_flag": false,
-        "interactive_mode_on_config": {
-            "total_simulations_before_assuming_continuous_manifold": 3
-        }
-    },
     "output": {
-        "results_only": false,
+        "results_only": true,
         "output_name": "0"
     },
     "phenotypic_manifold_config": {
         "load_old_manifold": false,
         "data_cofig": {
             "main_data_config": {
-                "main_data_file": "marrow_sample_scseq_counts.csv.gz",
-                "cell_index_prefix": "Run"
+                "main_data_file": "sample_scseq_data.csv",
+                "cell_index_prefix": "W"
             },
             "secondary_data_config": {
                 "secondary_data_file": "",
                 "cell_index_prefix": ""
             }
         },
-        "early_cell": "Run5_164698952452459",
+        "early_cell": "W30258",
         "palantir": {
             "diffusion_components": 5,
             "_cell_min_molecules": 1000,
@@ -58,6 +52,10 @@
         "gp_with_data_plot": true,
         "gp_only_plot": true,
         "gp_per_lineage_plot": true
+    },
+    "flip_plot_orientation": {
+        "flip_x": true,
+        "flip_y": true
     },
     "EXAMPLE_GUIDE": {
         "1_human_bone_marrow_example_phenotypic_manifold_config": {
@@ -147,6 +145,12 @@
                 "n_waypoints": 500,
                 "pseudotime_knn": 30
             }
+        }
+    },
+    "interactive_mode_config": {
+        "turn_interactive_mode_on_flag": false,
+        "interactive_mode_on_config": {
+            "total_simulations_before_assuming_continuous_manifold": 3
         }
     }
 }

@@ -118,6 +118,7 @@ def results(
     result_folder,
     main_cell_index_prefix,
     secondary_cell_index_prefix,
+    flip_plot_orientation=None,
 ):
     """
     two_dimension_manifold_plot = False #Two dimensional phenotypic manifold plot
@@ -163,6 +164,28 @@ def results(
     start_cell = determine_start_cell(
         bagel_loop_data, terminal_states, early_cell, dm_boundaries
     )
+
+    # -----------------------------------------------------------------
+    # Orientation: flip plot axes
+    # -----------------------------------------------------------------
+    if flip_plot_orientation is None:
+        flip_plot_orientation = {"flip_x": False, "flip_y": False}
+    if flip_plot_orientation["flip_x"]:
+        bagel_loop_data["pca_1"] *= -1
+        bagel_loop_data_terminal_state["pca_1"] *= -1
+        start_cell["pca_1"] *= -1
+        pca_1_mask = final_lineage_df.columns == "pca_1"
+        final_lineage_df.iloc[:, pca_1_mask] *= -1
+        for col in bifurcation_data.columns[bifurcation_data.columns.str.contains("pca_1")]:
+            bifurcation_data[col] *= -1
+    if flip_plot_orientation["flip_y"]:
+        bagel_loop_data["pca_2"] *= -1
+        bagel_loop_data_terminal_state["pca_2"] *= -1
+        start_cell["pca_2"] *= -1
+        pca_2_mask = final_lineage_df.columns == "pca_2"
+        final_lineage_df.iloc[:, pca_2_mask] *= -1
+        for col in bifurcation_data.columns[bifurcation_data.columns.str.contains("pca_2")]:
+            bifurcation_data[col] *= -1
 
     two_data_set_flag = joblib.load(f"{result_folder}/two_data_set_flag.pkl")
     # """
@@ -800,6 +823,14 @@ def results(
                 frenet_frame_window_counter = joblib.load(
                     f"{result_folder}/frenet_frame_window_counter" + str(t) + ".pkl"
                 )
+
+                if flip_plot_orientation["flip_x"]:
+                    frenet_frame_window_mean["pca_1"] *= -1
+                    frenet_frame_window_variance_vector["pca_1"] *= -1
+                if flip_plot_orientation["flip_y"]:
+                    frenet_frame_window_mean["pca_2"] *= -1
+                    frenet_frame_window_variance_vector["pca_2"] *= -1
+
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
                 # for variance_vector,mean_window_bagel_loop_data in range(frenet_frame_window_counter):
@@ -1825,6 +1856,14 @@ def results(
                 frenet_frame_window_counter = joblib.load(
                     f"{result_folder}/frenet_frame_window_counter" + str(t) + ".pkl"
                 )
+
+                if flip_plot_orientation["flip_x"]:
+                    frenet_frame_window_mean["pca_1"] *= -1
+                    frenet_frame_window_variance_vector["pca_1"] *= -1
+                if flip_plot_orientation["flip_y"]:
+                    frenet_frame_window_mean["pca_2"] *= -1
+                    frenet_frame_window_variance_vector["pca_2"] *= -1
+
                 # Frenet Frame
                 # colors = iter(cm.rainbow(np.linspace(0.5, 1, final_lineage_counter)))
                 # for variance_vector,mean_window_bagel_loop_data in range(frenet_frame_window_counter):

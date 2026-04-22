@@ -1194,6 +1194,7 @@ class BAGEL(object):
             self.result_folder,
             self.main_cell_index_prefix,
             self.secondary_cell_index_prefix,
+            self.bagel_config["flip_plot_orientation"],
         )
 
 
