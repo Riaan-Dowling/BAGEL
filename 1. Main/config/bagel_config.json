@@ -58,5 +58,95 @@
         "gp_with_data_plot": true,
         "gp_only_plot": true,
         "gp_per_lineage_plot": true
+    },
+    "EXAMPLE_GUIDE": {
+        "1_human_bone_marrow_example_phenotypic_manifold_config": {
+            "load_old_manifold": false,
+            "data_cofig": {
+                "main_data_config": {
+                    "main_data_file": "marrow_sample_scseq_counts.csv.gz",
+                    "cell_index_prefix": "Run"
+                },
+                "secondary_data_config": {
+                    "secondary_data_file": "",
+                    "cell_index_prefix": ""
+                }
+            },
+            "early_cell": "Run5_164698952452459",
+            "palantir": {
+                "diffusion_components": 5,
+                "_cell_min_molecules": 1000,
+                "_genes_min_cells": 10,
+                "n_components_pca": 300,
+                "n_waypoints": 500,
+                "pseudotime_knn": 30
+            }
+        },
+        "2_human_bone_marrow_with_human_ucb_example_phenotypic_manifold_config": {
+            "load_old_manifold": false,
+            "data_cofig": {
+                "main_data_config": {
+                    "main_data_file": "marrow_sample_scseq_counts.csv.gz",
+                    "cell_index_prefix": "Run"
+                },
+                "secondary_data_config": {
+                    "secondary_data_file": "human_UCB.csv",
+                    "cell_index_prefix": ""
+                }
+            },
+            "early_cell": "Run5_164698952452459",
+            "palantir": {
+                "diffusion_components": 5,
+                "_cell_min_molecules": 1000,
+                "_genes_min_cells": 10,
+                "n_components_pca": 300,
+                "n_waypoints": 500,
+                "pseudotime_knn": 30
+            }
+        },
+        "3_mouse_bone_marrow_example_phenotypic_manifold_config": {
+            "load_old_manifold": false,
+            "data_cofig": {
+                "main_data_config": {
+                    "main_data_file": "sample_scseq_data.csv",
+                    "cell_index_prefix": "W"
+                },
+                "secondary_data_config": {
+                    "secondary_data_file": "",
+                    "cell_index_prefix": ""
+                }
+            },
+            "early_cell": "W30258",
+            "palantir": {
+                "diffusion_components": 5,
+                "_cell_min_molecules": 1000,
+                "_genes_min_cells": 10,
+                "n_components_pca": 300,
+                "n_waypoints": 500,
+                "pseudotime_knn": 30
+            }
+        },
+        "4_mouse_bone_marrow_with_human_ucb_example_phenotypic_manifold_config": {
+            "load_old_manifold": false,
+            "data_cofig": {
+                "main_data_config": {
+                    "main_data_file": "sample_scseq_data.csv",
+                    "cell_index_prefix": "W"
+                },
+                "secondary_data_config": {
+                    "secondary_data_file": "human_UCB.csv",
+                    "cell_index_prefix": ""
+                }
+            },
+            "early_cell": "W30258",
+            "palantir": {
+                "diffusion_components": 5,
+                "_cell_min_molecules": 1000,
+                "_genes_min_cells": 10,
+                "n_components_pca": 300,
+                "n_waypoints": 500,
+                "pseudotime_knn": 30
+            }
+        }
     }
 }
