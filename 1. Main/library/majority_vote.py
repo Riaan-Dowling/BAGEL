@@ -690,6 +690,271 @@ def bifurcation_points(
     return bifurcation_data, bifurcate_once, total_bifurcations
 
 
+def validate_split_at_final_window(
+    once,
+    twice,
+    split,
+    once_data_ORIGNAl,
+    once_data_PROJECTED,
+    twice_data_ORIGNAl,
+    twice_data_PROJECTED,
+    data_output_gibbs_ORIGNAl,
+    data_output_gibbs_PROJECTED,
+    window_removed_data,
+    terminal_state_data,
+    window_3d,
+    lineage_1,
+    lineage_2,
+    previouse_window_l1,
+    previouse_window_l2,
+    previouse_window_l1_PROJECTED,
+    previouse_window_l2_PROJECTED,
+    first_time_association,
+    Model_1_lineage_1_counter,
+    Model_1_lineage_2_counter,
+):
+    """
+    validate_split_at_final_window
+
+    Fallback handler for incomplete majority votes at the final window.
+    When the sliding window reaches the end of the data and only 1 or 2
+    Model_2 (two-Gaussian) wins have accumulated (instead of the required 3),
+    this function validates the partial split detection by checking whether
+    terminal state cells are present in the split data.
+
+    Case 1 (once=True, twice=False):
+        Only 1 Model_2 win before data ended. Validate by checking terminal
+        state cells in once_data. If no remaining data, require >= 2 terminal
+        state cells in once_data.
+
+    Case 2 (once=True, twice=True):
+        2 Model_2 wins before data ended. Same checks across both once_data
+        and twice_data with more lenient thresholds.
+
+    If validated, runs association() and after_split_euclidean_dist_association()
+    to assign cells to lineages.
+    """
+
+    # Default: no split, single-model behaviour
+    one_model_flag = True
+    two_model_flag = False
+    validated = False
+
+    # -----------------------------------------------------------------
+    # Case 1: Only one Model_2 win accumulated before data ended
+    # -----------------------------------------------------------------
+    if (once is True) and (twice is False):
+
+        # Extract original 3d data for both gaussian components from once_data
+        d_g1 = {
+            "pseudo_time_normal": once_data_ORIGNAl["g1_pseudo_time_normal"],
+            "pca_1": once_data_ORIGNAl["g1_pca_1"],
+            "pca_2": once_data_ORIGNAl["g1_pca_2"],
+        }
+        once_g1_3d = pd.DataFrame(d_g1).dropna()
+
+        d_g2 = {
+            "pseudo_time_normal": once_data_ORIGNAl["g2_pseudo_time_normal"],
+            "pca_1": once_data_ORIGNAl["g2_pca_1"],
+            "pca_2": once_data_ORIGNAl["g2_pca_2"],
+        }
+        once_g2_3d = pd.DataFrame(d_g2).dropna()
+
+        # Count terminal state cells across both gaussian components
+        once_g1_ts = once_g1_3d[
+            once_g1_3d["pseudo_time_normal"].isin(
+                terminal_state_data["pseudo_time_normal"].values
+            )
+        ]
+        once_g2_ts = once_g2_3d[
+            once_g2_3d["pseudo_time_normal"].isin(
+                terminal_state_data["pseudo_time_normal"].values
+            )
+        ]
+        once_ts_total = len(once_g1_ts.index) + len(once_g2_ts.index)
+
+        if window_removed_data.empty is False:
+            # Remaining data exists: check it also contains terminal state cells
+            pov_ts = window_removed_data[
+                window_removed_data["pseudo_time_normal"].isin(
+                    terminal_state_data["pseudo_time_normal"].values
+                )
+            ]
+            # Both remaining data AND once_data must have terminal state cells
+            if (pov_ts.empty is False) and (once_ts_total >= 1):
+                validated = True
+        else:
+            # No remaining data: require stronger evidence from once_data alone
+            if once_ts_total >= 2:
+                validated = True
+
+    # -----------------------------------------------------------------
+    # Case 2: Two Model_2 wins accumulated before data ended
+    # -----------------------------------------------------------------
+    elif (once is True) and (twice is True):
+
+        # Check terminal state cells in once_data
+        d_g1 = {
+            "pseudo_time_normal": once_data_ORIGNAl["g1_pseudo_time_normal"],
+            "pca_1": once_data_ORIGNAl["g1_pca_1"],
+            "pca_2": once_data_ORIGNAl["g1_pca_2"],
+        }
+        once_g1_3d = pd.DataFrame(d_g1).dropna()
+
+        d_g2 = {
+            "pseudo_time_normal": once_data_ORIGNAl["g2_pseudo_time_normal"],
+            "pca_1": once_data_ORIGNAl["g2_pca_1"],
+            "pca_2": once_data_ORIGNAl["g2_pca_2"],
+        }
+        once_g2_3d = pd.DataFrame(d_g2).dropna()
+
+        once_g1_ts = once_g1_3d[
+            once_g1_3d["pseudo_time_normal"].isin(
+                terminal_state_data["pseudo_time_normal"].values
+            )
+        ]
+        once_g2_ts = once_g2_3d[
+            once_g2_3d["pseudo_time_normal"].isin(
+                terminal_state_data["pseudo_time_normal"].values
+            )
+        ]
+        once_ts_total = len(once_g1_ts.index) + len(once_g2_ts.index)
+
+        # Check terminal state cells in twice_data
+        d_g1_twice = {
+            "pseudo_time_normal": twice_data_ORIGNAl["g1_pseudo_time_normal"],
+            "pca_1": twice_data_ORIGNAl["g1_pca_1"],
+            "pca_2": twice_data_ORIGNAl["g1_pca_2"],
+        }
+        twice_g1_3d = pd.DataFrame(d_g1_twice).dropna()
+
+        d_g2_twice = {
+            "pseudo_time_normal": twice_data_ORIGNAl["g2_pseudo_time_normal"],
+            "pca_1": twice_data_ORIGNAl["g2_pca_1"],
+            "pca_2": twice_data_ORIGNAl["g2_pca_2"],
+        }
+        twice_g2_3d = pd.DataFrame(d_g2_twice).dropna()
+
+        twice_g1_ts = twice_g1_3d[
+            twice_g1_3d["pseudo_time_normal"].isin(
+                terminal_state_data["pseudo_time_normal"].values
+            )
+        ]
+        twice_g2_ts = twice_g2_3d[
+            twice_g2_3d["pseudo_time_normal"].isin(
+                terminal_state_data["pseudo_time_normal"].values
+            )
+        ]
+        twice_ts_total = len(twice_g1_ts.index) + len(twice_g2_ts.index)
+
+        if window_removed_data.empty is False:
+            # Remaining data exists: check for terminal state cells
+            pov_ts = window_removed_data[
+                window_removed_data["pseudo_time_normal"].isin(
+                    terminal_state_data["pseudo_time_normal"].values
+                )
+            ]
+            # More lenient: remaining data has terminal state cells AND
+            # at least one of once/twice data has terminal state cells
+            if (pov_ts.empty is False) and (
+                (once_ts_total >= 1) or (twice_ts_total >= 1)
+            ):
+                validated = True
+        else:
+            # No remaining data: lenient threshold for two accumulated wins
+            # Either once_data or twice_data has >= 2 terminal state cells,
+            # or both have >= 1 each
+            if (once_ts_total >= 2) or (twice_ts_total >= 2):
+                validated = True
+            elif (once_ts_total >= 1) and (twice_ts_total >= 1):
+                validated = True
+
+    # -----------------------------------------------------------------
+    # Act on validation result
+    # -----------------------------------------------------------------
+    if validated is True:
+        # Partial vote validated: confirm the split
+        split = True
+        first_time_association = True
+        one_model_flag = False
+        two_model_flag = True
+        print("Final window: partial split validated via terminal state membership")
+
+        # Run first-time association to assign delayed data to lineages
+        (
+            _,
+            _,
+            lineage_1,
+            lineage_2,
+            previouse_window_l1,
+            previouse_window_l2,
+            previouse_window_l1_PROJECTED,
+            previouse_window_l2_PROJECTED,
+            first_time_association,
+            Model_1_lineage_1_counter,
+            Model_1_lineage_2_counter,
+        ) = association(
+            once,
+            twice,
+            split,
+            window_3d,
+            one_model_flag,
+            two_model_flag,
+            lineage_1,
+            lineage_2,
+            data_output_gibbs_ORIGNAl,
+            data_output_gibbs_PROJECTED,
+            once_data_ORIGNAl,
+            once_data_PROJECTED,
+            twice_data_ORIGNAl,
+            twice_data_PROJECTED,
+            first_time_association,
+            previouse_window_l1,
+            previouse_window_l2,
+            previouse_window_l1_PROJECTED,
+            previouse_window_l2_PROJECTED,
+            Model_1_lineage_1_counter,
+            Model_1_lineage_2_counter,
+        )
+
+        # If remaining data exists, associate it to lineages via euclidean distance
+        if window_removed_data.empty is False:
+            (
+                lineage_1,
+                lineage_2,
+                previouse_window_l1,
+                previouse_window_l2,
+            ) = after_split_euclidean_dist_association(
+                lineage_1,
+                lineage_2,
+                window_removed_data,
+            )
+            previouse_window_l1_PROJECTED = previouse_window_l1
+            previouse_window_l2_PROJECTED = previouse_window_l2
+
+    else:
+        # Validation failed: no split, maintain single-model state
+        split = False
+        one_model_flag = True
+        two_model_flag = False
+        print("Final window: partial vote did not pass terminal state validation")
+
+    return (
+        split,
+        one_model_flag,
+        two_model_flag,
+        lineage_1,
+        lineage_2,
+        previouse_window_l1,
+        previouse_window_l2,
+        previouse_window_l1_PROJECTED,
+        previouse_window_l2_PROJECTED,
+        first_time_association,
+        Model_1_lineage_1_counter,
+        Model_1_lineage_2_counter,
+    )
+
+
 # import matplotlib.pyplot as plt
 # import time
 # for step in range(20):

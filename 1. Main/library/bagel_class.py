@@ -963,6 +963,52 @@ class BAGEL(object):
                     if lineage_split_flag is False:
                         previouse_window_l1_projected = window_bagel_loop_data
 
+                        # -------------------------------------------------
+                        # Fallback: validate incomplete majority votes at final window.
+                        # When data ends before 3 consecutive Model_2 wins,
+                        # validate the partial detection against terminal state
+                        # cell membership.
+                        # -------------------------------------------------
+                        if (is_final_window is True) and (
+                            split_in_lineage_once is True
+                        ):
+                            (
+                                lineage_split_flag,
+                                one_model_flag,
+                                two_model_flag,
+                                main_lineage_1_df,
+                                main_lineage_2_df,
+                                previouse_window_l1,
+                                previouse_window_l2,
+                                previouse_window_l1_projected,
+                                previouse_window_l2_projected,
+                                first_time_association,
+                                model_1_lineage_1_counter,
+                                model_1_lineage_2_counter,
+                            ) = majority_sup.validate_split_at_final_window(
+                                split_in_lineage_once,
+                                split_in_lineage_twice,
+                                lineage_split_flag,
+                                once_data_original,
+                                once_data_projected,
+                                twice_data_original,
+                                twice_data_projected,
+                                data_output_gibbs_original,
+                                data_output_gibbs_projected,
+                                self.window_removed_bagel_loop_data,
+                                self.bagel_loop_data_terminal_state,
+                                window_bagel_loop_data_no_cell_id,
+                                main_lineage_1_df,
+                                main_lineage_2_df,
+                                previouse_window_l1,
+                                previouse_window_l2,
+                                previouse_window_l1_projected,
+                                previouse_window_l2_projected,
+                                first_time_association,
+                                model_1_lineage_1_counter,
+                                model_1_lineage_2_counter,
+                            )
+
                 # Remove any duplicate assignments due to window and stepsize mismatch
                 main_lineage_1_df = main_lineage_1_df.drop_duplicates()
                 main_lineage_2_df = main_lineage_2_df.drop_duplicates()
