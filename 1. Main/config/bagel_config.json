@@ -1,6 +1,6 @@
 {
     "output": {
-        "results_only": false,
+        "results_only": true,
         "output_name": "3"
     },
     "phenotypic_manifold_config": {
@@ -12,7 +12,7 @@
             },
             "secondary_data_config": {
                 "secondary_data_file": "human_UCB.csv",
-                "cell_index_prefix": ""
+                "cell_index_prefix": "E"
             }
         },
         "early_cell": "Run5_164698952452459",
@@ -54,8 +54,8 @@
         "gp_per_lineage_plot": true
     },
     "flip_plot_orientation": {
-        "flip_x": true,
-        "flip_y": false
+        "flip_x": false,
+        "flip_y": true
     },
     "EXAMPLE_GUIDE": {
         "1_human_bone_marrow_example_phenotypic_manifold_config": {
@@ -89,7 +89,7 @@
                 },
                 "secondary_data_config": {
                     "secondary_data_file": "human_UCB.csv",
-                    "cell_index_prefix": ""
+                    "cell_index_prefix": "E"
                 }
             },
             "early_cell": "Run5_164698952452459",
@@ -133,7 +133,7 @@
                 },
                 "secondary_data_config": {
                     "secondary_data_file": "human_UCB.csv",
-                    "cell_index_prefix": ""
+                    "cell_index_prefix": "E"
                 }
             },
             "early_cell": "W30258",
