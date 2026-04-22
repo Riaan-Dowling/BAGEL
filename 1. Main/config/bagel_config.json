@@ -1,21 +1,21 @@
 {
     "output": {
-        "results_only": true,
-        "output_name": "0"
+        "results_only": false,
+        "output_name": "3"
     },
     "phenotypic_manifold_config": {
         "load_old_manifold": false,
         "data_cofig": {
             "main_data_config": {
-                "main_data_file": "sample_scseq_data.csv",
-                "cell_index_prefix": "W"
+                "main_data_file": "marrow_sample_scseq_counts.csv.gz",
+                "cell_index_prefix": "Run"
             },
             "secondary_data_config": {
-                "secondary_data_file": "",
+                "secondary_data_file": "human_UCB.csv",
                 "cell_index_prefix": ""
             }
         },
-        "early_cell": "W30258",
+        "early_cell": "Run5_164698952452459",
         "palantir": {
             "diffusion_components": 5,
             "_cell_min_molecules": 1000,
@@ -36,7 +36,7 @@
     "plot_config": {
         "primary_label": "Human bone marrow",
         "secondary_label": "Human UCB",
-        "output_prefix_label": "human_bone_marrow_and_human_UCB",
+        "output_prefix_label": "huamn_bone_marrow_humnan_ucb",
         "gene_list": [
             "CD34",
             "GATA1",
@@ -55,7 +55,7 @@
     },
     "flip_plot_orientation": {
         "flip_x": true,
-        "flip_y": true
+        "flip_y": false
     },
     "EXAMPLE_GUIDE": {
         "1_human_bone_marrow_example_phenotypic_manifold_config": {

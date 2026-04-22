@@ -168,6 +168,7 @@ def results(
     # -----------------------------------------------------------------
     # Orientation: flip plot axes
     # -----------------------------------------------------------------
+    start_cell = start_cell.copy()
     if flip_plot_orientation is None:
         flip_plot_orientation = {"flip_x": False, "flip_y": False}
     if flip_plot_orientation["flip_x"]:
@@ -176,16 +177,16 @@ def results(
         start_cell["pca_1"] *= -1
         pca_1_mask = final_lineage_df.columns == "pca_1"
         final_lineage_df.iloc[:, pca_1_mask] *= -1
-        for col in bifurcation_data.columns[bifurcation_data.columns.str.contains("pca_1")]:
-            bifurcation_data[col] *= -1
+        bif_pca_1_mask = bifurcation_data.columns.str.contains("pca_1")
+        bifurcation_data.iloc[:, bif_pca_1_mask] *= -1
     if flip_plot_orientation["flip_y"]:
         bagel_loop_data["pca_2"] *= -1
         bagel_loop_data_terminal_state["pca_2"] *= -1
         start_cell["pca_2"] *= -1
         pca_2_mask = final_lineage_df.columns == "pca_2"
         final_lineage_df.iloc[:, pca_2_mask] *= -1
-        for col in bifurcation_data.columns[bifurcation_data.columns.str.contains("pca_2")]:
-            bifurcation_data[col] *= -1
+        bif_pca_2_mask = bifurcation_data.columns.str.contains("pca_2")
+        bifurcation_data.iloc[:, bif_pca_2_mask] *= -1
 
     two_data_set_flag = joblib.load(f"{result_folder}/two_data_set_flag.pkl")
     # """
