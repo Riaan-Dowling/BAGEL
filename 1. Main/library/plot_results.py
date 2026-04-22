@@ -23,6 +23,7 @@ import library.gaussian_process as gp_sup
 
 
 plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams["savefig.dpi"] = 1200
 
 
 class Arrow3D(FancyArrowPatch):
